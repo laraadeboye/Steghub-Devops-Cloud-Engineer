@@ -233,7 +233,7 @@ We will create a directory next to the default one at `/var/www/html`
 ```sh
 sudo mkdir /var/www/lamp_project
 ```
-Currently, you `ls -la /var/www/lamp_project`, it may be owned by root or another user.
+Currently, if you check the dircetory ownership using `ls -la /var/www/lamp_project`, it may be owned by root or another user.
 
 ![Lamp owned by root](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LAMP-STACK/images/lamp-owned-by-root.png)
 
