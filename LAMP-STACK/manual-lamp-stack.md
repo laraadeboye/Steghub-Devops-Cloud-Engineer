@@ -23,7 +23,7 @@ It provides a comprehensive and reliable platform for building and hosting a wid
 
 ## Deploy a LAMP stack manually on AWS
 
-#### Steps 0 - Prepare prerequisites
+### Steps 0 - Prepare prerequisites
 
 - Create an AWS Account
 
@@ -56,7 +56,7 @@ ssh -i <private-key-name>.pem ubuntu@<publi-ip-address>
 ![SSH into LAMP-Successful login to lamp](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LAMP-STACK/images/successful-login-to-LAMP.png)
 
 
-#### Step 1 - Install Apache and update the firewall
+### Step 1 - Install Apache and update the firewall
 Apache is the web server that serves our web content to the end user.
 
 - Update the package list and install Apache
@@ -121,7 +121,7 @@ what you see is similar to the image below:
 
 ![IMAGE; Web-Apache-default page](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LAMP-STACK/images/Web-Apache-default-page.png)
 
-#### Step 2 - Install MySQL
+### Step 2 - Install MySQL
 To be able store and manage data for our web application in a relational database, we will install MYSQL.
 
 - Install mysql with apt
@@ -196,7 +196,7 @@ It is recommended to create dedicated users for each databases.
 
 MySQL has been installed and we can proceed to install PHP.
 
-#### Step 3 - Install PHP
+### Step 3 - Install PHP
 Now we install PHP to process code and to display dynamic content to the end user. We will install the `php` package, `php-mysql` which is a php module that php uses to communicate with MYSQL-based database; and `libapache2-mod-php` which enables Apache to handle PHP files.
 
 - Run the following command to install the 3 necessary packages:
@@ -224,7 +224,7 @@ if php has been successfully installed, you will get an image similar to the one
 Our LAMP is now succesfully installed and ready to be used. We will test our set up with as PHP script. We will follow best practice by setting up an Apache Virtual Host to hold our website files and folders. A virtual host allows us to serve multiple websites on one single host machine.
 
 
-#### Step 4 - Configure Apache Virtual Host
+### Step 4 - Configure Apache Virtual Host
 
 We will create a directory next to the default one at `/var/www/html`
 
@@ -322,7 +322,7 @@ The output should show our server's public hostname (DNS name)
 The `index.html` file can be kept as a placeholder until we replace it with our `index.php` file
 
 
-#### Step 5 - Enable PHP on the website
+### Step 5 - Enable PHP on the website
 Apache has a default **DirectoryIndex** in which the `index.html` file takes precedence over an `index.php` file. The real life application of this is that the `index.html` file can be used as a temporary  landing page to display an informative message to visitors especially during routine system maintenance. Once maintenance is aover, it is either renamed or removed, thereby bringing up the regular application page.
 
 This default behaviour can be changed by editing the `/etc/apache2/mods-enabled/dir.conf` and changing the order in which the `index.php is listed in the **DirectoryIndex** directive. 
@@ -342,7 +342,7 @@ sudo systemctl reload apache2
 ```
 
 
-#### Step 6 - Create PHP script to test the configuration of PHP
+### Step 6 - Create PHP script to test the configuration of PHP
 
 - Create a new file named `index.php` in the custom project folder:
 
