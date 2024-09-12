@@ -1,6 +1,20 @@
 
 # LAMP STACK ON AWS
 
+## Table of Content
+1. [LAMP STACK ON AWS](#lamp-stack-on-aws)
+2. [What Problem does LAMP stack solve?](#what-problem-does-lamp-stack-solve)
+3. [Deploy a LAMP stack manually on AWS](#deploy-a-lamp-stack-manually-on-aws)
+    * [Steps 0 - Prepare prerequisites](#steps-0---prepare-prerequisites)
+    * [Step 1 - Install Apache and update the firewall](#step-1---install-apache-and-update-the-firewall)
+    * [Step 2 - Install MySQL](#step-2---install-mysql)
+    * [Step 3 - Install PHP](#step-3---install-php)
+    * [Step 4 - Configure Apache Virtual Host](#step-4---configure-apache-virtual-host)
+    * [Step 5 - Enable PHP on the website](#step-5---enable-php-on-the-website)
+    * [Step 6 - Create PHP script to test the configuration of PHP](#step-6---create-php-script-to-test-the-configuration-of-php)
+4. [Conclusion](#conclusion)
+
+
 ## What Problem does LAMP stack solve?
 The LAMP stack is a framework for hosting web applications. It is based on Linux as the operating system, Apache as the web server, MySQL as the Database  and PHP as the scripting language. PHP can be substituted with Python or Perl.
 
