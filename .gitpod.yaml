@@ -1,7 +1,8 @@
 tasks:
   - name: terraform
     before: |
-      source $PROJECT_ROOT/bin/install_terraform_cli
+      echo "Running install terraform script..."
+      ./bin/install_terraform_cli
       terraform --version
 
  # random utilities
@@ -14,7 +15,8 @@ tasks:
     enAWS_CLI_AUTO_PROMPTv:
       : on-partial
     before: |
-      source $PROJECT_ROOT/bin/install_aws_cli
+      echo "Running install aws script..."
+      ./bin/install_aws_cli
       aws --version
 
 vscode:
