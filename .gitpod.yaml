@@ -1,19 +1,17 @@
 tasks:
-  - name: terraform
+  - name: Install Terraform
     before: |
       echo "Running install terraform script..."
       ./bin/install_terraform_cli
       terraform --version
 
- # random utilities
-  - name: utils
+  - name: Install Utilities
     before: |
-      sudo apt-get install tree
+      echo "Installing utilities..."
+      sudo apt-get update
+      sudo apt-get install -y tree
 
-# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-  - name: aws-cli
-    enAWS_CLI_AUTO_PROMPTv:
-      : on-partial
+  - name: Install AWS CLI
     before: |
       echo "Running install aws script..."
       ./bin/install_aws_cli
