@@ -5,13 +5,16 @@ tasks:
       ./bin/install_terraform_cli
       terraform --version
 
-  - name: Install Utilities
+  - name: utils
     before: |
       echo "Installing utilities..."
       sudo apt-get update
       sudo apt-get install -y tree
 
+  # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
   - name: Install AWS CLI
+    env:
+      AWS_CLI_AUTO_PROMPT: on-partial
     before: |
       echo "Running install aws script..."
       ./bin/install_aws_cli
