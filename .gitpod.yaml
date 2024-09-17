@@ -2,6 +2,7 @@ tasks:
   - name: terraform
     before: |
       source ./bin/install_terraform_cli
+      terraform --version
 
  # random utilities
   - name: utils
@@ -14,6 +15,7 @@ tasks:
       : on-partial
     before: |
       source ./bin/install_aws_cli
+      aws --version
 
 vscode:
   extensions:
