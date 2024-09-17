@@ -1,0 +1,21 @@
+tasks:
+  - name: terraform
+    before: |
+      source ./bin/install_terraform_cli
+
+ # random utilities
+  - name: utils
+    before: |
+      sudo apt-get install tree
+
+# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+  - name: aws-cli
+    enAWS_CLI_AUTO_PROMPTv:
+      : on-partial
+    before: |
+      source ./bin/install_aws_cli
+
+vscode:
+  extensions:
+    - amazonwebservices.aws-toolkit-vscode
+    - hashicorp.terraform
