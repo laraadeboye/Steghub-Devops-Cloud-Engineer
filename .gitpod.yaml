@@ -1,24 +1,28 @@
 tasks:
   - name: Install Terraform
     before: |
-      echo "Running install terraform script..."
-      ./bin/install_terraform_cli
-      terraform --version
+      sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+      wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+      gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
+      echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+      sudo apt update
+      sudo apt-get install terraform
+      
 
   - name: utils
-    before: |
-      echo "Installing utilities..."
-      sudo apt-get update
+    before: |      
       sudo apt-get install -y tree
 
   # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-  - name: Install AWS CLI
+  - name: aws-cli
     env:
       AWS_CLI_AUTO_PROMPT: on-partial
     before: |
-      echo "Running install aws script..."
-      ./bin/install_aws_cli
-      aws --version
+      cd /workspace 
+      curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      unzip awscliv2.zip
+      sudo ./aws/install
+      cd $PROJECT_ROOT
 
 vscode:
   extensions:
