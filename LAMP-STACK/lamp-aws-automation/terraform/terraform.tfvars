@@ -1,1 +1,9 @@
-region = "us-east-1"
+region               = "us-east-1"
+vpc_cidr_block       = "10.0.0.0/16"
+env_prefix           = "dev"
+public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
+azs                  = ["us-east-1a", "us-east-1c"]
+ports                = [80, 443]
+specific_ssh_ip      = "34.78.109.111/32"
+public_key_location  = "./keys/gitpod_ec2_key.pub"

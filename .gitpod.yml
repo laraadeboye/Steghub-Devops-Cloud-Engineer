@@ -20,6 +20,17 @@ tasks:
       ./bin/install_aws_cli
       aws --version
 
+  - name: Setup SSH key
+    before: |
+      echo "Setting up SSH key..."
+      if [ ! -f ~/.ssh/gitpod_ec2_key ]; then
+        ssh-keygen -t rsa -b 2048 -f ~/.ssh/gitpod_ec2_key -N ""
+      fi
+      eval $(ssh-agent -s)
+      ssh-add ~/.ssh/gitpod_ec2_key
+      mkdir -p keys
+      cp ~/.ssh/gitpod_ec2_key.pub keys/gitpod_ec2_key.pub
+
 vscode:
   extensions:
     - amazonwebservices.aws-toolkit-vscode
