@@ -29,7 +29,7 @@ tasks:
       eval $(ssh-agent -s)
       ssh-add ~/.ssh/gitpod_ec2_key
       mkdir -p keys
-      cp ~/.ssh/gitpod_ec2_key.pub /keys/gitpod_ec2_key.pub
+      cp ~/.ssh/gitpod_ec2_key.pub keys/gitpod_ec2_key.pub
 
 vscode:
   extensions:
