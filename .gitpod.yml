@@ -30,7 +30,7 @@ tasks:
       ssh-add ~/.ssh/gitpod_ec2_key
       cd LAMP-STACK/lamp-aws-automation/terraform
       mkdir -p keys
-      cp ~/.ssh/gitpod_ec2_key.pub ~/LAMP-STACK/lamp-aws-automation/terraform/keys/gitpod_ec2_key.pub
+      cp ~/.ssh/gitpod_ec2_key.pub ~/LAMP-STACK/lamp-aws-automation/terraform/keys/
 
 vscode:
   extensions:
