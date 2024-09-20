@@ -22,15 +22,7 @@ tasks:
 
   - name: Setup SSH key
     before: |
-      echo "Setting up SSH key..."
-      if [ ! -f ~/.ssh/gitpod_ec2_key ]; then
-        ssh-keygen -t rsa -b 2048 -f ~/.ssh/gitpod_ec2_key -N ""
-      fi
-      eval $(ssh-agent -s)
-      ssh-add ~/.ssh/gitpod_ec2_key
-      cd LAMP-STACK/lamp-aws-automation/terraform
-      mkdir -p keys
-      cp ~/.ssh/gitpod_ec2_key.pub ~/LAMP-STACK/lamp-aws-automation/terraform/keys/
+      ./bin/setup_ssh_key
 
 vscode:
   extensions:
