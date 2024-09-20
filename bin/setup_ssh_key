@@ -14,7 +14,7 @@ eval $(ssh-agent -s)
 ssh-add ~/.ssh/gitpod_ec2_key
 
 # Define the project directory
-PROJECT_DIR="$PROJECT_ROOT/LAMP-STACK/lamp-aws-automation/terraform"
+PROJECT_DIR="$TERRAFORM_DIR"
 
 # Create the keys directory in the project directory
 mkdir -p "$PROJECT_DIR/keys"
