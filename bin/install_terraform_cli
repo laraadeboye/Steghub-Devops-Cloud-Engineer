@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "Running install terraform script..."
+
 cd /workspace
 
 sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl 
@@ -19,7 +21,9 @@ sudo tee /etc/apt/sources.list.d/hashicorp.list
 sudo apt update
 
 sudo apt-get install terraform
-cd $PROJECT_ROOT
+cd $TERRAFORM_DIR
+
+terraform --version
 
 
 

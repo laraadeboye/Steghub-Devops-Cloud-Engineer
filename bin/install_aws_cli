@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "Running install aws script..."
+
 cd /workspace
 
 rm -f '/workspace/awscliv2.zip'
@@ -12,3 +14,5 @@ sudo ./aws/install
 aws sts get-caller-identity
 
 cd $PROJECT_ROOT
+
+aws --version

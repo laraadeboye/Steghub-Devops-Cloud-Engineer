@@ -1,9 +1,8 @@
 tasks:
   - name: Install Terraform
-    before: |
-      echo "Running install terraform script..."
+    before: |      
       ./bin/install_terraform_cli
-      terraform --version
+      
 
   - name: utils
     before: |
@@ -15,10 +14,9 @@ tasks:
   - name: Install AWS CLI
     env:
       AWS_CLI_AUTO_PROMPT: on-partial
-    before: |
-      echo "Running install aws script..."
+    before: |      
       ./bin/install_aws_cli
-      aws --version
+      
 
   - name: Setup SSH key
     before: |
