@@ -27,6 +27,12 @@ cd $TERRAFORM_DIR
 terraform --version
 
 
+# Install utils
+
+echo "Installing utilities..."
+sudo apt-get update
+sudo apt-get install -y tree
+
 
 
 

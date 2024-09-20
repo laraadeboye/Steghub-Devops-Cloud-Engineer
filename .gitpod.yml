@@ -1,14 +1,7 @@
 tasks:
-  - name: Install Terraform
+  - name: Install Terraform and utils
     before: |      
-      ./bin/install_terraform_cli
-      
-
-  - name: utils
-    before: |
-      echo "Installing utilities..."
-      sudo apt-get update
-      sudo apt-get install -y tree
+      ./bin/install_terraform_cli      
 
   # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
   - name: Install AWS CLI
