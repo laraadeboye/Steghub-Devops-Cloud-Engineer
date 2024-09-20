@@ -8,8 +8,7 @@ tasks:
     env:
       AWS_CLI_AUTO_PROMPT: on-partial
     before: |      
-      ./bin/install_aws_cli
-      
+      ./bin/install_aws_cli      
 
   - name: Setup SSH key
     before: |
