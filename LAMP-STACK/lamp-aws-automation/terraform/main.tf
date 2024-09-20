@@ -111,45 +111,6 @@ resource "aws_route_table_association" "lamp_vpc_private_asso" {
 }
 
 
-# Security group
-
-resource "aws_security_group" "lamp_server_sg" {
-  name   = "${var.env_prefix}-lamp_server_sg"
-  vpc_id = aws_vpc.lamp_vpc.id
-
-  # Static ingress rule for SSH from a specific IP
-  ingress {
-    description = "Allow SSH from specific IP"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.specific_ssh_ip]
-  }
-
-  # Dynamic ingress rule for SSH from a specific IP
-  dynamic "ingress" {
-    for_each = var.ports
-    content {
-      description = "Allow traffic on port ${ingress.value}"
-      from_port   = ingress.value
-      to_port     = ingress.value
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1" # Allows all outbound traffic
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.env_prefix}-lamp_server_sg"
-  }
-}
-
 # ssh key-pair
 resource "aws_key_pair" "ssh-key" {
   key_name   = "gitpod_ec2_key"
@@ -159,3 +120,102 @@ resource "aws_key_pair" "ssh-key" {
     Name = "${var.env_prefix}-key-pair"
   }
 }
+
+# Application Load balancer for EC2 instances
+
+resource "aws_lb" "lamp_server_alb" {
+  name               = "${var.env_prefix}-lamp_server_alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.lb_sg.id]
+  subnets            = aws_subnet.public_subnets[*].id
+
+ 
+
+  tags = {
+    Name = "${var.env_prefix}-lamp_server_alb"
+  }
+}
+
+
+# # ALB Security Group
+
+# resource "aws_security_group" "lamp_server_albsg" {
+#   name   = "${var.env_prefix}-lamp_server_albsg"
+#   description = "Security group for ALB"
+#   vpc_id = aws_vpc.lamp_vpc.id
+
+
+#   # Dynamic ingress rule for HTTP/HTTPS from anywhere
+#   dynamic "ingress" {
+#     for_each = var.ingress_ports
+#     content {
+#       description = "Allow traffic on port ${ingress.value}"
+#       from_port   = ingress.value
+#       to_port     = ingress.value
+#       protocol    = "tcp"
+#       cidr_blocks = ["0.0.0.0/0"]
+#     }
+#   }
+
+#   egress {
+#     description = "Allows traffic to EC2 instances"
+#     from_port   = 0
+#     to_port     = 65535
+#     protocol    = "tcp"
+#     security_groups = [aws_security_group.lamp_server_sg.id]
+#   }
+
+#   tags = {
+#     Name = "${var.env_prefix}-lamp_server_albsg"
+#   }
+# }
+
+# # EC2 Security group
+# resource "aws_security_group" "lamp_server_sg" {
+#   description = "Security group for EC2 instances"
+#   name   = "${var.env_prefix}-lamp_server_sg"
+#   vpc_id = aws_vpc.lamp_vpc.id
+
+#   # Allow traffic from Alb security group
+#   ingress {
+#     description = "Allow traffic from ALB"
+#     from_port   = 0
+#     to_port     = 65535
+#     protocol    = "tcp"
+#     security_groups = [aws_security_group.lamp_server_albsg]
+#   }
+
+#   ingress {
+#   description = "Allow SSH access for maintenance"
+#   from_port   = 22
+#   to_port     = 22
+#   protocol    = "tcp"
+#   cidr_blocks = [var.specific_ssh_ip]  # Replace with your office, VPN, or bastion IP
+# }
+
+# # Egress rule to allow traffic to RDS 
+# egress {
+#   description    = "Allow traffic to RDS"
+#   from_port      = 5432  # PostgreSQL (or 3306 for MySQL)
+#   to_port        = 5432
+#   protocol       = "tcp"
+#   security_groups = [aws_security_group.rds_sg.id]  
+# }
+ 
+#   # Dynamic egress rule for specific ports 
+#   dynamic "egress" {
+#     for_each = var.egress_ports
+#     content {
+#       description = "Allow traffic on port ${egress.value}"
+#       from_port   = egress.value
+#       to_port     = egress.value
+#       protocol    = "tcp"
+#       cidr_blocks = ["0.0.0.0/0"]
+#     }
+#   }
+
+#   tags = {
+#     Name = "${var.env_prefix}-lamp_server_sg"
+#   }
+# }

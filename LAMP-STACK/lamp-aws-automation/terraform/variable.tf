@@ -28,8 +28,13 @@ variable "azs" {
   type        = list(string)
 }
 
-variable "ports" {
+variable "ingress_ports" {
   description = "List of ports to allow inbound traffic"
+  type        = list(number)
+}
+
+variable "egress_ports" {
+  description = "List of ports to allow outbound traffic"
   type        = list(number)
 }
 
