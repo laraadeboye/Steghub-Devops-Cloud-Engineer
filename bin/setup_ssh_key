@@ -26,9 +26,7 @@ echo "SSH key setup complete. Public key copied to $TERRAFORM_DIR/keys/gitpod_ec
 
 # Verify the file exists
 if [ -f "$TERRAFORM_DIR/keys/gitpod_ec2_key.pub" ]; then
-    echo "Public key file successfully created."
-    echo "Contents of the public key file:"
-    cat "$TERRAFORM_DIR/keys/gitpod_ec2_key.pub"
+    echo "Public key file successfully created."    
 else
     echo "Error: Public key file not found at $TERRAFORM_DIR/keys/gitpod_ec2_key.pub"
 fi
