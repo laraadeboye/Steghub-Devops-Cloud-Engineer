@@ -39,3 +39,6 @@ terraform.rc
 
 # Ignore the SSH keys directory
 keys/
+
+# Ignore private keys
+*.pem
