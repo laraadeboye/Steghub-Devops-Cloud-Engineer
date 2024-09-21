@@ -33,6 +33,8 @@ mkdir -p ~/.aws
   echo "output = $AWS_DEFAULT_OUTPUT"
 } > ~/.aws/config
 
+aws configure list
+
 cd $PROJECT_ROOT
 
 # Check AWS CLI version
