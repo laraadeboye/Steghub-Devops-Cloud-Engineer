@@ -156,11 +156,11 @@ resource "aws_security_group" "lamp_server_albsg" {
     }
   }
   # Allow all outbound traffic
-   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
 
@@ -210,10 +210,10 @@ resource "aws_security_group" "lamp_server_sg" {
 }
 
 
-# RDS security group
-resource "aws_security_group" "rds_sg" {
-  description = "Security group for EC2 instances"
-  name        = "${var.env_prefix}-lamp_server_rdssg"
+# DB security group
+resource "aws_security_group" "db_sg" {
+  description = "Security group for DB"
+  name        = "${var.env_prefix}-lamp_server_dbsg"
   vpc_id      = aws_vpc.lamp_vpc.id
 
   ingress {
@@ -224,10 +224,114 @@ resource "aws_security_group" "rds_sg" {
     security_groups = [aws_security_group.lamp_server_sg.id]
   }
 
-  # egress rule not needed for RDS. Will be expliciity defined if needed
+  ingress {
+    description = "MySQL between primary and replica"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    self        = true
+  }
+
+  # egress rule not needed for DB. Will be expliciity defined if needed
 
   tags = {
-    Name = "${var.env_prefix}-lamp_server_rdssg"
+    Name = "${var.env_prefix}-lamp_server_dbsg"
   }
 }
+
+#------------ Configure EC2 auto scaling group ------------
+# Launch Template for EC2 instances 
+
+resource "aws_launch_template" "lamp_server" {
+  name_prefix   = "${var.env_prefix}-lamp_server_lt"
+  image_id      = "var.ami"
+  instance_type = "var.instance"
+  key_name      = "gitpod_ec2_key"
+
+  vpc_security_group_ids = [aws_security_group.lamp_server_sg.id]
+
+  tags = {
+    Name = "${var.env_prefix}-lamp_server"
+  }
+}
+
+# Autoscaling group
+
+resource "aws_autoscaling_group" "lamp_server_asg" {
+  name_prefix               = "${var.env_prefix}-lamp_server_asg"
+  max_size                  = 4
+  min_size                  = 2
+  desired_capacity          = 2
+  health_check_grace_period = 300
+  health_check_type         = "ELB"
+  vpc_zone_identifier       = [aws_subnet.public_subnets[*].id]
+
+  launch_template {
+    id      = aws_launch_template.lamp_server.id
+    version = "$Latest"
+  }
+
+  tag {
+    key                 = "Name"
+    value               = "${var.env_prefix}-lamp_server"
+    propagate_at_launch = true
+  }
+}
+
+# Target Group for ALB
+resource "aws_lb_target_group" "lamp_server_tg" {
+  name        = "${var.env_prefix}-lamp_server_tg"
+  target_type = "alb"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.lamp_vpc.id
+
+
+  health_check {
+    path                = "/"
+    healthy_threshold   = 3
+    unhealthy_threshold = 2
+  }
+}
+
+# DB Instance
+resource "aws_db_instance" "lamp_db_primary" {
+  identifier           = "${var.env_prefix}-lamp-db-primary"
+  allocated_storage    = 10
+  db_name              = "lampdb"
+  username             = "var.db_username"
+  password             = "var.db_password"
+  engine               = "mysql"
+  engine_version       = "8.0"
+  instance_class       = "db.t3.micro"
+  parameter_group_name = "default.mysql8.0"
+
+  vpc_security_group_ids = [aws_security_group.db_sg.id]
+
+
+  multi_az            = false
+  skip_final_snapshot = true
+
+  tags = {
+    Name = "${var.env_prefix}-lamp_db_primary"
+  }
+
+}
+
+# Add a new resource for the read replica
+resource "aws_db_instance" "lamp_db_replica" {
+  identifier          = "${var.env_prefix}-lamp-db-replica"
+  instance_class      = "db.t3.micro"
+  replicate_source_db = aws_db_instance.lamp_db_primary.identifier
+
+  vpc_security_group_ids = [aws_security_group.db_sg.id]
+
+  multi_az            = false
+  skip_final_snapshot = true
+
+  tags = {
+    Name = "${var.env_prefix}-lamp_db_replica"
+  }
+}
+
 

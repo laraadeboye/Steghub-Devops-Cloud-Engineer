@@ -47,3 +47,23 @@ variable "public_key_location" {
   description = "ssh public key location"
   type        = string
 }
+
+variable "ami" {
+  description = "ami image from which to launch instance"
+  type        = string
+}
+
+variable "instance" {
+  description = "type of instance"
+  type        = string
+}
+
+variable "db_username" {
+  description = "type of instance"
+  type        = string
+}
+
+variable "db_password" {
+  description = "type of instance"
+  type        = string
+}
