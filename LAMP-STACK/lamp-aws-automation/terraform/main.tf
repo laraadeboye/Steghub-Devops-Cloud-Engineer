@@ -123,7 +123,7 @@ resource "aws_key_pair" "ssh-key" {
 
 # Application Load balancer for EC2 instances
 resource "aws_lb" "lamp_server_alb" {
-  name               = "${var.env_prefix}-lamp_server_alb"
+  name               = "${var.env_prefix}-lamp-server-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lamp_server_albsg.id]
@@ -243,7 +243,7 @@ resource "aws_security_group" "db_sg" {
 # Launch Template for EC2 instances 
 
 resource "aws_launch_template" "lamp_server" {
-  name_prefix   = "${var.env_prefix}-lamp_server_lt"
+  name          = "${var.env_prefix}-lamp-server-lt"
   image_id      = "var.ami"
   instance_type = "var.instance"
   key_name      = "gitpod_ec2_key"
@@ -258,13 +258,13 @@ resource "aws_launch_template" "lamp_server" {
 # Autoscaling group
 
 resource "aws_autoscaling_group" "lamp_server_asg" {
-  name_prefix               = "${var.env_prefix}-lamp_server_asg"
+  name                      = "${var.env_prefix}-lamp-server-asg"
   max_size                  = 4
   min_size                  = 2
   desired_capacity          = 2
   health_check_grace_period = 300
   health_check_type         = "ELB"
-  vpc_zone_identifier       = [aws_subnet.public_subnets[*].id]
+  vpc_zone_identifier       = aws_subnet.public_subnets[*].id
 
   launch_template {
     id      = aws_launch_template.lamp_server.id
@@ -280,7 +280,7 @@ resource "aws_autoscaling_group" "lamp_server_asg" {
 
 # Target Group for ALB
 resource "aws_lb_target_group" "lamp_server_tg" {
-  name        = "${var.env_prefix}-lamp_server_tg"
+  name        = "${var.env_prefix}-lamp-server-tg"
   target_type = "alb"
   port        = 80
   protocol    = "HTTP"
