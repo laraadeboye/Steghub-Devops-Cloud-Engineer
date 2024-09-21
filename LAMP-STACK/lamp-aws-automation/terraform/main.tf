@@ -244,8 +244,8 @@ resource "aws_security_group" "db_sg" {
 
 resource "aws_launch_template" "lamp_server" {
   name          = "${var.env_prefix}-lamp-server-lt"
-  image_id      = "var.ami"
-  instance_type = "var.instance"
+  image_id      = var.ami_id
+  instance_type = var.instance_type
   key_name      = "gitpod_ec2_key"
 
   vpc_security_group_ids = [aws_security_group.lamp_server_sg.id]
@@ -281,7 +281,7 @@ resource "aws_autoscaling_group" "lamp_server_asg" {
 # Target Group for ALB
 resource "aws_lb_target_group" "lamp_server_tg" {
   name        = "${var.env_prefix}-lamp-server-tg"
-  target_type = "alb"
+  target_type = "instance"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = aws_vpc.lamp_vpc.id
@@ -294,13 +294,24 @@ resource "aws_lb_target_group" "lamp_server_tg" {
   }
 }
 
+# DB subnet group
+resource "aws_db_subnet_group" "lamp_db_subnet_group" {
+  name       = "${var.env_prefix}-lamp-db-subnet-group"
+  subnet_ids = aws_subnet.private_subnets[*].id
+
+  tags = {
+    Name = "${var.env_prefix}-lamp-db-subnet-group"
+  }
+}
+
 # DB Instance
 resource "aws_db_instance" "lamp_db_primary" {
   identifier           = "${var.env_prefix}-lamp-db-primary"
   allocated_storage    = 10
+  db_subnet_group_name = aws_db_subnet_group.lamp_db_subnet_group.name
   db_name              = "lampdb"
-  username             = "var.db_username"
-  password             = "var.db_password"
+  username             = var.db_username
+  password             = var.db_password
   engine               = "mysql"
   engine_version       = "8.0"
   instance_class       = "db.t3.micro"
@@ -318,11 +329,12 @@ resource "aws_db_instance" "lamp_db_primary" {
 
 }
 
-# Add a new resource for the read replica
+# Read replica
 resource "aws_db_instance" "lamp_db_replica" {
-  identifier          = "${var.env_prefix}-lamp-db-replica"
-  instance_class      = "db.t3.micro"
-  replicate_source_db = aws_db_instance.lamp_db_primary.identifier
+  identifier           = "${var.env_prefix}-lamp-db-replica"
+  instance_class       = "db.t3.micro"
+  replicate_source_db  = aws_db_instance.lamp_db_primary.identifier
+  db_subnet_group_name = aws_db_subnet_group.lamp_db_subnet_group.name
 
   vpc_security_group_ids = [aws_security_group.db_sg.id]
 

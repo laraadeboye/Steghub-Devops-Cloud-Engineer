@@ -48,12 +48,12 @@ variable "public_key_location" {
   type        = string
 }
 
-variable "ami" {
+variable "ami_id" {
   description = "ami image from which to launch instance"
   type        = string
 }
 
-variable "instance" {
+variable "instance_type" {
   description = "type of instance"
   type        = string
 }
