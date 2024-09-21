@@ -4,15 +4,36 @@ echo "Running install aws script..."
 
 cd /workspace
 
+# Clean up previous installations
 rm -f '/workspace/awscliv2.zip'
 rm -rf '/workspace/aws'
 
+# Download and Install AWS CLI
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
 
+# Confirm installation
 aws sts get-caller-identity
+
+
+# Create or update AWS credentials file
+mkdir -p ~/.aws
+
+{
+  echo "[default]"
+  echo "aws_access_key_id = $AWS_ACCESS_KEY_ID"
+  echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY"
+} > ~/.aws/credentials
+
+# Create or update AWS config file
+{
+  echo "[default]"
+  echo "region = $AWS_DEFAULT_REGION"
+  echo "output = $AWS_DEFAULT_OUTPUT"
+} > ~/.aws/config
 
 cd $PROJECT_ROOT
 
+# Check AWS CLI version
 aws --version
