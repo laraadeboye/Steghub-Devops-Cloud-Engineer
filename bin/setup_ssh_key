@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 # Setup ssh key for Lamp stack terraform environment
 echo "Setting up SSH key..."
 
@@ -32,13 +34,9 @@ else
     echo "Error: Public key file not found at $TERRAFORM_DIR/keys/gitpod_ec2_key.pub"
 fi
 
-# Import the public key to AWS as a key pair for manual EC2 instances
-aws ec2 import-key-pair --key-name "gitpod-ec2-key" --public-key-material fileb://~/.ssh/gitpod_ec2_key.pub
-
 
 # Remind about Terraform variable
 echo "
 Remember to set your Terraform variable 'public_key_location' to 'keys/gitpod_ec2_key.pub'
 in your variables.tf or terraform.tfvars when running Terraform.
 "
-echo "Usage for ssh connection:ssh -i ~/.ssh/gitpod_ec2_key ubuntu@<Public-IP>"
