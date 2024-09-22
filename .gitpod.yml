@@ -14,9 +14,9 @@ tasks:
     before: |
       ./bin/setup_ssh_key
 
-  - name: Setup SSH key for EC2
-    before: |
-      ./bin/setup_ssh_key_ec2
+  # - name: Setup SSH key for EC2
+  #   before: |
+  #     ./bin/setup_ssh_key_ec2
 
 vscode:
   extensions:
