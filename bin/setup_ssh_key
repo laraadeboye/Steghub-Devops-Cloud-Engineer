@@ -35,6 +35,7 @@ fi
 # Import the public key to AWS as a key pair for manual EC2 instances
 aws ec2 import-key-pair --key-name "gitpod-ec2-key" --public-key-material fileb://~/.ssh/gitpod_ec2_key.pub
 
+
 # Remind about Terraform variable
 echo "
 Remember to set your Terraform variable 'public_key_location' to 'keys/gitpod_ec2_key.pub'
