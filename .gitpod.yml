@@ -4,19 +4,16 @@ tasks:
       ./bin/install_terraform_cli      
 
   # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-  - name: Install AWS CLI
+  - name: Install AWS CLI and set SSH key for AWS environment
     env:
       AWS_CLI_AUTO_PROMPT: on-partial
     before: |      
       ./bin/install_aws_cli      
 
-  - name: Setup SSH key for terraform
+  - name: Setup SSH key for terraform 
     before: |
       ./bin/setup_ssh_key
 
-  # - name: Setup SSH key for EC2
-  #   before: |
-  #     ./bin/setup_ssh_key_ec2
 
 vscode:
   extensions:

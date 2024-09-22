@@ -43,7 +43,8 @@ aws --version
 
 # ----------------------------------------------------------------
 
-# set up ssh key for AWS
+# Set up ssh key for AWS. This ensures key is created after AWS CLI setup
+
 # Function to create and store the key
 create_and_store_key() {
     echo "Creating AWS EC2 key pair..."
