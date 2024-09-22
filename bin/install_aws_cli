@@ -43,57 +43,47 @@ aws --version
 
 # ----------------------------------------------------------------
 
-# Set up ssh key for AWS. This ensures key is created after AWS CLI setup
+#!/usr/bin/env bash
+
+set -e
+
+KEY_NAME="lempKey"
+KEY_PATH="$HOME/.ssh/${KEY_NAME}.pem"
 
 # Function to create and store the key
 create_and_store_key() {
-    echo "Creating AWS EC2 key pair..."
-    aws ec2 create-key-pair --key-name lempKey --query 'KeyMaterial' --output text > ~/.ssh/lempKey.pem
-    chmod 400 ~/.ssh/lempKey.pem
+    echo "Deleting existing key pair in AWS (if any)..."
+    aws ec2 delete-key-pair --key-name "$KEY_NAME" || true
+
+    echo "Creating new AWS EC2 key pair..."
+    aws ec2 create-key-pair --key-name "$KEY_NAME" --query 'KeyMaterial' --output text > "$KEY_PATH"
+    chmod 400 "$KEY_PATH"
 
     echo "Storing AWS private key into environment variable..."
-    AWS_PRIVATE_KEY_VALUE=$(cat ~/.ssh/lempKey.pem)
+    AWS_PRIVATE_KEY_VALUE=$(cat "$KEY_PATH")
     gp env AWS_PRIVATE_KEY="$AWS_PRIVATE_KEY_VALUE"
 
-    # Store the key name in an environment variable
-    gp env AWS_KEY_NAME="lempKey"
+    echo "Storing key name in environment variable..."
+    gp env AWS_KEY_NAME="$KEY_NAME"
 
     echo "Key created and stored successfully."
 }
 
-# Check if the AWS_KEY_NAME environment variable exists
-if [ -z "$AWS_KEY_NAME" ]; then
-    echo "No existing key information found."
-    create_and_store_key
-else
-    echo "Existing key information found: $AWS_KEY_NAME"
+# Main script
+echo "Setting up a fresh SSH key for AWS..."
 
-    # Check if the key exists in AWS
-    KEY_EXISTS=$(aws ec2 describe-key-pairs --key-names "$AWS_KEY_NAME" --query 'KeyPairs[0].KeyName' --output text 2>/dev/null)
+# Always create a new key
+create_and_store_key
 
-    if [ "$KEY_EXISTS" == "$AWS_KEY_NAME" ]; then
-        echo "AWS key pair '$AWS_KEY_NAME' exists in AWS."
-
-        # Check if we have the private key
-        if [ -n "$AWS_PRIVATE_KEY" ]; then
-            echo "Using existing private key from Gitpod environment."
-            echo "$AWS_PRIVATE_KEY" > ~/.ssh/lempKey.pem
-            chmod 400 ~/.ssh/lempKey.pem
-        else
-            echo "Private key not found in Gitpod environment."
-            echo "Deleting existing key pair in AWS and recreating..."
-            aws ec2 delete-key-pair --key-name "$AWS_KEY_NAME"
-            create_and_store_key
-        fi
-    else
-        echo "Key pair doesn't exist in AWS. Creating new key pair..."
-        create_and_store_key
-    fi
-fi
-
-# Always ensure the key is available as id_rsa as well
-cp ~/.ssh/lempKey.pem ~/.ssh/id_rsa
-chmod 600 ~/.ssh/id_rsa
+# Ensure the key is available as id_rsa as well
+cp "$KEY_PATH" "$HOME/.ssh/id_rsa"
+chmod 600 "$HOME/.ssh/id_rsa"
 
 echo "SSH key setup complete."
-echo "Usage: ssh -i ~/.ssh/lempKey.pem ubuntu@[Public-IP]"
+echo "New key pair '$KEY_NAME' has been created in AWS and stored locally."
+echo "Private key location: $KEY_PATH"
+echo "Usage: ssh -i $KEY_PATH ubuntu@[Public-IP]"
+
+# Display public key for verification
+echo "Public key (for verification):"
+ssh-keygen -y -f "$KEY_PATH"
