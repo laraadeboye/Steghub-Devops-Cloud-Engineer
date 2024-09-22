@@ -35,63 +35,6 @@ mkdir -p ~/.aws
 
 aws configure list
 
-# Create ssh keys for AWS environment:
-# Check if lempKey already exists in AWS
-KEY_EXISTS=$(aws ec2 describe-key-pairs --key-names lempKey --query 'KeyPairs[0].KeyName' --output text 2>/dev/null)
-
-if [ "$KEY_EXISTS" == "lempKey" ]; then
-  echo "AWS key pair 'lempKey' already exists."
-
-  # Check if the AWS_PRIVATE_KEY is set
-  if [ -z "$AWS_PRIVATE_KEY" ]; then
-    echo "No private key found in Gitpod environment."
-    echo "Deleting existing key pair and recreating..."
-
-    # Delete existing key pair
-    aws ec2 delete-key-pair --key-name lempKey
-
-    # Create the SSH key pair again
-    aws ec2 create-key-pair --key-name lempKey --query 'KeyMaterial' --output text > ~/.ssh/lempKey.pem
-    chmod 400 ~/.ssh/lempKey.pem
-
-    # Store the private key in the Gitpod workspace environment variable
-    echo "Storing AWS private key into environment variable..."
-    AWS_PRIVATE_KEY_VALUE=$(cat ~/.ssh/lempKey.pem)
-    gp env AWS_PRIVATE_KEY="$AWS_PRIVATE_KEY_VALUE"
-
-    # Move the private key into ~/.ssh and set it up for use. This is just for duplication.
-    cp ~/.ssh/lempKey.pem ~/.ssh/id_rsa
-    chmod 600 ~/.ssh/id_rsa
-
-  else
-    echo "Using existing private key from Gitpod environment."
-    echo "$AWS_PRIVATE_KEY" > ~/.ssh/id_rsa
-    chmod 600 ~/.ssh/id_rsa
-  fi
-
-else
-  echo "Creating AWS EC2 key pair..."
-
-  # Create the SSH key pair (only if it doesn't exist)
-  aws ec2 create-key-pair --key-name lempKey --query 'KeyMaterial' --output text > ~/.ssh/lempKey.pem
-
-  # Set proper permissions for the private key
-  chmod 400 ~/.ssh/lempKey.pem
-
-  # Store the private key in the Gitpod workspace environment variable
-  echo "Storing AWS private key into environment variable..."
-  AWS_PRIVATE_KEY_VALUE=$(cat ~/.ssh/lempKey.pem)
-  gp env AWS_PRIVATE_KEY="$AWS_PRIVATE_KEY_VALUE"
-
-  # Move the private key into ~/.ssh and set it up for use
-  echo "$AWS_PRIVATE_KEY_VALUE" > ~/.ssh/id_rsa
-  chmod 600 ~/.ssh/id_rsa
-
-  # Optionally add the EC2 instance's host to known hosts for SSH
-  # ssh-keyscan -H <your-ec2-public-dns> >> ~/.ssh/known_hosts
-fi
-
-echo "Usage: ssh -i ~/.ssh/lempKey ubuntu@[Public-IP]"
 
 cd $PROJECT_ROOT
 

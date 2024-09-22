@@ -10,9 +10,13 @@ tasks:
     before: |      
       ./bin/install_aws_cli      
 
-  - name: Setup SSH key
+  - name: Setup SSH key for terraform
     before: |
       ./bin/setup_ssh_key
+
+  - name: Setup SSH key for EC2
+    before: |
+      ./bin/setup_ssh_key_ec2
 
 vscode:
   extensions:
