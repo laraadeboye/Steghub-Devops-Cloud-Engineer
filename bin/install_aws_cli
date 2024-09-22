@@ -59,8 +59,8 @@ if [ "$KEY_EXISTS" == "lempKey" ]; then
     AWS_PRIVATE_KEY_VALUE=$(cat ~/.ssh/lempKey.pem)
     gp env AWS_PRIVATE_KEY="$AWS_PRIVATE_KEY_VALUE"
 
-    # Move the private key into ~/.ssh and set it up for use
-    echo "$AWS_PRIVATE_KEY_VALUE" > ~/.ssh/id_rsa
+    # Move the private key into ~/.ssh and set it up for use. This is just for duplication.
+    cp ~/.ssh/lempKey.pem ~/.ssh/id_rsa
     chmod 600 ~/.ssh/id_rsa
 
   else
@@ -91,7 +91,7 @@ else
   # ssh-keyscan -H <your-ec2-public-dns> >> ~/.ssh/known_hosts
 fi
 
-echo "Usage: ssh -i ~/.ssh/id_rsa ubuntu@[Public-IP]"
+echo "Usage: ssh -i ~/.ssh/lempKey ubuntu@[Public-IP]"
 
 cd $PROJECT_ROOT
 
