@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-
+# Setup ssh key for Lamp stack terraform environment
 echo "Setting up SSH key..."
 
 # Generate SSH key if it doesn't exist
