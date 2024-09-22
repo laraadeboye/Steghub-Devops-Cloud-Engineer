@@ -43,11 +43,13 @@ aws --version
 
 # Import the public key to AWS as a key pair for manual EC2 instances
 echo "Importing SSH public key to AWS..."
-aws ec2 import-key-pair --key-name "gitpod-ec2-key" --public-key-material fileb://~/.ssh/gitpod_ec2_key.pub
+aws ec2 import-key-pair --key-name "gitpod_ec2_key" --public-key-material fileb://~/.ssh/gitpod_ec2_key.pub
 
 echo "Usage for ssh connection:ssh -i ~/.ssh/gitpod_ec2_key ubuntu@<Public-IP>"
 
-
+# For every deletion of gitpod workspace. Delete the gitpod-ec2--key 
+# from AWS and Recreate the instance. Otherwise, back up all newly created key-pairs for
+# continued access to the ec2 instance
 
 
 
