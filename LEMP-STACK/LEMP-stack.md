@@ -622,7 +622,7 @@ This PHP script connects to a MySQL database, retrieves data from a "todo_list" 
 6. Visit the browser and you will see an image similar to the one below:
 
 ```sh
-http://[Publi-ip]/todo_list.php
+http://[Public-ip]/todo_list.php
 ```
 ![todo_list on browser](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/to%20do%20list%20on%20browser.png)
 
