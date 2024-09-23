@@ -25,7 +25,7 @@ The LEMP stack is a widely used software stack for serving web applications and 
 
 Nginx receives HTTP requests from clients. For dynamic pages, it forwards requests to PHP, which processes them, interacts with MySQL for data retrieval or storage, and sends results back to Nginx, which then responds to the client.
 
-In this project, i will provision the AWS EC2 instance from the commandline. The required prerequisite for this is configuration of the AWS CLI
+In this project, i will provision the AWS EC2 instance from the commandline. The required prerequisite for this is configuration of the AWS CLI.
 
 **Prerequisites**
 - AWS Account
@@ -46,7 +46,7 @@ You will be required to enter your AWS Access Key ID, Secret Access Key, Region 
 
 Run : `aws configure list` to verify the configuration.
 
-[IMAGE: AWS configure list]
+![Aws configure list](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/aws_configure_list.png)
 
 3. Choose an AMI: You can visit the console to choose an appropriate image or run the following command:
 
@@ -62,10 +62,11 @@ aws ec2 create-key-pair --key-name lempKey --query 'KeyMaterial' --output text >
 ```
 This command shows no output. The file is created in the current working directory and can be viewed with the `ls` command
 
-[IMAGE: Create lempkey]
+![Create lempkey](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/Create-lempKey.png)
 
 When you check the content, it should be similar to the image below:
-[IMAGE: cat lempKey]
+
+![cat lempKey](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/cat%20lempKey.png)
 
 Set the appropriate permission:
 
@@ -81,7 +82,7 @@ aws ec2 create-security-group --group-name <MySecurityGroup> --description "Secu
 ```
 This command will show the `GroupId` which be used in the next step.
 
-[IMAGE: groupid-securitygrp]
+![groupid-securitygrp](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/groupid-securitygrp.png)
 
 Run the following command to authorize ssh Access
 
@@ -90,7 +91,7 @@ aws ec2 authorize-security-group-ingress --group-id <GroupId> --protocol tcp --p
 
 ```
 
-[IMAGE: port 22 access]
+![port 22 access](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/port%2022%20access.png)
 
 Run the following to authorize http and https access:
 - **http**
@@ -99,7 +100,7 @@ Run the following to authorize http and https access:
 aws ec2 authorize-security-group-ingress --group-id <GroupId> --protocol tcp --port 80 --cidr 0.0.0.0/0
 
 ```
-[port 80 access any]
+![port 80 access any](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/port%2080%20access%20any.png)
 
 - **https**
 
@@ -107,7 +108,7 @@ aws ec2 authorize-security-group-ingress --group-id <GroupId> --protocol tcp --p
 aws ec2 authorize-security-group-ingress --group-id <GroupId> --protocol tcp --port 443 --cidr 0.0.0.0/0
 
 ```
-[port 443 access any]
+![port 443 access any](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/port%20443%20access%20any.png)
 
 Verify that the rules were added correctly:
 
@@ -115,7 +116,7 @@ Verify that the rules were added correctly:
 aws ec2 describe-security-groups --group-ids <GroupId>
 
 ```
-[image: all security grp]
+![image: all security grp](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/all%20security%20grp.png)
 
 
 6. Launch an ec2 instance: Run the command below to launch an instance
@@ -125,24 +126,24 @@ aws ec2 run-instances --image-id <ami-id> --count 1 --instance-type <instance-ty
 ```
 Replace <ami-id>, <instance-type>, <key-pair>, <security-group-id> as appropriate
 
-[Image Succesfully created instance]
+![Succesfully created instance](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/successfully%20created%20instance.png)
 
 On the console:
 
-[Image created instance on console]
+![created instance on console](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/Successful%20creation%20on%20the%20console.png)
 
 Note that to create the instance with a name, include a name tag as follows:
 
 ```sh
 aws ec2 run-instances --image-id <ami-id> --count 1 --instance-type <instance-type> --key-name <key-pair> --security-group-ids <security-group-id> --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=lempserver}]'
-
 ```
+
 7. ssh into the server. Ensure you are in the directory where your private key is and run the following command. Otherwise, use the full path of the key.
 
 ```sh
 ssh -i lempKey.pem ubuntu@54.164.242.184
 ```
-[Image SSh with Lemp Key]
+![SSh with Lemp Key](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/ssh%20with%20lempKey.png)
 
 ## Step 1 Install Nginx web server
 1. Update apt packages and Install Nginx on the server
@@ -158,7 +159,7 @@ sudo apt install nginx -y
 sudo systemctl status nginx
 ```
 
-[IMAGE: Nginx running]
+![Nginx running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/nginx%20running.png)
 
 3. Verify via curl on the terminal or on the web browser
 
@@ -166,7 +167,7 @@ sudo systemctl status nginx
 ```sh
 curl http://localhost:80
 ```
-[IMAGE: nginx on curl]
+![nginx on curl](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/nginx%20on%20curl.png)
 
 **web browser**
 Retrieve the public Ip address with the following command:
@@ -175,15 +176,12 @@ Retrieve the public Ip address with the following command:
 TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"` && curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/meta-data/public-ipv4
 
 ```
-
-```sh
-curl -s http://169.254.169.254/latest/meta-data/public-ipv4
-```
+View on browser:
 ```sh
 http://[Ubuntu-webserver-IP]
 ```
 
-[IMAGE: nginx on browse]
+![nginx on browse](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/nginx%20on%20browse.png)
 
 ## Step 2 Install MySQL
 1. Mysql is a popular relational database that we can use in this project. We will install it with apt.
@@ -196,7 +194,7 @@ Verify with:
 sudo systemctl status mysql
 ``` 
 
-[IMAGE: Systemctl mysql]
+![Systemctl mysql](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/systemctl%20mysql.png)
 
 2. Login to the mysql console:
 
@@ -218,7 +216,7 @@ Exit the mysql shell with the command `exit`
 ```sh
 sudo mysql_secure_installation
 ```
-[secure mysql]
+![secure mysql](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/secure-mysql.png)
 
 4. Test login to mysql
 ```sh
@@ -228,6 +226,8 @@ sudo mysql -p
 Exit
 
 We will be asked to configure the VALIDATE PASSWORD PLUGIN.
+
+![Secure MySQL cont](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/contine%20secure-mysql.png)
 
 ## Step 3 Install PHP
 
@@ -248,7 +248,7 @@ ls /var/run/php/
 ```sh
 sudo systemctl status php8.3-fpm #Replace with the appropriate version
 ```
-[image php running]
+![php running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/Php%20running.png)
 
 ## Step 4 Configure Nginx to use PHP processor
 
@@ -259,15 +259,18 @@ First create a system user with no acces to login for improved security:
 ```sh
 sudo useradd -rs /usr/sbin/nologin project_lemp
 ```
+
 Then create the root directory 
 ```sh
 sudo mkdir /var/www/project_lemp
 ```
+
 This command produces no output if successful.
 
-2. Assign ownership of the directory with $USER 
+2. Assign ownership of the directory 
 The current owner is root as seen in the image
-[Image: Current owner root]
+
+![Current owner root](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/Root%20owner%20lemp%20dir.png)
 
 ```sh
 sudo chown -R project_lemp:project_lemp /var/www/project_lemp
@@ -310,6 +313,31 @@ server {
     }
 }
 ```
+- The breakdown of the server block is as follows:
+
+    1. Server Configuration
+       - listen 80;: Listens on port 80 (default HTTP port).
+       - server_name project_lemp www.project_lemp;: Specifies the server name (domain or subdomain).
+       - root /var/www/project_lemp;: Sets the document root directory for the project.
+
+    2. Index Files
+       - index index.html index.htm index.php;: Defines the index files to serve when a directory is requested.
+
+    3. Logging
+       - access_log /var/log/nginx/project_lemp.access.log;: Logs access requests.
+       - error_log /var/log/nginx/project_lemp.error.log;: Logs errors.
+
+    4. Static File Handling
+       - location / { try_files $uri $uri/ =404; }: Attempts to serve files from the requested URI; if not found, returns a 404 error.
+
+    5. PHP Configuration
+       - location ~ \.php$ { ... }: Handles PHP files using PHP-FPM (FastCGI Process Manager).
+include snippets/fastcgi-php.conf;: Includes PHP configuration settings.
+       - fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;: Forwards PHP requests to PHP-FPM via a Unix socket (update the PHP version as needed).
+
+    6. Security
+      - location ~ /\.ht { deny all; }: Denies access to files starting with .ht (e.g., .htaccess).
+
 
 Next activate the configuration by creating a link to the config file form nginx sites-enabled directory:
 
@@ -322,7 +350,8 @@ Test the configuration by running:
 sudo nginx -t
 ```
 The configuration is ok if it shows an image similar to the one below:
-[image nginx -t 1]
+
+![image nginx -t 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/nginx%20-t%201.png)
 
 
 Also, disable the default nginx host configured on port 80:
@@ -352,14 +381,20 @@ sudo bash c 'echo 'HELLO LEMP from hostname' $(TOKEN=`curl -X PUT "http://169.25
 ```
 
 Set the correct permissions for the file:
+
 ```
 sudo chmod 644 /var/www/project_lemp/index.html
 ```
+![metadata on index.html](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/metadata%20on%20index.html.png)
 
-[Image metadata on index.html]
-Note: There is a  difference in IP. I had to unavoidably pause the configurations. BEing that I am using a cloud IDE-gitpod. The workspace and thehence the EC2 had to be recreated
+Here is the image of the metadata info of our server on browser:
+
+![Hello lemp](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/HEllo%20lemp.png)
+
+***Note: There is a  difference in IP. I had to unavoidably pause the configurations. Being that I am using a cloud IDE-gitpod, the workspace and hence, the EC2 instance had to be recreated***
 
 ## Step 6 Test server block with php
+
 1. Create a file named `info.php` in `/var/www/project_lemp/`. 
 
 ```sh
@@ -388,7 +423,7 @@ http://[Public-ip]/info.php
 ```
 This shows sensitive details about the php environment and ubuntu server as shown below:
 
-[image: php info page]
+![php info page](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/php%20info%20page.png)
 
 Remove the file or edit the script to contain:
 
@@ -398,7 +433,7 @@ echo "PHP is working";
 ?>
 ```
 
-[image: php is working]
+![php is working](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/php%20is%20working.png)
 
 ## Step 7 Retrieve data from the MySQl database with PHP
 We will:
@@ -409,7 +444,7 @@ We will create a new user with `caching_sha2_password` authentication method whi
 
 To confirm this, we will visit the php info page (Use the php info script we used previously and view it on the browser) and look for the MySQL native driver (`mysqlnd`) as shown:
 
-[Image: mysqlnd]
+![mysqlnd](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/mysqlind.png)
 
 Alternatively, you can verify the availability of the necessary driver by checking the version of php you are using and the modules installed:
 
@@ -423,7 +458,8 @@ Check php modules
 php -m
 ```
 
-[Image: php version and modules]
+![php version and modules](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/php%20version%20and%20php%20mod.png)
+
 1. Connect to the MySQL console with root:
 ```sh
 sudo mysql -p
@@ -434,14 +470,15 @@ sudo mysql -p
 ```sh
 CREATE DATABASE `example_database`;
 ```
-[image:create database]
-3. Create the user named `example_user` using `caching_sha2_password` as the default authetication method with the  password as`Passw0rd123@`
+![create database](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/Create%20database.png)
+
+3. Create the user named `example_user` using `caching_sha2_password` as the default authentication method with the  password as`Passw0rd123@`
 
 ```sh
 CREATE USER 'example_user'@'%' IDENTIFIED WITH caching_sha2_password BY 'Passw0rd123@';
 ```
 
-[create example user]
+![create example user](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/create%20eample%20user.png)
 
 Using the wildcard '%' means that the user can connect form any host machine and he is not retricted to logging in from the host machine lie the root user.
 
@@ -450,7 +487,7 @@ Using the wildcard '%' means that the user can connect form any host machine and
 ```sh
 GRANT ALL PRIVILEGES ON example_database. * TO 'example_user'@'%';
 ```
-(Note the period in front of the database)
+*(Note the period in front of the database)*
 
 This command grants this user `example_user` full access to only the `example_user` database. He doesn't have access to any other databases on the server.
 
@@ -471,18 +508,20 @@ In older legacy applications using old versions of php you cn use the `mysql_nat
 
 
 6. View the database and create the `todo_list` table:
+   
 1. View database with the following command:
 ```sh
 SHOW DATABASES;
 
 ```
-[Image show databases]
+![show databases](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/Show%20databases.png)
+
 2. Select the database:
 
 ```sh
 USE example_database;
 ```
-[Image Use database]
+![Use database](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/use%20database.png)
 
 2. Create a table with the following command:
 
@@ -510,13 +549,14 @@ INSERT INTO todo_list (task, status) VALUES
 SELECT * FROM todo_list;
 ```
 
-[Image Select from table]
+![Select from table](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/select%20from%20table.png)
 
 Exit the MySQL console.
 
 5. Create a PHP script that will connect to MySQL and query the content:
 
-First create a PHP file:
+First create th PHP file:
+
 ```sh
 vi /var/www/project_lemp/todo_list.php
 ```
@@ -560,13 +600,31 @@ try {
 }
 ?>
 ```
+- **The functionality of the script**
+
+This PHP script connects to a MySQL database, retrieves data from a "todo_list" table, and displays the tasks in an unordered list.
+
+- **Functionality Breakdown:**
+
+    1. Database Configuration: The script defines database connection parameters (host, database name, username, password, and table name).
+
+    2. Database Connection: It establishes a connection to the database using PDO (PHP Data Objects) and sets the error mode to throw exceptions.
+  
+    3. Query Execution: The script executes a SELECT query to retrieve all tasks from the "todo_list" table.
+  
+    4. Data Retrieval: It fetches all query results as an associative array.
+  
+    5. Displaying Results: If tasks exist, it displays them in an unordered list with task ID, description, and status. Otherwise, it shows a "No tasks found" message.
+
+    6. Error Handling: The script catches and displays any PDO exceptions that occur during database connection or query execution.
+
 
 6. Visit the browser and you will see an image similar to the one below:
 
 ```sh
 http://[Publi-ip]/todo_list.php
 ```
-
+![todo_list on browser](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/to%20do%20list%20on%20browser.png)
 
 ## Conclusion
-We have successfully deployed LEMP stack on AWS accessed the database with a php script.
+In this project, we successfully deployed a LEMP stack on AWS, providing a robust and efficient environment for serving web applications. By implementing a test database and creating a dynamic PHP script, we demonstrated how to interact with the database, showcasing the full capabilities of the LEMP stack. This hands-on experience solidified our understanding of server configurations and database management in a cloud environment.
