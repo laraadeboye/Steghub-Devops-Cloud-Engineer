@@ -51,5 +51,10 @@ echo "Usage for ssh connection:ssh -i ~/.ssh/gitpod_ec2_key ubuntu@<Public-IP>"
 # from AWS and Recreate the instance. Otherwise, back up all newly created key-pairs for
 # continued access to the ec2 instance
 
+# Create the workspace before you create the EC2 instance to allow time for the keypair to reflect
+#on the console
 
+########## Create BAckup by using EC2 instance connect ###############
+# Open EC2 instance connect on the console.
+# Add the public key to the authorized_keys file for persistence 
 
