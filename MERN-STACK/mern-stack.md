@@ -1,6 +1,8 @@
 
 # Deploying A MERN Stack To-Do App on AWS: A Step-by-Step Guide
-[mern on aws]()
+![mern on aws](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/mern%20on%20aws.png)
+
+## Table of Contents
 1. [Project Overview](#project-overview)
 2. [Prerequisites](#prerequisites)
 3. [Steps](#steps)
@@ -27,14 +29,14 @@ The application we will be deploying is a single-page application (SPA), a to-do
 ## Step 0 Prepare Prerequisites
 - Launch an EC2 instance named `mern-server`. We will be using an ubuntu instance LTS 24.04.
 
-[IMAGE: mern-server created]
+![mern-server created on aws](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/mern%20server%20created.png)
 
 -  SSH into the server from your local machine or development environment
 
 ```
 ssh -i /path/to/key ubuntu@[public-IP]
 ```
-[image: ssh into mern-server]
+![ssh into mern-server](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/ssh%20into%20mern-server.png)
 
 ## Step 1 Configure the backend
 
@@ -56,7 +58,7 @@ node -v
 npm -v
 ```
 
-[node and npm version]
+![node and npm version](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/node%20and%20npm%20version.png)
 
 #### Set up application code
 - First, we will create a new directory for the To-do app project and verify its creation with the `ls` command:
@@ -64,7 +66,7 @@ npm -v
 ```
 mkdir Todo && ls
 ```
-[make Todo dir]
+![make Todo dir](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/make%20Todo%20dir.png)
 
 - Change directory to the newly created directory:
 
@@ -77,16 +79,16 @@ cd Todo
 ```
 npm init
 ```
-[image: npm init]
+![npm init](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/npm%20init.png)
 Press enter/return key to accept the default values. Finally enter `yes` to accept.
 
 This command creates a new `package.json` file within our folder that contains the application code and the dependencies it requires to run.
 
-[image: npm init accept default values]
+![npm init accept default values](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/npm%20init%20accept%20default%20values.png)
 
 The content of the package.json is similar to the image below:
 
-[content of the package.json]
+![content of the package.json](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/package.json%20content.png)
 
 - Install Expressjs and the dotenv module
 Expressjs is a framework for Node.js. It helps to simplify development.
@@ -95,9 +97,9 @@ We will install it with npm:
 ```
 npm install express dotenv
 ```
-[image install express dotenv]
+![image install express dotenv](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/install%20express%20dotenv.png)
 
-[listing after express dotenv]
+![listing after express dotenv](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/listing%20after%20express%20dotenv.png)
 
 Create the `index.js` file which is the entry point of the application:
 ```
@@ -146,7 +148,7 @@ node index.js
 ```
 The image below shows the running server.
 
-[image: node server running on port 5000]
+![node server running on port 5000](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/server%20running%20on%20port%205000.png)
 
 Note the port the server is running on and open the port in the security group with the following command:
 
@@ -160,8 +162,6 @@ Retrieve groupId for a specific security group
 ```
 aws ec2 describe-security-groups --group-names "my-security-group" --query "SecurityGroups[*].GroupId" --output text
 ```
-
-[image: Retrieve groupid]
 
 Create an ingress rule for the port from anywhere `0.0.0.0/0`
 
@@ -186,7 +186,7 @@ Next, access your server's public IP in your browser:
 ```
 http://[public-ip]:5000
 ```
-[image: Welcome to Express browser]
+![image: Welcome to Express browser](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Welcome%20to%20Express%20browser.png)
 
 ** Hints/ Troubleshooting ** : 
 - If you get "ERR_SSL_PROTOCOL_ERROR" , check that you are running the application of http not https.
@@ -344,23 +344,23 @@ It interacts with the MongoDB database using the Mongoose model we defined earli
 We will use mongoDB to store our data. We will use a database as a service solution that used to be called `mLab`. `mLab` was a popular cloud database service for MongoDB, but it has since been acquired by MongoDB and merged into `MongoDB Atlas`, their cloud-based service. Since mLab no longer offers services independently, the process for creating a free MongoDB cluster now involves using `MongoDB Atlas`.
 
 Sign up for `MongoDB Atlas`. Once signed in you will be taken to the `MongoDB Atlas dashboard`. And then, the **Deploy your cluster page**
-[image: mongodb atlas dashboard]
-[image: mongodb atlas deploy your cluster page]
+![image: mongodb atlas dashboard](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/MongoDB%20atlas%20dashboard.png)
+![image: mongodb atlas deploy your cluster page](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Deploy%20ur%20cluster.png)
 
 Or follow the steps below:
 
 - Create a New Project: Click on **New Project** to create a new project where your cluster will reside. Name the project and click "**Next**".
 
-[image: Create a project]
-[image mern stack project creation]
+![image: Create a project](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Create%20a%20project.png)
+![image mern stack project creation](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/mern%20stack%20project%20creation.png)
 
 - Create a Free Cluster: In the newly created project, click "**Build a Cluster**", Choose "**Shared Clusters**" and select the "**Free tier**" (M0 cluster).You have options to configure the cloud provider (Choose AWS) and the region closest to you. Ensure you select the regions that have free tier available. We will choose the option of allowing access to the MongoDB database from anywhere.This is ideal for testing cases. [Note that stricter maeasures should be applied for production environment]. Also change the time of deleting entry from 6hours to 1 week.
 
-[image: Create a Cluster]
-[image: Deploy your Cluster]
+![image: Create a Cluster](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Create%20a%20cluster.png)
+![image: Deploy your Cluster](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Deploy%20ur%20cluster.png)
 
 Click on "**Create your deployment**", will show the image below:
-[image: Connect to todo app cluster]
+![image: Connect to todo app cluster](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Connect%20to%20%20todo%20app%20cluster.png)
 
 Note that, I have covered personal details,
 
@@ -368,20 +368,20 @@ From the pop-up you can set up your Network Access and Database user.
 
 - Set up MongoDB User: Click "**Database Access**" and then Click "**Add New Database User**". Choose "**Password**" for the authentication method and set the username and password.
 
-[Database Access]
-[Database Access 2]
-I used a weak passwordfor testing purposes. It is ideal to use strong passwords for production environments.
+![Database Access](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Database%20Access.png)
+![Database Access 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Database%20Access%202.png)
+I used a weak password for testing purposes. It is ideal to use strong passwords for production environments.
 
 - Set IP Whitelist: This allows your local machine or application to connect to MongoDB Atlas cluster. Click "**Network Access**", then click "**Add IP Address**". You can allow access from anywhere by entering `0.0.0.0/0`. This is ideal for testing cases. [Note that stricter maeasures should be applied for production environment].
 
-[image: Network access]
+![image: Network access](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Network%20Access.png)
 
-[image: Network access from Anywhere]
+![image: Network access from Anywhere](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Network%20Access%20from%20anywhere.png)
 
 - Choose a connection method: After setting the database user and network access, Close the pop-up. On the dashboard, click "**Get connection string**". Then click "**Done**"
-[image Get connection string 1]
+![image Get connection string 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Get%20connection%20string.png)
 
-[image Get connection string 2]
+[image Get connection string 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Get%20connection%20string%202.png)
 
 Copy the connection string for use in the application:
 
@@ -473,7 +473,7 @@ We will start the Node.js server:
 node index.js
 ```
 
-[Image: Database Connected successfully]
+![Image: Database Connected successfully](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Database%20connected%20successfully.png)
 
 
 ## Step 2 Test the Backend code with Postman
@@ -484,7 +484,8 @@ Install postman on your machine or use the web version.
 I will be using the web version as it provides equal functionality. Also, because I am using a cloud IDE.
 
 - Visit [Postman website](https://web.postman.co/) and sign up or sign in to your account.
-[postman dashboard]
+  
+![postman dashboard](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/postman%20dashboard.png)
 
 - In Postman Web, create a new request by clicking "**Send an API Request**".
 
@@ -501,14 +502,14 @@ To set the body, click on the body tab below the URL field >> Select raw >> add 
 }
 
 ```
-[Image post into the body]
+![Image post into the body](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/post%20to%20the%20body.png)
 
 - Set the Headers: (D)
 
 Key: value (Content-type: application/json)
 
 
-[Image postman dashboard labelled]
+![Image postman dashboard labelled](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/postman%20labelled.png)
 
 
 E shows example result of the test on the POST request. The 200 OK status code means that the request was successful.
@@ -516,15 +517,15 @@ E shows example result of the test on the POST request. The 200 OK status code m
 It is important to test all the endpoints:
 
 Testing the HTTP GET request to display a list of tasks, we get the following:
-[Get request]
+![Get request](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Get%20request.png)
 
 Testing the HTTP DELETE request to test how to deleting an existing task:
 
-[Delete request by Id]
+![Delete request by Id](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Delete%20request%20by%20id.png)
 
 if we check the GET endpoint again , we see that we are left with two tasks instead of three.
 
-[Get after Delete]
+![Get after Delete](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Get%20after%20Delete.png)
 
 ## Step 3 Create the frontend
 We will create a user interface for a web client to interact with the to-do app via API. 
@@ -565,8 +566,8 @@ Replace the `"scripts"` section with the following:
 "dev": "concurrently \"npm run start-watch\" \"cd client && npm start\""
 },
 ```
-[replace this script section]
-[with this script]
+![replace this script section](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/replace%20this%20script%20section.png)
+![with this script](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/with%20this%20script.png)
 
 - **Configure proxy in `package.json**
 We will configure proxy in `package.json`
@@ -591,7 +592,7 @@ Add the key value pair:
 
 Including the proxy configuration makes it possible to access the application directly from the browser by calling the server url `http://localhost:5000` rather than always including the entire path `http://localhost:5000/api/todos`
 
-Navigate to the todo directory and run:
+Navigate to the Todo directory and run:
 
 ```
 npm run dev
@@ -600,7 +601,7 @@ The app will run on `localhost:3000`, the default port for react app.
 
 Hint: Open security group port to allow TCP port `3000`.
 
-[image react app running]
+![image react app running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/React%20app%20running.png)
 
 
 ## Step 4 Create the React Components
@@ -930,7 +931,9 @@ npm run dev
 ```
 We will be able to view the app running on port 3000 as shown below. we will observe that the app has listed already, what we used in the postman tests. The todo list app is functional!
 
-[Image: Functional todo list app]
+![Image: Functional todo list app](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Functional%20to-do%20list%20%20app.png)
+
+
 ## Conclusion
 
 This project demonstrates the complete deployment process of a MERN stack to-do application on AWS. From setting up the backend with Node.js and Express.js, to integrating MongoDB Atlas for database storage, and finally deploying the React-based frontend, this guide covers the essential steps for developing and deploying a dynamic single-page application (SPA). The final product allows users to add, view, and delete tasks, leveraging AWS infrastructure for scalability and security.
