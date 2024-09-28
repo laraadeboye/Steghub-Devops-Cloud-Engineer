@@ -47,7 +47,7 @@ aws ec2 import-key-pair --key-name "gitpod_ec2_key" --public-key-material fileb:
 
 echo "Usage for ssh connection:ssh -i ~/.ssh/gitpod_ec2_key ubuntu@<Public-IP>"
 
-# For every deletion of gitpod workspace. Delete the gitpod-ec2--key 
+# For every deletion of gitpod workspace. Delete the gitpod_ec2_key 
 # from AWS and Recreate the instance. Otherwise, back up all newly created key-pairs for
 # continued access to the ec2 instance
 
@@ -55,6 +55,12 @@ echo "Usage for ssh connection:ssh -i ~/.ssh/gitpod_ec2_key ubuntu@<Public-IP>"
 #on the console
 
 ########## Create BAckup by using EC2 instance connect ###############
-# Open EC2 instance connect on the console.
+# Connect EC2 via instance connect on the console.
 # Add the public key to the authorized_keys file for persistence 
+
+
+########## Create Backup by saving content of gitpod_ec2_key and gitpod_ec2_key.pub ###############
+# Save content in a text file on local system
+# Once gitpod restarts, wipe out the content of both files and replace with your previously saved keys.
+# This ensures continued access to the instance
 
