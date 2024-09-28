@@ -8,7 +8,7 @@
     * [Step 1 Configure the backend](#step-1-configure-the-backend)
     * [Step 2 Test the Backend code with Postman](#step-2-test-the-backend-code-with-postman)
     * [Step 3 Create the frontend](#step-3-create-the-frontend)
-    * [Step 4 Create the React Components](#step-5-create-the-react-components)
+    * [Step 4 Create the React Components](#step-4-create-the-react-components)
     * [Step 5 Run the app](#step-5-run-the-app)
 4. [Conclusion](#conclusion)
 
