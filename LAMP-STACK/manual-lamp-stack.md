@@ -1,6 +1,6 @@
 
 # LAMP STACK ON AWS
-
+![Lamp](https://raw.githubusercontent.com/laraadeboye/Steghub-Devops-Cloud-Engineer/refs/heads/main/LAMP-STACK/images/LAMP-img.webp)
 ## Table of Content
 1. [LAMP STACK ON AWS](#lamp-stack-on-aws)
 2. [What Problem does LAMP stack solve?](#what-problem-does-lamp-stack-solve)
