@@ -1,5 +1,5 @@
 # LEMP STACK ON AWS
-
+![Lemp](https://raw.githubusercontent.com/laraadeboye/Steghub-Devops-Cloud-Engineer/refs/heads/main/LAMP-STACK/images/LAMP-img.webp)
 ## Table of Content
 1. [Project Overview](#project-overview)
 2. [Steps](#steps)
