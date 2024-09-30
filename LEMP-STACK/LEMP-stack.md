@@ -1,5 +1,5 @@
 # LEMP STACK ON AWS
-
+![Lemp](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LEMP-STACK/images/InstaLL%20LEMP%20STACK%20ON%20AWS.png)
 ## Table of Content
 1. [Project Overview](#project-overview)
 2. [Steps](#steps)
