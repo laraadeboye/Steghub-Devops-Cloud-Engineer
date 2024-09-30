@@ -32,6 +32,8 @@ terraform --version
 echo "Installing utilities..."
 sudo apt-get update
 sudo apt-get install -y tree
+sudo apt install curl -y 
+sudo apt-get install unzip -y
 
 
 
