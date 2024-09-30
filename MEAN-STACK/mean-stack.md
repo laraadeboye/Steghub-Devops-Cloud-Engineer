@@ -50,7 +50,7 @@ node -v # should print `v20.17.0`
 npm -v # should print `10.8.2`
 ```
 
-[image node v.npm v]
+![image node v.npm v](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MEAN-STACK/images/node%20v.%20npm%20v.png)
 
 Note that the fnm package manager may require the curl and the unzip dependencies to be installed. They can be installed using apt.
 
@@ -85,7 +85,7 @@ sudo systemctl enable mongod
 sudo systemctl status mongod
 ```
 
-[image Mongod service started]
+![image Mongod service started](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MEAN-STACK/images/Mongod%20service%20started.png)
 
 -Install `body-parser`
 The `body-parser` package helps us to process JSON files passed in requests to the server
@@ -96,7 +96,7 @@ The `body-parser` package helps us to process JSON files passed in requests to t
 npm install body-parser
 ```
 
-[npm install body-parser]
+![npm install body-parser](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MEAN-STACK/images/npm%20install%20body-parser.png)
 
 -Create a folder named `Books` and cd into it:
 
@@ -110,7 +110,7 @@ mkdir Books && cd Books
 npm init
 ```
 
-[image npm init]
+![image npm init](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MEAN-STACK/images/npm%20init.png)
 
 - create a file named ``server.js` and enter the following code:
 
@@ -639,11 +639,11 @@ button.edit:hover {
 node server.js
 ```
 
-[image: Mongo database connected]
+![image: Mongo database connected](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MEAN-STACK/images/Mongo%20database%20connected.png)
 
 We can now access the Book Register via its public IP.
 
-[image: Book Management App]
+![image: Book Management App](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MEAN-STACK/images/Book%20management%20app.png)
 
 
 ## Conclusion
