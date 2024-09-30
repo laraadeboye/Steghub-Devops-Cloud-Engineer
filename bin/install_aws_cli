@@ -56,7 +56,7 @@ echo "Usage for ssh connection:ssh -i ~/.ssh/gitpod_ec2_key ubuntu@<Public-IP>"
 
 ########## Create BAckup by using EC2 instance connect ###############
 # Connect EC2 via instance connect on the console.
-# Add the public key to the authorized_keys file for persistence 
+# Manually add the public key to the authorized_keys file for persistence 
 
 
 ########## Create Backup by saving content of gitpod_ec2_key and gitpod_ec2_key.pub ###############
