@@ -40,7 +40,7 @@ ssh -i /path/to/key ubuntu@[public-IP]
 
 ## Step 1 Configure the backend
 
-#### Update and upgrade the ubuntu instance:
+- Update and upgrade the ubuntu instance:
 
 ```sh
 sudo apt update -y && sudo apt upgrade -y
@@ -102,13 +102,14 @@ npm install express dotenv
 ![listing after express dotenv](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/listing%20after%20express%20dotenv.png)
 
 Create the `index.js` file which is the entry point of the application:
-```
+
+```sh
 vi index.js
 ```
 
 We will write the following code into the `index.js` file. Open the file with an editor of choice and enter the code:
 
-```
+```js
 // Importing dependencies
 const express = require('express');
 require('dotenv').config();
@@ -159,15 +160,15 @@ aws ec2 describe-security-groups --query "SecurityGroups[*].{ID:GroupId,Name:Gro
 ```
 
 Retrieve groupId for a specific security group
-```
+
+```sh
 aws ec2 describe-security-groups --group-names "my-security-group" --query "SecurityGroups[*].GroupId" --output text
 ```
 
 Create an ingress rule for the port from anywhere `0.0.0.0/0`
 
-```
+```sh
 aws ec2 authorize-security-group-ingress --group-id [GroupId] --protocol tcp --port [port] --cidr 0.0.0.0/0
-
 ```
 
 Alternatively, set the security group ingress via the AWS console.
@@ -176,24 +177,24 @@ Alternatively, set the security group ingress via the AWS console.
 
 Retrieve your server's public IP with the instance metadata
 
-```
+```sh
 TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"` && curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/meta-data/public-ipv4
-
 ```
 
 
 Next, access your server's public IP in your browser:
-```
+
+```sh
 http://[public-ip]:5000
 ```
 ![image: Welcome to Express browser](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Welcome%20to%20Express%20browser.png)
 
-** Hints/ Troubleshooting ** : 
+**Hints/ Troubleshooting** : 
 - If you get "ERR_SSL_PROTOCOL_ERROR" , check that you are running the application of http not https.
 
 - When you run `node index.js` you will not be able work on that terminal, resolve this by ssh into the instance on another terminal. Alternatively, run the server with the ampersand symbol to run it in the background: `node index.js &`
 
-
+&nbsp;
 - **Routes**
 Our to-do app will be able to perform the following three actions which will be associated with specific endpoints.
 
@@ -207,18 +208,18 @@ We will create `routes` that will define the endpoints that the to-do app requir
 
 In a new terminal,create a folder called `routes` and `cd` into it.
 
-```
+```sh
 mkdir routes && cd routes
 ```
 We will create a file named `api.js` inside the folder, opening it with an editor of choice.
 
-```
+```sh
 vi api.js
 ```
 
 Enter the following code:
 
-```
+```js
 // Import Express and Create a router
 const express = require('express');
 const router = express.Router();
@@ -258,7 +259,7 @@ We will create a model since our app is using Mongodb, a NoSQL database. A model
 
 Install mongoose inside the `Todo` folder:
 
-```
+```sh
 cd Todo && npm install mongoose
 ```
 
@@ -270,7 +271,7 @@ mkdir models && cd models && vi todo.js
 
 Enter the following code into the `todo.js` file:
 
-```
+```js
 // Import mongoose
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema; // retrieves the mongoose schema constructor
@@ -296,7 +297,7 @@ Since our MongoDB models has been set up, we need to update the `routes` in the 
 
 Delete the previous content of the `api.js` file and enter the following:
 
-```
+```js
 // Import Dependencies 
 const express = require('express');
 const router = express.Router();
@@ -387,7 +388,7 @@ Copy the connection string for use in the application:
 
 It is in the following format:
 
-```
+```sh
 mongodb+srv://username:<db_password>@todo-app-cluster.vj1ly.mongodb.net/?retryWrites=true&w=majority&appName=todo-app-cluster
 ```
 
@@ -396,19 +397,19 @@ Note that the UI may differ. But the process of configuration remains largely th
 - **Creating an Environment variable file**
 In our `index.js` we specified a `process.env` to access environment variables. Hence, we need to create the file named `.env` as follows in the `todo ` directory and add the connection string:
 
-```
+```sh
 vim .env
 ```
 
 Add the connection string similar to the below:(Preferably get the connection string on the mongo Atlas dashboard)
 
-```
+```sh
 DB = mongodb+srv://username:<db_password>@todo-app-cluster.vj1ly.mongodb.net/?retryWrites=true&w=majority&appName=todo-app-cluster
 ```
 
 Next we will update the index.js to reflect the use of the `.env` so that Node.js can connect to the database. Simply delete the existing content of the file and add the following code:
 
-```
+```js
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -512,7 +513,7 @@ Key: value (Content-type: application/json)
 ![Image postman dashboard labelled](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/postman%20labelled.png)
 
 
-E shows example result of the test on the POST request. The 200 OK status code means that the request was successful.
+(E) shows example result of the test on the POST request. The 200 OK status code means that the request was successful.
 
 It is important to test all the endpoints:
 
@@ -569,7 +570,7 @@ Replace the `"scripts"` section with the following:
 ![replace this script section](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/replace%20this%20script%20section.png)
 ![with this script](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/with%20this%20script.png)
 
-- **Configure proxy in `package.json**
+- **Configure proxy in `package.json`**
 We will configure proxy in `package.json`
 
 change directory to the `client` folder:
@@ -625,7 +626,7 @@ We will create three files namely: `Input.js`, `ListTodo.js` `Todo.js`
 In the `input.js`, enter the following code:
 
 
-```
+```js
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -696,7 +697,7 @@ vim ListTodo.js
 
 Paste the code below into the file:
 
-```
+```js
 import React from 'react';
 
 const ListTodo = ({ todos, deleteTodo }) => {
@@ -722,7 +723,7 @@ This component is designed to display and manage a list of Todo items, allowing 
 
 Then add the following code to the Todo.js file:
 
-```
+```js
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -781,7 +782,7 @@ This React code defines a Todo component that manages a Todo list application. I
 
 We will open the `App.js` file located in `src`. Change directory to the `src` directory and enter the following:
 
-```
+```js
 import React from 'react';
 
 import Todo from './components/Todo';
@@ -809,7 +810,7 @@ Still in the src directory , we will open the `App.css` and paste the following 
 vi App.css
 ```
 
-```
+```css
 .App {
     text-align:center;
     font-size: calc(10px + 2vmin);
@@ -904,7 +905,7 @@ button {
 
 In the src directory, also open the `index.css` and enter the following css code:
 
-```
+```css
 body {
     margin: 0;
     padding: 0;
