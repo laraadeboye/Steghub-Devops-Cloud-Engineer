@@ -2,6 +2,7 @@
 # Network Diagnostic Commands in Linux
 
 1. **Ping**
+
 Tests the reachability of a host and measures round-trip time.
 
 Basic Usage:
@@ -20,6 +21,7 @@ Specify Packet Size:
 ping -s 64 google.com
 ```
 2. **Traceroute**
+   
 Maps the path that packets take from your machine to a specified destination.
 
 Basic Usage:
@@ -28,6 +30,7 @@ Basic Usage:
 traceroute google.com
 ```
 3. **Nslookup**
+
 Queries the DNS to obtain domain name or IP address mapping.
 
 Basic Usage:
@@ -37,6 +40,7 @@ nslookup google.com
 ```
 
 4. **Netstat**
+   
 Displays network connections, routing tables, interface statistics, and more.
 
 Basic Usage:
@@ -45,6 +49,7 @@ Basic Usage:
 netstat -tuln
 ```
 5. **Tcpdump**
+   
 Captures and analyzes network packets.
 
 Basic Usage:
@@ -53,6 +58,7 @@ Basic Usage:
 tcpdump -i eth0
 ```
 6. **Iperf**
+   
 Measures bandwidth between two hosts over TCP or UDP.
 
 Server Mode:
@@ -67,6 +73,7 @@ iperf -c <server_ip>
 ```
 
 7. **Dig**
+   
 Performs DNS lookups and displays the answers from the name server(s).
 
 Basic Usage:
@@ -75,6 +82,7 @@ Basic Usage:
 dig google.com
 ```
 8. **Nmap**
+
 Network exploration tool and security scanner.
 
 Basic Usage:
@@ -83,6 +91,7 @@ Basic Usage:
 nmap 192.168.1.0/24
 ```
 9. **Curl**
+    
 Transfers data using various protocols.
 
 Basic Usage:
@@ -90,6 +99,7 @@ Basic Usage:
 curl https://example.com
 ```
 10. **Ss**
+    
 Another utility to investigate sockets.
 
 Basic Usage:
@@ -97,6 +107,7 @@ Basic Usage:
 ss -tuln
 ```
 11. **Hostname**
+    
 Displays or sets the system's host name.
 
 Basic Usage:
@@ -105,6 +116,7 @@ Basic Usage:
 hostname
 ```
 12. **Ifconfig / Ip**
+
 Configures network interfaces.
 
 Basic Usage:
@@ -114,6 +126,7 @@ ifconfig
 ip addr show
 ```
 13. **Mtr**
+    
 Combines the functionality of 'traceroute' and 'ping'.
 
 Basic Usage:
