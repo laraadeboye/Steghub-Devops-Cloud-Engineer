@@ -1,6 +1,8 @@
 
 # CLIENT-SERVER ACHITECTURE WITH MYSQL
 
+![client-server diagram](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/client-server%20diagram.png)
+
 ## Overview:
 In a client-server architecture, the client requests data or services, and the server responds with the requested information. For a MySQL-based architecture, the client would communicate with a MySQL server, where the database operations such as queries, inserts, updates, and deletions occur.
 
@@ -19,7 +21,7 @@ Stores the data.
 Responds to queries from the server to fetch or update data.
 
 
-To demostrate the client server architecture, we will follow the following steps:
+To demonstrate the client server architecture, we will follow the following steps:
 
 ## Steps
 
@@ -27,30 +29,32 @@ To demostrate the client server architecture, we will follow the following steps
 
 - We will launch two ubuntu instances on AWS named `mysql-server` and `mysql-client`
 
-[image 2-ubuntu-instances]
+![image 2-ubuntu-instances](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/2-ubuntu-instances.png)
 
 Note the public-IP of the `mysql-client` server
 
-In this case, mine is `
+In this case, mine is `98.80.124.104`
 
-[image  mysql-client-public-ip]
+![image  mysql-client-public-ip](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/mysql-client-public-ip.png)
 
 - Open security groups ports on `3306`, the default mySQL port on `mysql-server` from the specific IP of the `mysql-client`
 
-[image 3306 and 22 open on mysql-server from mysql-client]
+![image 3306 and 22 open on mysql-server from mysql-client](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/3306%20and%2022%20open%20on%20mysql-server%20from%20mysql-client.png)
 
 The only ports open on our `mysql-server` are `3306` for database access `22` for server configurations.
 
 - We will open SSH, HTTP, and HTTPs access on the `mysql-client` server so that we can access it from our local system and from anywhere. Also, to simulate real time client.
 
-[image mysql-client-SG]
+![image mysql-client-SG](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/mysql-client-SG.png)
 
 A and B are specific IP ranges for EC2-instance-connect and my local IP range respectively.
 
 SSH into both servers. I will be using the EC2 instance connect. You can also access the server from your local system via SSH.
-[image ssh into mysql-client with instance connect]
+![image ssh into mysql-client with instance connect](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/ssh%20into%20mysql-client%20with%20instance%20connect.png)
 
-[image ssh into mysql-server with instance connect]
+&nbspp;
+
+![image ssh into mysql-server with instance connect](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/ssh%20into%20mysql-server%20with%20instance%20connect.png)
 
 
 ## Step 2 Install MySQL-server and Configure mysql-server to allow connections form remote hosts.
@@ -76,7 +80,8 @@ sudo systemctl restart mysql
 sudo mysql
 
 ```
-[image mysql-server installed on mysql-server]
+
+![image mysql-server installed on mysql-server](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/mysql-server%20installed%20on%20mysql-server.png)
 
 Set the root user password:
 ```
@@ -105,7 +110,7 @@ Change this line to `0.0.0.0 ` to allow MySQL to listen on all network interface
 ```
 sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
-[Configure remote access everywhere]
+![Configure remote access everywhere](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/configure%20remote%20access%20everywhere.png)
 
 Save and exit the file.
 
@@ -125,6 +130,8 @@ sudo apt update -y
 sudo apt install mysql-client -y
 ```
 
+![mysql-client installed](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/mysql-client%20installed.png)
+
 ## Step 4 Connect to `mysql-server` via `mysql-client` Linux server.
 
 
@@ -138,7 +145,7 @@ First create a remote user named `remote_user` on `mysql-server`:
 sudo mysql -u root -p
 ```
 
-[Login to mysql-server with root]
+![Login to mysql-server with root](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/Login%20to%20mysql-server%20with%20root.png)
 
 - Create a new user named `remote-user` and grant all privileges to the user:
 
@@ -156,7 +163,7 @@ Exit the mysql console.
 exit
 ```
 
-[image create remote user]
+![image create remote user](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/create%20remote%20user.png)
 
 
 '%' allows you to connect from any IP. It can be replaced with a specific IP for improved security.
@@ -188,14 +195,14 @@ Finally, connect remotely using the mysql client from the `mysql-client` server:
 mysql -h [mysql-server-ip] -u [username] -p
 ```
 
-for instance, `3.82.5.9` is the mysql-server public -IP
+for instance, in my case, `3.82.5.9` is the mysql-server public -IP
 
 ```sh
 mysql -h 3.82.5.9 -u remote_user -p 
 
 # You will be prompted to enter the password for remote user which in our case is `Passw0rd321#`
 ```
-[image successful login to mysql server from client]
+![image successful login to mysql server from client](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/successful%20login%20to%20mysql%20server%20from%20client.png)
 
 - Run some database commands from `mysql-client` server to verify remote access:
 
@@ -205,7 +212,12 @@ mysql -h 3.82.5.9 -u remote_user -p
 SHOW databases;
 
 ```
-[image; show databases]
+![image; show databases](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/SHow%20databases.png)
+
+&nbsp;
+
+- Create database and table
+
 ```sql
 
 /* Create database, create table */
@@ -235,9 +247,9 @@ SHOW TABLES;
 
 ```
 
-[show tables]
+![show tables](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CLIENT-SERVER/images/Show%20tables.png)
 
-Note that we are performing this actions from the mysql-client server.
+Note that we performed this actions from the mysql-client server, thereby demonstrating the client-server architecture
 
 
 
