@@ -1,6 +1,6 @@
 
 # Deploying A MERN Stack To-Do App on AWS: A Step-by-Step Guide
-![mern on aws](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/mern%20on%20aws.png)
+![mern on aws](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/MERN-STACK/images/Untitled%20design%20(1).png)
 
 ## Table of Contents
 1. [Project Overview](#project-overview)
