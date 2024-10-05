@@ -690,6 +690,8 @@ Enter the following:
     CustomLog /var/log/http/access.log combined
 </VirtualHost>
 ```
+&nbsp;
+Remember to replace `your_domain_or_ip` with your domain. In this case, I used `wordpress`(the document folder) since I did not create a domain for this project.
 
 
 Visiting our instance public-Ip, we see the following image
