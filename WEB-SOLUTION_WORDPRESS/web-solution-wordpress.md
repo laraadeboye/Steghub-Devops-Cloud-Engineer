@@ -32,7 +32,7 @@ This is a client-server software architecture pattern that comprises of three di
 
 ## Prerequisites
 
-- linux OS on AWS (Amazon Linux 2023 which is based on Redhat and Centos)
+- linux OS on AWS 
 
 - Basic knowledge of AWS
 
@@ -41,7 +41,7 @@ This is a client-server software architecture pattern that comprises of three di
 
 - Launch an EC2 instance- REDHAT OS named `project-web`
 
-[image: project-web running]
+![image: project-web running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/project-web%20running.png)
 
 Ensure that the security group allows internet access on port `80` and `443` from anywhere on the internet.
 
@@ -57,21 +57,21 @@ Select the `project-web`
 
 On the side navigation bar, click on volumes and enter the appropriate details based on your specifications. Name the volumes: `project-web-volume1`, `project-web-volume2` and `project-web-volume3` respectively.
 
-[image volumes created]
+![image volumes created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/Volume%20created%20(2).png)
 
 - Attach each of the block volumes to the AWS instance, `project-web`
 
-[image volumes attached]
+![image volumes attached](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/volumes%20attached.png)
 
 Alternatively, (easiest way), Create the volumes by editing the **configure storage** section while launching the instance. The volumes will be automatically attached and created in the same availability zone of the instance:
 
-[configure storage]
+![configure storage](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/configure%20storage.png)
 
 &nbsp;
 
-[volumes configure storage]
+![volumes configure storage](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/Volumes%20configure%20storage.png)
 
-It is important to attach the volumes to the instance early on so that the application can have access to it. Also it prevents the complexity of having to dirupt operations if the system is already in production.
+It is important to attach the volumes to the instance early on so that the application can have access to it. Also it prevents the complexity of having to disrupt operations if the system is already in production.
 
 - Verify on the terminal that the volume has been attached. Run the following command:
 
@@ -79,7 +79,7 @@ It is important to attach the volumes to the instance early on so that the appli
 lsblk
 ```
 Take note of the attached volumes as seen in the image.
-[image lsblk]
+![image lsblk](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lsblk.png)
 
  The image shows that the root filesystem (/) is on xvda1, which  is 8GB in size.
 
@@ -92,14 +92,14 @@ We have three additional 10GB disks: `xvdb`, `xvdc`, and `xvdd`.
 ls /dev/
 ```
 
-[image inspect dev]
+![image inspect dev](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/inspect%20dev.png)
 
 To view all the mounts and free space on the server, run :
 
 ```sh
 df -h
 ```
-[image df -h not mounted]
+![image df -h not mounted](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/inspect%20dev.png)
 
 The three additional block devices (`xvdb`, `xvdc`, `xvdd`) have not been mounted yet. 
 
@@ -141,25 +141,25 @@ You will enter an interactive session to create a partition:
 
 - Confirm by typing `y` when prompted.
 
-[gdisk xvdb]
+![gdisk xvdb](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/gdisk%20xvdb.png)
 
 Verify the new partition by running `lsblk` again.
 
-[lsblk xvdb]
+![lsblk xvdb](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lsblk%20xvdb.png)
 
 The output should show a partition (e.g., `/dev/xvdb1`).
 
 We will partition the remaining two volumes using the gdisk utility:
 
 **`/dev/xvdc`**
-[gdisk xvdc]
-[lsblk xvdc]
+![gdisk xvdc](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/gdisk%20xvdc.png)
+![lsblk xvdc](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lsblk%20xvdc.png)
 
 &nbsp;
 
 **`/dev/xvdc`**
-[gdisk xvdd]
-[lsblk xvdd]
+![gdisk xvdd](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/gdisk%20xvdd.png)
+![lsblk xvdd](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lsblk%20xvdd.png)
 
 - Next, we will use `lvm2` package to check for available partitions. Lvm stands for Logical Volume management. It allows for more flexible disk management (beyond `lsblk` and `fdisk -l` utilities), such as resizing volumes on the fly, creating snapshots, and spanning filesystems across multiple disks.
 
@@ -168,7 +168,7 @@ Install `lvm2` with the following command:
 ```sh
 sudo yum install lvm2
 ```
-[install lvm2]
+![install lvm2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/install%20lvm2.png)
 
 We can run the following command to check for available disk partitions:
 
@@ -176,9 +176,9 @@ We can run the following command to check for available disk partitions:
 sudo lvmdiskscan
 ```
 
-[image lvmdiskscan]
+![image lvmdiskscan](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lvmdiskscan.png)
 
-Note that there is zero lvm physical volumes
+Note that there are zero lvm physical volumes
 
 - We will use `pvcreate` to turn the partitions into LVM physical volumes:
 
@@ -188,7 +188,7 @@ sudo pvcreate /dev/xvdc1
 sudo pvcreate /dev/xvdd1
 ```
 
-[expected output PV]
+![expected output PV](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/expected%20output%20pv.png)
 
 Verify that the physical volume have been created:
 
@@ -196,7 +196,7 @@ Verify that the physical volume have been created:
 sudo pvs
 ```
 
-[image: sudo pvs]
+![image: sudo pvs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/sudo%20pvs.png)
 
 We will use `vgcreate` to group the volumes into a volume group named `webdata-vg`
 
@@ -211,7 +211,7 @@ Verify that the volume group has been created by running:
 sudo vgs
 ```
 
-[sudo vgs]
+![sudo vgs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/sudo%20vgs.png)
 
 We will use `lvcreate` to create logical volumes from the volume group. We will create 2 logical volumes:
 
@@ -232,7 +232,7 @@ Verify that the LV has been created:
 sudo lvs
 ```
 
-[image sudo lvs]
+![image sudo lvs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/sudo%20lvs.png)
 
 - We will verify the entire configurations by running:
 
@@ -243,13 +243,13 @@ sudo vgdisplay -v
 sudo lsblk
 ```
 
-[sudo vgdisplay01]
-[sudo vgdisplay02]
-[sudo vgdisplay03]
+![sudo vgdisplay01](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/sudo%20vgdisplay01.png)
+![sudo vgdisplay02](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/sudo%20vgdisplay02.png)
+![sudo vgdisplay03](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/sudo%20vgdisplay03.png)
 
 
 &nbsp;
-[lsblk vgdisplay]
+[lsblk vgdisplay](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lsblk%20vgdisplay.png)
 
 The apps (14GB) and logs (14GB) logical volumes are larger than the individual disk sizes (10GB each), demonstrating that LVM is being used to combine storage from multiple disks.This configuration is optimized for a web application, with separate volumes for application data and logs, and potential redundancy across physical disks. 
 
@@ -262,7 +262,7 @@ sudo mkfs -t ext4 /dev/webdata-vg/apps-lv
 sudo mkfs -t ext4 /dev/webdata-vg/logs-lv
 ```
 
-[format lvs]
+![format lvs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/format%20lvs.png)
 
 - Create the `/var/www/html` directory to store the website files:
 
@@ -285,13 +285,13 @@ sudo mkdir -p /home/recovery/logs
 ```
 This is necessary because when mounting, all the existing data on `/var/log` will be deleted
 
-[content of var log]
+![content of var log](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/content%20of%20var%20log.png)
 
 ```sh 
 sudo rsync -av /var/log/ /home/recovery/logs
 ```
 
-[rsync -av]
+[rsync -av](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/rsync%20-av.png)
 
 The '-a' and '-v' flags in the command stands for archive mode and verbose respectively.
 
@@ -339,7 +339,7 @@ UUID=4bb84a45-74a5-4b5e-b289-9d17c9103275 /var/www/html ext4 defaults 0 0
 
 UUID=0088a2b7-03d8-4429-8b12-c7632f3d6dcd /var/log ext4 defaults 0 0
 ```
-[edit fstab webserver]
+[edit fstab webserver](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/edit%20fstab%20webserver.png)
 
 - Test the configurations and reload the daemon:
 
@@ -351,12 +351,12 @@ sudo systemctl daemon-reload
 
 - Verify your setup by running `df -h` 
 
-[df -h fstab]
+![df -h fstab](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/df%20-h%20fstab.png)
 
 ## Step 3 Prepare the Database Server.
 
 - Launch an EC2 instance- Amazon Linux 2 named `project-db`. Follow the steps as for the first server.
-[project-db running]
+![project-db running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/project-db%20running.png)
 
 Note that the security group does allows inbound access on port 3306 on `project-web` private IP (gor security reasons)
 
@@ -370,15 +370,15 @@ We repeat the same steps as for the webserver. But the logical volume should be 
 
 - **Attached volumes for db server on console**
 
-[Attached volumes db-server]
+![Attached volumes db-server](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/attached%20volumes%20dbserver.png)
 
-[lsblk-db volumes]
+![lsblk-db volumes](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lsblk-db%20volumes.png)
 
 - **Partitioned db volumes using gdisk utility**
-[partitioned db volumes]
+![partitioned db volumes](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/partitioned%20db%20volumes.png)
 
 - **Lvm2 utility**
-[lvmdiskscan.pvcreate.vgcreate]
+![lvmdiskscan.pvcreate.vgcreate](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lvmdiskscan.pvcreate.vgcreate.png)
 
 
 We use `lvcreate` to create logical volumes from the volume group `webdata-vg`. We will create 2 logical volumes:
@@ -387,11 +387,11 @@ We use `lvcreate` to create logical volumes from the volume group `webdata-vg`. 
 
 - logs-lv : which will store data for the logs. We will use the remaining half
 
-[lsblk db-lv]
+![lsblk db-lv](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lsblk%20db-lv.png)
 
 - **Format logical volumes:**
 
-[format lvs db]
+![format lvs db](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/format%20lvs%20db.png)
 
 - Create the directory for db files
 
@@ -429,7 +429,7 @@ Restore the logfiles back with `rsync`:
 sudo rsync -av /home/recovery/logs /var/log/
 ```
 - Ensure to persist the mount in the `/etc/fstab` file
-[df -h fstab db]
+![df -h fstab db](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/df%20-h%20fstab%20db.png)
 
 ## Step 5 Install Wordpress on the Web server EC2.
 
@@ -530,7 +530,7 @@ sudo setsebool -P http_can_network_connect=1
 
 ```
 
-## Step 6 Install MysQL on the DB server EC2 (Amazon Linux 2023) and configure remote access.
+## Step 6 Install MysQL on the DB server EC2 and configure remote access.
 
 ```sh
 
@@ -558,13 +558,13 @@ sudo systemctl start mysqld
 # Start mysql daemon
 sudo systemctl status mysqld
 ```
-[Mysql running db]
+![Mysql running db](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/msql%20running%20db.png)
 
 Ensure to follow the steps to secure mysql. Create root user, then run the secure_mysql_installation.
 
 Configure remote access by editing the mysql configuration file with is found at `/etc/my.cnf` in Mysql installed on Amazon linux 2023
 
-[my.cnf file]
+![my.cnf file](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/my.cnf%20file.png)
 
 **Troubleshooting**
 Here, I encountered a bit of challenge logging in to mysql. It seemed the password for root was alrady set and I didn't know it! I was able to resolve it by doing a little research. I found out that new versions of MySQL 8.0+ come with a default security configuration that prevents access. A temporary password has been created for the root user which can be found with the following command:
@@ -572,7 +572,7 @@ Here, I encountered a bit of challenge logging in to mysql. It seemed the passwo
 ```sh
 sudo grep 'temporary password' /var/log/mysqld.log
 ```
-[Troubleshooting mysql login]
+![Troubleshooting mysql login](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/Troubleshooting%20mysql%20login.png)
 
 We can now log in with the output DB_PASSWORD...
 
@@ -602,7 +602,7 @@ SHOW DATABASES;
 exit
 ```
 
-[admin user wordpress db]
+![admin user wordpress db](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/admin%20user%20wordpress%20db.png)
 
 ## Step 8 Configure wordpress to connect to remote database
 
@@ -639,7 +639,7 @@ Execute some database commands to verify remote access:
 ```
 SHOW DATABASES;
 ```
-[login to db from web]
+![login to db from web](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/login%20to%20db%20from%20web.png)
 
 - Ensure that proper file permissions are set: Apache needs the correct permissions to read and write WordPress files.These commands should set Apache as the owner of the WordPress files, set directories to 755 permissions, and files to 644 permissions.
 
@@ -665,7 +665,7 @@ define('DB_PASSWORD', 'your_database_password');
 define('DB_HOST', 'your_database_server_private_ip');
 ```
 
-[image edit wp config]
+![image edit wp config](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/edit%20wpconfig.png)
 
 - Ensure Apache is configured to serve WordPress. Create a new Apache configuration file:
 
@@ -693,12 +693,14 @@ Enter the following:
 
 
 Visiting our instance public-Ip, we see the following image
-[wordpressinstall on uI]
+![wordpressinstall on uI](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/wordpressinstall%20on%20uI.png)
 Follow the prompts to install wordpress and login
 
 
-[Welcome to Wordpress]
+![Welcome to Wordpress](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/welcome%20towordpress.png)
 
 
 # Conclusion
+We successfully implemented a robust storage subsystem on two Linux RHEL servers, demonstrated  a Three-Tier Architecture with wordpress utilizing client-server architecture.
+
 
