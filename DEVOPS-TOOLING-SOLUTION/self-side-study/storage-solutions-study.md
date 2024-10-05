@@ -1,5 +1,5 @@
 
-# Explanation of Storage Solutions
+# Explanation of Storage Solutions and related protocols
 
 
 1. **Network Attached Storage (NAS)**
@@ -15,6 +15,7 @@ Network Attached Storage (NAS) is a file-level storage solution that connects to
 **Use Cases:** Suitable for home media servers, small businesses, and file sharing among teams.
 
 2. **Storage Area Network (SAN)**
+
 A Storage Area Network (SAN) is a dedicated high-speed network that provides block-level storage access to servers. SANs consolidate storage devices into a single network, allowing multiple servers to access shared storage resources as if they were directly attached. This architecture improves performance by offloading storage traffic from the local area network (LAN).
 
 **Key Features:**
@@ -25,6 +26,7 @@ A Storage Area Network (SAN) is a dedicated high-speed network that provides blo
 **Use Cases:** Ideal for databases, virtual machines, and mission-critical applications.
 
 3. **NFS (Network File System)**
+
 NFS is a protocol used for sharing files over a network. It allows clients to access files on a remote server as if they were local files. NFS operates at the file level and is commonly used in UNIX/Linux environments.
 
 **Key Features:**
@@ -34,6 +36,7 @@ NFS is a protocol used for sharing files over a network. It allows clients to ac
 **Use Cases:** Suitable for shared file systems in development environments and collaborative projects.
 
 4. **Secure File Transfer Protocol (S)FTP**
+
 (S)FTP is a secure version of the File Transfer Protocol (FTP) that provides a way to transfer files over a secure connection. It encrypts both commands and data, ensuring that sensitive information is protected during transmission.
 
 **Key Features:**
@@ -44,6 +47,7 @@ NFS is a protocol used for sharing files over a network. It allows clients to ac
 **Use Cases:** Ideal for transferring sensitive data between servers and clients.
 
 5. **iSCSI (Internet Small Computer Systems Interface)**
+
 iSCSI is a protocol that allows SCSI commands to be sent over IP networks. It enables block-level access to storage devices over long distances using existing network infrastructure.
 
 **Key Features:**
