@@ -117,6 +117,16 @@ Network File Storage refers to file-level storage systems that allow multiple us
 
 &nbsp;
 
+## Required NFS Ports.
+To ensure that an NFS server is accessible, the following ports should be open:
+
+| Port Number | Protocol | Description                                                                                                          |
+|-------------|----------|----------------------------------------------------------------------------------------------------------------------|
+| **111**     | TCP/UDP  | **PortMapper**: This port is used for the RPC (Remote Procedure Call) service, which helps clients discover the NFS services running on the server. |
+| **2049**    | TCP/UDP  | **NFSd**: This is the primary port for NFS operations. All NFS requests are sent to this port.                      |
+| **20048**   | TCP/UDP  | **MountD**: Used by the mount daemon for mounting NFS shares.                                                      |
+| **9023-9026** | TCP/UDP | **Additional NFS Services**: These ports may be used for other NFS-related services, such as lock management and status monitoring (e.g., nlockmgr, statd). |
+
 &nbsp;
 
 ## Differences between block storage, object storage and filesystem storage
