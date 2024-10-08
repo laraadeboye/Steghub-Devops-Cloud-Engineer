@@ -1,6 +1,4 @@
 
-# Project Title
-
 ## Explanation of NFS Export Options
 
 In the `/etc/exports` file, we use several options when defining the NFS exports. Here's what each of these options means:
