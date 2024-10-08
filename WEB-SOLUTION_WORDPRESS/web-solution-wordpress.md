@@ -249,7 +249,7 @@ sudo lsblk
 
 
 &nbsp;
-[lsblk vgdisplay](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lsblk%20vgdisplay.png)
+![lsblk vgdisplay](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/lsblk%20vgdisplay.png)
 
 The apps (14GB) and logs (14GB) logical volumes are larger than the individual disk sizes (10GB each), demonstrating that LVM is being used to combine storage from multiple disks.This configuration is optimized for a web application, with separate volumes for application data and logs, and potential redundancy across physical disks. 
 
@@ -291,7 +291,7 @@ This is necessary because when mounting, all the existing data on `/var/log` wil
 sudo rsync -av /var/log/ /home/recovery/logs
 ```
 
-[rsync -av](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/rsync%20-av.png)
+![rsync -av](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/rsync%20-av.png)
 
 The '-a' and '-v' flags in the command stands for archive mode and verbose respectively.
 
@@ -339,7 +339,7 @@ UUID=4bb84a45-74a5-4b5e-b289-9d17c9103275 /var/www/html ext4 defaults 0 0
 
 UUID=0088a2b7-03d8-4429-8b12-c7632f3d6dcd /var/log ext4 defaults 0 0
 ```
-[edit fstab webserver](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/edit%20fstab%20webserver.png)
+![edit fstab webserver](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/WEB-SOLUTION_WORDPRESS/images/edit%20fstab%20webserver.png)
 
 - Test the configurations and reload the daemon:
 
