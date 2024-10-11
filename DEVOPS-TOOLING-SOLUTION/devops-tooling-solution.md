@@ -2,7 +2,9 @@
 # TOOLING WEBSITE SOLUTION
 ## 3-tier Web Application with A Database server And An NFS server as a shared file storage
 
-[Achitecture Diagram]
+
+![Achitecture Diagram](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/3%20tier.png)
+
 This project involves the development of a 3-tier web application that integrates a database server and a Network File System (NFS) server for shared file storage. 
 
 It can be applied by businesses and developers seeking a robust, scalable solution. The architecture separates the application into three distinct layers: 
@@ -32,7 +34,7 @@ This project provides a solid foundation for deploying modern web applications t
 
 We will create an EC2 instance named `NFS-server` with RHEL Linux 9 Operating System via AWS console to serve the NFS server. Connect to the instance via SSH or use instance connect on the AWS console. You can install instance connect on the RHEL EC2 instance by following the instructions in the [documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html) as the machine does not come preinstalled with it.
 
-[NFS-server running]
+![NFS-server running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/NFS-server%20running.png)
 
 **Security group setting for the NFS server**
 To allow NFS server to communicate effectively with the client, allowing for seamless file sharing and management accross our network, we will allow inbound access on ports:
@@ -53,16 +55,16 @@ Note that these ports should only be open to the VPC CIDR or specific subnet CID
 
 - First create 3 volumes for the NFS server via the AWS management console and attach it to the EC2 instance.
 
-[volumes created]
+![volumes created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/volumes%20created.png)
 
-[3 volumes attached]
+![3 volumes attached](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/3%20attached%20volumes.png)
 
 - Verify the attached volumes on the terminal. Run:
 
 ```sh
 lsblk
 ```
-[lsblk attached volumes]
+![lsblk attached volumes](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/lsblk%20attached%20volumes.png)
 
 - Create one partition each for the volumes:
 
@@ -77,7 +79,7 @@ sudo gdisk /dev/xvdf
 sudo gdisk /dev/xvdg
 sudo gdisk /dev/xvdh
 ```
-[lsblk gdisk 3volumes]
+![lsblk gdisk 3volumes](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/lsblk%20gdisk%203%20volumes.png)
 
 - Create logical volumes using `lvm2`.
 
@@ -89,7 +91,7 @@ sudo yum install lvm2 -y
 
 Run `sudo lvmdiskscan` to verify the presence of available disk partitions.
 
-[Verify Available disk partitions]
+![Verify Available disk partitions](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/Verify%20Available%20disk%20partitions.png)
 
 Use `pvcreate` to turn the partitions to physical volumes
 
@@ -98,7 +100,7 @@ sudo pvcreate /dev/xvdf1 /dev/xvdg1 /dev/xvdh1
 ```
 Verify by running `sudo pvs`.
 
-[pvcreate sudo pvs]
+![pvcreate sudo pvs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/sudo%20pvs.png)
 
 Use `vgcreate` to group the volumes into a volume group named `nfs-vg`
 
@@ -107,7 +109,7 @@ sudo vgcreate nfs-vg /dev/xvdf1 /dev/xvdg1 /dev/xvdh1
 ```
 Verify by running `sudo vgs`
 
-[vgcreate sudo vgs]
+![vgcreate sudo vgs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/sudo%20vgs.png)
 
 Use `lvcreate` to create three  logical volumes from the volume group: `lv-opt`, `lv-apps`, `lv-logs` each with 9G
 
@@ -123,19 +125,19 @@ It's generally a good idea to leave some free space in your volume group. This a
 
 Verify with `sudo lvs`
 
-[lvcreate sudo lvs]
+![lvcreate sudo lvs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/sudo%20lvs.png)
 
 Verify the entire configuration by running:
 
 ```sh
 sudo vgdisplay -v
 ```
-[vgdisplay 1]
-[vgdisplay 2]
-[vgdisplay 3]
+![vgdisplay 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/vgdisplay%201.png)
+![vgdisplay 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/vgdisplay%202.png)
+![vgdisplay 3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/vgdisplay%203.png)
 You can also run `sudo lsblk`
 
-[lsblk vg]
+![lsblk vg](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/lsblk%20vg.png)
 
 
 - Format the filesystem:
@@ -150,7 +152,7 @@ sudo mkfs -t xfs /dev/nfs-vg/lv-apps
 
 sudo mkfs -t xfs /dev/nfs-vg/lv-logs
 ```
-[format files]
+![format files](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/format%20files.png)
 
 - Create mount points. 
 
@@ -195,7 +197,7 @@ Check NFS installation by viewing the NFS statistics :
 sudo nfsstat -s
 ```
 
-[nfs-server installed status]
+![nfs-server installed status](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/nfs%20server%20installed%20status.png)
 
 
 - We will create the three web servers in the same subnet within the default VPC for our test case for simplicity. The default VPC in AWS typically has a CIDR block of `172.31.0.0/16` and creates a default subnet in each Availability Zone in the region. Each subnet is usually a `/20` network within this range. Setting up the webservers in different subnet also allows for security. The `subnet cidr` is found by clicking on the networking tab in the details section of the EC2 instance.
@@ -232,7 +234,7 @@ sudo systemctl restart nfs-server
 
 - Obtain the subnet cidr of the instances from the console, and configure access to NFS for clients within the subnets. We will edit `etc/exports` file in the NFS server.
 
-[subnet cidr]
+![subnet cidr](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/subnet%20cidr.png)
 
 ```sh
 sudo vi /etc/exports
@@ -269,7 +271,7 @@ Exit the editor and run the command below to apply the changes:
 ```sh
 sudo exportfs -arv
 ```
-[exportfs]
+![exportfs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/exportfs.png)
 
 - Configure the security group setting for the NFS server. 
 
@@ -278,11 +280,11 @@ Check which port is used by NFS and add allow the new inbound rule in the securi
 ```sh
 rpcinfo -p | grep nfs
 ```
-[2049]
+![2049](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/2049.png)
 
 security group rule: Type: NFS, Protocol: TCP, Port Range: 2049, Source: `172.31.32.0/20`
 
-[security group rule nfs]
+![security group rule nfs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/security%20group%20rule%20nfs.png)
 
 *Hint*
 Example rules for 3 subnets:
@@ -290,7 +292,7 @@ Example rules for 3 subnets:
 Type: NFS, Protocol: TCP, Port Range: 2049, Source: 172.31.0.0/20
 Type: NFS, Protocol: TCP, Port Range: 2049, Source: 172.31.16.0/20
 Type: NFS, Protocol: TCP, Port Range: 2049, Source: 172.31.32.0/20
-Repeat for ports 111 and 20048
+Repeat for ports 111 and 20048 if necessary.
 
 
 - Make the NFS Mounts Persistent accross System Reboot:
@@ -328,13 +330,9 @@ Launch an ubuntu EC2 instance named `DB-server`, that will serve as the Database
 
 Configure the security group to allow inbound access on the default port for mysql `3306` from the subnet cidr of the webserver which in my use case is `172.31.32.0/20`
 
-[db server security group rule]
+![db server security group rule](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/db%20server%20security%20group%20rule.png)
 
 Connect to it via SSH or instance connect. 
-[DB server running]
-
-
-
 
 - Install MySQL server:
 
@@ -359,7 +357,8 @@ sudo mysql
 ```
 
 
-[Image mySQL running]
+![Image mySQL running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/mysql%20running.png)
+
 Follow the steps to secure mysql. Create root user, then run the secure_mysql_installation.
 
 - Login to the mysql console:
@@ -386,7 +385,6 @@ exit
 ```sh
 sudo mysql_secure_installation
 ```
-[mysql secure install]
 
 - Configure remote access. Edit the `mysqld.cnf` file, replacing the **bind-address** port on localhost `127.0.0.1` with `0.0.0.0`
 
@@ -394,7 +392,7 @@ sudo mysql_secure_installation
 sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
-[image mysqld.cnf]
+![image mysqld.cnf](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/mysqld.cnf.png)
 
 Restart mysql to apply changes:
 
@@ -428,11 +426,10 @@ exit
 
 ```
 
-[mysql oper on db]
+![mysql oper on db](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/mysql%20oper%20on%20db.png)
 
 *Hint*
 In a production environment with different subnets, we can use wild cards. For example:
-
 
 ```sql
 -- Create the user with wildcard for the host
@@ -464,9 +461,8 @@ We will use RHEL Operating system 9 for our webservers.
 
 Launch 3 RHEL webservers on AWS named `webserver-01`, `webserver-02`, `webserver-03`. Configure the security groups to allow inbound access on ports `80` (HTTP) and `22`(SSH); 
 
-[3 webservers running]
+![3 webservers running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/3%20webservers%20running.png)
 
-[Take security group pics]
 
 The following commands should be applied on all three servers.
 
@@ -517,9 +513,9 @@ Then run: `nc -zv [private IP of nfs server] 2049` to review connection settings
 
 - Verify that the NFS was mounted successfully by running `df -h`.
 
-[df -h webserver 1]
-[df -h webserver 2]
-[df -h webserver 3]
+![df -h webserver 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/df%20-h%20webserver1.png)
+![df -h webserver 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/df%20-h%20webserver%202.png)
+![df -h webserver 3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/df%20-h%20webserver%2003.png)
 
 - Ensure that the changes persist on the web servers after reboot by editing the `/etc/fstab` and adding the following content:
 
@@ -598,9 +594,15 @@ git clone https://github.com/laraadeboye/tooling.git
 sudo cp -R tooling/html/. /var/www/html/
 ```
 
-[git installed server 1]
+![git installed server 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/git%20installed%20server%201.png)
+
+![Content of htmlfolder1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/content%20of%20html%20folder%20server%201.png)
 
 The git clone and copy command was run on only `webserver1` . The content of the `/var/www/html` is found in the remaining two servers as shown in the images below:
+
+![content of html folder server2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/content%20of%20html%20folder%20server%202.png)
+
+![content of html folder server 3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/content%20of%20html%20folder%20server%203.png)
 
 *Hint*:
 You may need to install git : `sudo yum install git -y`
@@ -614,7 +616,7 @@ The tooling website code is deployed to the webservers. The html folder from the
 sudo chown -R apache:apache /var/www/html
 sudo chmod -R 755 /var/www/html
 ```
-[change ownership to apache]
+![change ownership to apache](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/change%20ownership%20to%20apache.png)
 This change of ownership will also be reflected in the remaining two servers.
 
 - Set selinux policies: Important for website access 
@@ -645,7 +647,7 @@ sudo setsebool -P httpd_execmem on
 ```sh
 $db = mysqli_connect('172.31.38.76', 'webaccess', 'Passw0rd321#', 'tooling');
 ```
-[update db details]
+![update db details](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/update%20db%20details.png)
 
 - We will install mysql client on the webservers. Run the following commands to install mysql client on the servers. (You may need to install `wget` utility first: `sudo yum install wget -y`)
 
@@ -670,19 +672,25 @@ sudo dnf install mysql-community-client -y
 - Apply the `tooling-db.sql` script to the database by using the following command:
 
 ```sql
-mysql -h [database-private-ip] -u [db-username] -p [db-password] < tooling-db.sql
+mysql -h [database-private-ip] -u [db-username] -p [db-name] < tooling-db.sql
 ```
 ```sql
 mysql -h 172.31.38.76 -u webaccess -p tooling < tooling-db.sql
 ```
 Enter the password for the webaccess user when prompted.
 
-[apply tooling script]
+![apply tooling script](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/Apply%20tooling%20script.png)
 
 If the command runs without errors, it is successful.
 
 
 - In the MySQL server we create a new admin user with username `myuser` and password `password`. 
+We accessed our database from `webserver1` which has mysql-client installed. Ensure to login to the database first with the following command:
+
+```sql
+mysql -h [database-private-ip] -u [db-username] -p [db-name]
+```
+Enter the password when prompted. Then run the following mysql command to insert the new admin user into the database.
 
 ```sh
 INSERT INTO `users` (`username`, `password`, `email`, `user_type`, `status`) 
@@ -690,9 +698,7 @@ VALUES ('myuser', '5f4dcc3b5aa765d61d8327deb882cf99', 'user@mail.com', 'admin', 
 
 ```
 
-[acessing database from webserver 1]
-
-
+![acessing database from webserver 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/acessing%20database%20from%20webserver1.png)
 
 
 - When we open the website in our web browser at `http://[web-server-Public-IP]/index.php` , we should be able to login with the `myuser` user
@@ -700,14 +706,17 @@ VALUES ('myuser', '5f4dcc3b5aa765d61d8327deb882cf99', 'user@mail.com', 'admin', 
 ```sh
 http://98.81.207.96/index.php
 ```
-[Tooling website deployed]
+![Tooling website deployed](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/Tooling%20website%20deployed.png)
 
-[login with password]
+When we login to the application from `webserver1`, we see the following page:
+
+![Access from webserver1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/Access%20from%20server%201.png)
+
 
 *Hint*
 If you get a 403 forbidden error as shown below:
 
-[403 forbidden]
+![403 forbidden](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/403%20forbidden.png)
 
 Check:
 1. `/var/www/html` folder and file permissions
@@ -720,12 +729,14 @@ sudo vi /etc/selinux/config
 
 Find the line that reads `SELINUX=enforcing` and change it to:
 
+```sh
+SELINUX=permissive # or disable
 ```
-SELINUX=permissive
-```
+We are able to login to the application from the remaining two `webserver1` and `webserver2` as shown:
+![Access from servers1,2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/Access%20from%20the%20other%20two%20web%20servers.png)
 
 ## Conclusion
-
+In this project, we demonstrated a three tier application having a centralised file managemwnt solution with an NFS server and a shared database
 
 
 
