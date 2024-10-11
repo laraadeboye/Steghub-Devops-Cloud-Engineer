@@ -703,16 +703,8 @@ http://98.81.207.96/index.php
 ```
 ![Tooling website deployed](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/Tooling%20website%20deployed.png)
 
-We can access it from `webserver1` public IP address:
+*Troubleshooting Hint*
 
-![Access into server 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/Access%20from%20server%201.png)
-
-
-We can equally access it form `webserver2` and `webserver3`:
-
-![Access into server 2 and 3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/Access%20from%20the%20other%20two%20web%20servers.png)
-
-*Hint*
 If you get a 403 forbidden error as shown below:
 
 ![403 forbidden](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/403%20forbidden.png)
@@ -731,6 +723,16 @@ Find the line that reads `SELINUX=enforcing` and change it to:
 ```
 SELINUX=permissive
 ```
+We can access it from `webserver1` public IP address:
+
+![Access into server 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/Access%20from%20server%201.png)
+
+
+We can equally access it form `webserver2` and `webserver3`:
+
+![Access into server 2 and 3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/images/Access%20from%20the%20other%20two%20web%20servers.png)
+
+
 
 ## Conclusion
 
