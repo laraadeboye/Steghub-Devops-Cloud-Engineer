@@ -129,6 +129,8 @@ You can designate a server as a hot standby:
 
 Server3 will only receive requests if server1 and server2 are unavailable.
 
+
+
 ## 6. Sticky Sessions
 Sticky sessions ensure that a client always connects to the same backend server:
 
