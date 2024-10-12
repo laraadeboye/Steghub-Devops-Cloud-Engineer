@@ -68,6 +68,17 @@ it is generally recommended to set up the load balancer on a separate server for
 - Nginx Load Balancer
 - Haproxy Load Balancer
 
+## Choice of Load balancer Instance Size:
+A `t2.micro` instance can be sufficient for a basic load balancer setup with moderate traffic. However, the appropriate size depends on your specific workload.
+
+**When to consider a larger instance:**
+
+- High traffic volumes (e.g., thousands of requests per second)
+- If you're terminating SSL/TLS on the load balancer
+- If you're seeing high CPU usage or network bottlenecks
+- When you need more memory for caching or handling concurrent connections.
+
+Monitor your t2.micro instance's performance. If you see consistent high CPU usage or network constraints, consider upgrading.
 
 ## Conclusion
 Load balancing is essential for maintaining optimal performance and reliability in modern web applications. By intelligently distributing traffic among multiple servers, load balancers enhance user experience, ensure high availability, and enable scalable architectures capable of handling varying loads.
