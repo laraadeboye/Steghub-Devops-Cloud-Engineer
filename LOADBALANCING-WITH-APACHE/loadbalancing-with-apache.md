@@ -1,9 +1,11 @@
 
 # Load Balancing with Apache - Setting up a load balancer for the three-tier application
 
+![Architecture](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/3-tier%20web%20application%20with%20database%20and%20NFS%20server.png)
+
 ## Project Overview
 
-Previously we set up a [3-tier devops solution](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/devops-tooling-solution.md) with three web servers have different public IPS and different DNS names. We will configure a load balancer to manage traffic to each of the web servers through one dns name and IP.
+Previously we set up a [3-tier devops solution](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/devops-tooling-solution.md) with three web servers having different public IPS and different DNS names. We will configure a load balancer to manage traffic to each of the web servers through one dns name and IP.
 
 This will enhance the three-tier architecture by improving scalability and providing a single point of access for users.
 
@@ -25,11 +27,11 @@ Visit my [Readme](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/b
 ###  Step 0. Launch an Ubuntu EC2 instance.
 - Create a security group for the loadbalancer instance on AWS named `lb-sg`. Allow inbound access on port `80` from everywhere `0.0.0.0/0` on the internet. I also allowed access from HTTPS on port `443` and SSH access on port `22` to access the server for configurations.
 
-[lb-sg security group rules]
+![lb-sg security group rules](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/lb-sg%20security%20group%20rules.png)
 
 - Launch a `t2.micro` sized ubuntu instance 24.04 LTS on AWS named `webserver-lb` with the security group `lb-sg` that we created. Depending on the specific workload, a larger instance may be needed in production settings. Valid reasons why you may want to increase instance size can be found in my [Readme](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/self-side-study/loadbalancing-concepts.md) on the subject.
 
-[webserver-lb running]
+![webserver-lb running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/webserver-lb%20running.png)
 
 - Connect to the instance with instance connect or via your local system. I will be using instance connect. 
 
@@ -73,11 +75,11 @@ sudo a2enmod lbmethod_bytraffic
 sudo a2enmod headers
 ```
 The history of the commands run to install Apache2 and modules are shown:
-[install apache and modules]
+![install apache and modules](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/install%20apache%20and%20modules.png)
 
 Run `sudo systemctl status apache2` to verify that it is enabled and running:
 
-[Apache running]
+![Apache running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/apache2%20running.png)
 
 ###  Step 2. Configure Apache as a Load balancer
 We will create a new configuration file in the `sites-available` folder named `webserver-lb.conf`
@@ -109,6 +111,7 @@ sudo vi /etc/apache2/sites-available/webserver-lb.conf
     ProxyPassReverse "/" "balancer://mycluster/"
 </VirtualHost>
 ```
+
 Replacing `http://web1.example.com` and others with my server Public-IPS which are: `184.72.181.7`, `3.81.71.198` and `18.209.111.102` for `webserver-01`, `webserver-02` and `webserver-03` respectively.
 
 Note that If you previously stopped your instances, note that the the IPS will change as in my case unless you preserve them with AWS Elastic IP feature.
@@ -171,7 +174,7 @@ sudo a2dissite 000-default.conf
 sudo apache2ctl configtest
 sudo systemctl restart apache2
 ```
-[edit configuration]
+![edit configuration](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/edit%20configuration.png)
 
 ###  Step 5. Configure Firewall
 To ensure that Apache Load balance instance can communicate with the web servers and users can access the load balancer, the firewall rules should be configured:
@@ -194,30 +197,28 @@ http://[webserver-lb PUBLIC_IP]
 ```
 Replace [webserver-lb PUBLIC_IP] with the public IP of the load balancer.
 
-[accessing app through lb IP]
+![accessing app through lb IP](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/Acessing%20app%20from%20lb%20ip.png)
 
-[login to app from lp IP]
+&nbsp;
+![login to app from lp IP](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/login%20to%20app%20from%20lb%20IP.png)
 
 We want to test each webservers from their terminal and view their individual logs.
 Open ssh terminals of the three webservers or use instance connect to access their terminals. We will first unmount the log files from the nfs server using the following commands:
 
 
-First verify if /var/log/httpd is mounted on nfs server. Run this command on each of the webservers and the nfs server:
+First verify if /var/log/httpd is mounted on nfs server. Run this command on each of the webservers:
 
 ```sh
 df -h
 ```
 **webserver-01 `df -h`**
-[df -h verify webserver-01]
+![df -h verify webserver-01](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/df%20-h%20verify%20webserver-01.png)
 
 **webserver-02 `df -h`**
-[df -h verify webserver-02]
+![df -h verify webserver-02](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/df%20-h%20verify%20webserver-02.png)
 
 **webserver-03 `df -h`**
-[df -h verify webserver-03]
-
-**nfs server `df -h`**
-[df -h verify nfs-server]
+![df -h verify webserver-03](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/df%20-h%20verify%20webserver-03.png)
 
 
 Then unmount the directory in each webserver: 
@@ -235,10 +236,11 @@ sudo systemctl stop httpd
 df -h
 ```
 
-[lsof to determine processes]
+![lsof to determine processes](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/lsof%20to%20determine%20processes.png)
+
 
 Notice that the directory has been unmounted.
-[df -h after unmount]
+![df -h after unmount](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/df%20-h%20after%20unmount.png)
 
 Run the following command on each terminal of the webservers:
 
@@ -247,13 +249,13 @@ sudo tail -f /var/log/httpd/access_log
 ```
 By refreshing our browser (load balancer IP) multiple times, we get the following results on each server: (Notice the access is from the load balancer IP- `204.236.248.3`)
 
-[access-log webserver1]
-[access-log webserver2]
-[access-log webserver3]
+![access-log webserver1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/access%20logwebserver%2001%20log.png)
+![access-log webserver2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/access%20log%20webserver%202.png)
+![access-log webserver3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/access%20log%20webserver%203.png)
 
 
-###  Step 7. Configure Local DNS names resolution
-The local DNS name of our webservers can be configured in the `/etc/hosts` file of the loadbalancer server. This is an internal configuration that is local to our load balancer server.
+###  Step 7. [Optional] Configure Local DNS names resolution
+The local DNS name of our webservers can be configured in the `/etc/hosts` file of the loadbalancer server. This is an internal configuration that is local to our load balancer server and is used for testing purposes.
 
 Open the file as follows:
 
@@ -278,15 +280,17 @@ Add the following lines to resolve the IP address of our `webserver1`, `webserve
 The load balancer config files can be updated with the new names instead of IP addresses as shown:
 
 
-[resolve locally]
+![resolve locally](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/resolve%20locally.png)
 
 When we curl the addresses locally from the load balancer server, they are accessible as shown in the images:
 
-[curl http web01]
+![curl http web01](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/curl%20http%20web01.png)
 
-[curl http web02]
+&nbsp;
+![curl http web02](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/curl%20http%20web02.png)
 
-[curl http web03]
+&nbsp;
+![curl http web03](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/curl%20http%20web03.png)
 
 ## Conclusion
 We have successfuly configured an Apache loadbalancer to manage web traffic to our webservers. This setup enhances performance, reliability, and scalability in the three-tier architecture.
