@@ -3,6 +3,8 @@
 
 We will be enhancing our DevOps Pipeline by implementing Continuous Integration with Jenkins.
 
+![Architecture](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/3-tier%20web%20application%20with%20database%20and%20NFS%20server%20CI%20with%20Jenkins.png)
+
 Following up on our [three tier architecture](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEVOPS-TOOLING-SOLUTION/devops-tooling-solution.md), we have added an apache load balancer to evenly distribute web traffic between our three webservers for improved performance and scalability [here](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/loadbalancing-with-apache.md).
 
 Next up, we want to begin automating our architecture  with continuous integration using Jenkins. Continuous Integration is an important concept in DevOps as it allows for automated build and tests of code changes commited to a central repository by developers.
@@ -23,11 +25,9 @@ Furthermore, Jenkins enhances collaboration among team members by providing visi
 - Create a separate security group for Jenkins. This approach offers better security isolation and more flexible management, aligning with best practices for cloud infrastructure security.
 Allow inbound internet access on jenkins default port `8080` for the jenkins instance on AWS named `jenkins-server-sg`. I also allowed SSH access on port 22 to access the server for configuration.
 
-[jenkins-server-sg]
-
 - Launch a `t3.medium` sized ubuntu instance 24.04 LTS on AWS named `jenkins-server` with the security group `jenkins-server-sg` that we created. Depending on the specific workload, a larger instance may be needed in production settings. The recommended instance sizes for test and production environments can be found in my [write-up](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/self-side-study/jenkins-notes.md) on the subject.
 
-[jenkins-server running]
+![jenkins-server running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/jenkins-server%20running.png)
 
 - Login to the instance via SSH or instance connect and update the ubuntu apt repository:
 
@@ -69,7 +69,7 @@ sudo apt-get install jenkins
 ```sh
 sudo systemctl status jenkins
 ```
-[jenkins verified]
+1[jenkins verified](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/jenkins%20verified.png)
 
 - We will access the jenkins server via its public IP and port as shown:
 
@@ -82,7 +82,7 @@ Hence:
 ```sh
 http://52.23.197.77:8080
 ```
-[jenkins on web]
+![jenkins on web](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/jenkins%20on%20web.png)
 
 - We are prompted for the Administrator password which is found in `/var/lib/jenkins/secrets`
 
@@ -91,18 +91,18 @@ Run:
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 The password looks like the string of numbers below:
-![Initial Admin Password]
+![Initial Admin Password](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/Initial%20Admin%20Password.png)
 
 When you enter the password, you will be taken to the following page:
-![suggested plugins page]
+![suggested plugins page](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/suggested%20plugins.png)
 
 Install the suggested plugins, then create an admin user with a secure password. We will use `Passw0rd123#` for our test environment.
-![Initial Admin user]
+![Initial Admin user](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/Create%20first%20admin%20user.png)
 
 &nbsp;
 Accept the root URL then click **Save $ Finish**
 
-[jenkins is ready]
+![jenkins is ready](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/Jenkins%20ready.png)
 
 
 
@@ -123,15 +123,16 @@ For instance, when a developer pushes code to a GitHub repository, a webhook can
   - Activate the webhook by checking the 'Active' checkbox
   - Click on **Add webhook** to save the settings
 
-  [webhook config ]
+  ![webhook config ](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/webhook%20config.png)
 
 - Go the Jenkins console. Click on **New Item**. Create a freestyle project named `toolingjob_github`
-[create freestyle project]
+![create freestyle project](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/freestyle%20project.png)
 
 - Connect your github repository by providing its URL. Also provide the credentials (user/password)
 
 - Save the configuration and run the build. Click **Build Now**
-[build job]
+![build job](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/build%20job.png)
+
 Notice the build will only be successful after you have properly done the configurations
 This build only runs when we trigger it manually. Not sufficient for our use case.
 
@@ -144,18 +145,18 @@ Add the following configurations:
 - We will test our configuration by making a little change to the Readme file in the `tooling` repository.
 A new build is launched automatically by webhook and the artifacts are archived and saved on the Jenkins server.
 
-[status build failed]
+![status build failed](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/status%20build%20failed.png)
 
 We see that the build failed and checking the console output, we can locate the cause of the error is due to configuration settings
 
-[error.specify star]
+![error.specify star](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/error.specify%20star.png)
 
 When we correct the configuration settings as shown:
 
 
-We will make another change to the Readme file, the build is succesful as shown:
+We will make another change to the Readme file, the build is successful as shown:
 
-[build succesful star solved]
+![build succesful star solved](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/build%20successful%20star%20solved.png)
 
 The artifacts are stored by default on Jenkins server locally:
 ```sh
@@ -165,7 +166,7 @@ For the most recent build with number 5,
 ```sh
 ls /var/lib/jenkins/jobs/toolingjob_github/builds/5/archive/
 ```
-[artifacts saved in builds directory]
+![artifacts saved in builds directory](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/artifacts%20in%20builds%20directory.png)
 
 ## Step 3 Configure Jenkins to copy files to NFS server via SSH
 
@@ -174,38 +175,40 @@ We have our artifacts saved locally on Jenkins server, we will copy them to the 
 - SSH into your NFS server and run `df -h` to verify that the directory exist:
 
 
-[df -h mnt apps nfs]
+![df -h mnt apps nfs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/df%20-h%20mnt%20apps%20nfs.png)
 
 - First install the **Publish Over SSH** plugins (Navigate to Dashboard >> manage Jenkins>> Plugins >> Available Plugins)
-![publish over ssh]
+
+![publish over ssh](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/publish%20over%20ssh.png)
+
 Once the plugin installation is successful, Restart Jenkins.Then, login again with your admin user and password.
 
-![Restart plugin succesful]
+![Restart plugin succesful](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/Restart%20plugin%20succesful.png)
+
 - Configure the job to copy the artifact over to the NFS server
   - Select **Manage Jenkins** and choose **System**
   - Scroll to the **Publish over SSH** configuration section and configure it to connect to the NFS server:**Click on SSH Servers**
   - You need to provide a private key, arbitrary name `NFS-server`, Hostname(private IP of the NFS server), user-name (`ec2-user`),Remote directory (`/mnt/apps`). This is the folder that our webservers use as a mount point to retrieve files from the NFS server.
   - Save the configuration. Open the jenkins job configuration page and add another **Post-build Action**: `send build artifacts over SSH`.Configure it to send all files produces by the build into our previously defined directory `/mnt/apps`
 We will use `**` to represent all source files.
-  [configure ssh to NFS]
+  ![configure ssh to NFS](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/configure%20ssh%20to%20nfs.png)
 
-  [choose send build a]
+&nbsp;
+  ![choose send build a](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/choose%20send%20build%20a.png)
 
-  [configure send build a]
+&nbsp;
+  ![configure send build a](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/configure%20send%20buil%20a.png)
 
-  [send build artifact over SSH]
-
- - Ensure to configure security group settings on the NFS server: Enable inbound SSH access from the jenkins server IP to the NFS server
-jenkins server IP:`52.23.197.77/32`
+  
+ - Ensure to configure security group settings on the NFS server: Enable inbound SSH access from the jenkins security group to the NFS server.
 
   - Save the configuration. Make a little change in the Readme in the tooling repository.
 
 - The webhook will trigger a new job in the console output of the job and we will see:
-[build 6 success]
+![build 6 success](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/Screenshot%202024-10-13%20213713.png)
 
 The console output verifies the successful update to the Readme
-[sucessful build final]
-
+![sucessful build final](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/final%20words.png)
 
 
 - Verify that the /mnt/apps have been updated. Connect to the NFS server and check the README.md with the `cat` command
@@ -213,6 +216,13 @@ The console output verifies the successful update to the Readme
 ```sh
 cat /mnt/apps/README.md
 ```
+![cat files transferred](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/files%20transfered.png)
+
+*Troubleshooting errors*
+Errors may occur due to:
+- Inability of the jenkins server to ssh into the NFS server: Adjust the security group rules
+- Inability of the jenkins server to access the /mnt/apps directory: Check and adjust the file permissions and ownership
+
 ## Conclusion
 We have configured a basic job triggered by a webhook using Jenkins CI. This is just the foundation for advanced CI task which we will carry out on our Jenkins server.
 
