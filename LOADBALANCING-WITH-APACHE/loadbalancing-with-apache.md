@@ -44,6 +44,7 @@ sudo apt update -y
 sudo apt upgrade -y
 ```
 
+&nbsp;
 ###  Step 1. Install Apache and the required modules:
 
 The apache `mod_proxy` module is used for load balancing protocols including `HTTP` and `HTTPS`. This module is combined with other modules for effective load balancing. Install them with the following commands (comments included for explanation):
@@ -81,6 +82,7 @@ Run `sudo systemctl status apache2` to verify that it is enabled and running:
 
 ![Apache running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/apache2%20running.png)
 
+&nbsp;
 ###  Step 2. Configure Apache as a Load balancer
 We will create a new configuration file in the `sites-available` folder named `webserver-lb.conf`
 
@@ -159,6 +161,7 @@ Note that this is a very basic configuration setting and it can be improved to i
 
 Suggestions for improvement can be found in my [README.md](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/self-side-study/optimizing-apachelb-configuration.md) 
 
+&nbsp;
 ###  Step 3. Enable the new configuration and disable the default
 
 Run the following command to enable the new configuration and disable the default:
@@ -168,6 +171,7 @@ sudo a2ensite webserver-lb.conf
 sudo a2dissite 000-default.conf
 ```
 
+&nbsp;
 ###  Step 4. Test the configuration and restart Apache
 
 ```sh
@@ -176,6 +180,7 @@ sudo systemctl restart apache2
 ```
 ![edit configuration](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/edit%20configuration.png)
 
+&nbsp;
 ###  Step 5. Configure Firewall
 To ensure that Apache Load balance instance can communicate with the web servers and users can access the load balancer, the firewall rules should be configured:
 
@@ -187,6 +192,7 @@ sudo ufw allow 'Apache Full'
 
 ```
 
+&nbsp;
 ###  Step 6. Test the Load balancer
 
 Access the load balancer's IP address in a web browser:
@@ -253,7 +259,7 @@ By refreshing our browser (load balancer IP) multiple times, we get the followin
 ![access-log webserver2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/access%20log%20webserver%202.png)
 ![access-log webserver3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-APACHE/images/access%20log%20webserver%203.png)
 
-
+&nbsp;
 ###  Step 7. [Optional] Configure Local DNS names resolution
 The local DNS name of our webservers can be configured in the `/etc/hosts` file of the loadbalancer server. This is an internal configuration that is local to our load balancer server and is used for testing purposes.
 
