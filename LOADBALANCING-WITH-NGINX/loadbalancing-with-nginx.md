@@ -1,4 +1,5 @@
-# Project Title
+# Load balancing with Nginx
+## Configuring an alternative Load balancer for the 3-tier application
 
 ![Architecture diagram](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-NGINX/images/3-tier%20web%20application%20with%20database%20and%20NFS%20server.drawio%20(1).png)
 
