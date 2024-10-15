@@ -162,6 +162,10 @@ Now we can view the application from our domain name:
 
 [now we can view the application from our domain]
 
+
+And log in with our password as well:
+[logged in succesfully]
+
 - Install certbot and request for an SSL/TLS certificate
 
 ```sh
@@ -217,6 +221,7 @@ Assuming we want to schedule the cron job for certbot to run on the first day of
 0 0 1 * *  root /usr/bin/certbot renew > /dev/null 2>&1
 ```
 [crontab renew]
+
 
 ## Conclusion
 
