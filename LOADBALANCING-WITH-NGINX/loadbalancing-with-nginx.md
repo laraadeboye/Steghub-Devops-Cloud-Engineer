@@ -173,6 +173,10 @@ Now we can view the application from our domain name:
 
 ![now we can view the application from our domain](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-NGINX/images/now%20we%20can%20view%20the%20application%20from%20our%20domain.png)
 
+We can also login to our application with the username and password:
+
+![logged in success](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/LOADBALANCING-WITH-NGINX/images/logged%20in%20successfuly.png)
+
 - Next, we will install certbot and request for an SSL/TLS certificate
 
 ```sh
