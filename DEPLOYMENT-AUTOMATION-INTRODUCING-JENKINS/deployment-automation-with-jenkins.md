@@ -69,7 +69,7 @@ sudo apt-get install jenkins
 ```sh
 sudo systemctl status jenkins
 ```
-1[jenkins verified](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/jenkins%20verified.png)
+![jenkins verified](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/jenkins%20verified.png)
 
 - We will access the jenkins server via its public IP and port as shown:
 
