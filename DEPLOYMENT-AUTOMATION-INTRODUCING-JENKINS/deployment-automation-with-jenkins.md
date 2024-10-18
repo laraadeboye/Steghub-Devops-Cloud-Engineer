@@ -96,7 +96,7 @@ The password looks like the string of numbers below:
 When you enter the password, you will be taken to the following page:
 ![suggested plugins page](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/suggested%20plugins.png)
 
-Install the suggested plugins, then create an admin user with a secure password. We will use `Passw0rd123#` for our test environment.
+Install the suggested plugins, then create an admin user with a secure password. We will use `myuser` as username and  `Passw0rd123#` for our test environment.
 ![Initial Admin user](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/DEPLOYMENT-AUTOMATION-INTRODUCING-JENKINS/images/Create%20first%20admin%20user.png)
 
 &nbsp;
