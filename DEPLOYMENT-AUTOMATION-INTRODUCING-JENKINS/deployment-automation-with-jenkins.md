@@ -115,7 +115,7 @@ A webhook serves as a mechanism for real-time communication between services. It
 For instance, when a developer pushes code to a GitHub repository, a webhook can notify Jenkins to automatically start a build process. 
 
 - We will enable webhooks in our Github repository. 
-  - Navigate to the **settings** tab of located under the github repo name, `tooling` (which can be forked [here](https://github.com/laraadeboye/tooling))
+  - Navigate to the **settings** tab located under the github repo name, `tooling` (which can be forked [here](https://github.com/laraadeboye/tooling))
   - Select **webhooks** in the left sidebar, and Click on **Add a webhook**
   - In the Payload URL field, enter the URL where you want Github to send the webhook requests. For Jenkins, it typically looks like `http://<jenkins_server_ip>:8080/github-webhook/`, replacing <jenkins_server_ip> with the IP address or domain of the jenkins server
   - Select the Content type as **application/json** to receive the payloads in JSON format.
