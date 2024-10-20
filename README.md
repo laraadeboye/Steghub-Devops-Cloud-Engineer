@@ -13,3 +13,4 @@ The order of projects in this repository is found below:
 - [LOAD BALANCING WITH NGINX](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/tree/main/LOADBALANCING-WITH-NGINX)
 
 ## Projects 11-15
+- [ANSIBLE CONFIGURATION MANAGEMENT](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/ansible-automate-tasks.md)
