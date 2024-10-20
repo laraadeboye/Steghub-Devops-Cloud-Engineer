@@ -46,5 +46,6 @@ By leveraging Ansible, organizations can enhance collaboration between developme
 5. **Verify Installation**:
    - Check if Apache is running on the managed nodes.
 
+
 ## Reference
 - [Ansible's website](https://docs.ansible.com/ansible/latest/index.html).
