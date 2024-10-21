@@ -197,7 +197,7 @@ Viewing the bottowm left corner in the image below, we observe SSH connection to
  ** Update `inventory/dev.yml` file**
  Update the `inventory/dev.yml` file with the connection information of the NFS server, the three webservers, the DB server and the load balancer server:
 
- ```sh
+ ```text
  [nfs]
  <NFS-Server-Private-IP-Address> ansible_ssh_user=ec2_user
 
@@ -215,7 +215,7 @@ Viewing the bottowm left corner in the image below, we observe SSH connection to
 
 
  Replace the placeholders as follows:
- ```sh
+ ```text
  [nfs]
  172.31.39.177 ansible_ssh_user=ec2-user
 
@@ -236,7 +236,7 @@ Viewing the bottowm left corner in the image below, we observe SSH connection to
 
  Edit the `playbook/common.yml` file with the code below:
 
- ```
+ ```yaml
  ---
  - name: update web and nfs servers
   hosts: webservers, nfs
@@ -278,7 +278,7 @@ We will later update the `common.yml` to include additional tasks in another fil
  - Run some shell scripts. Create shell scripts
 
 We will update the host file as follows:
-```sh
+```text
 [nfs]  
 172.31.39.177 ansible_ssh_user=ec2_user
 
@@ -325,7 +325,7 @@ git push --set-upstream origin feat/prj-11-ansible-config
 Create a `common2.yml` file and paste the following content to the `common2.yml` file
 
 **Updated `common2.yml` file**:
-```
+```yaml
 ---
 - name: Update and configure servers
   hosts: all  # Target all servers
