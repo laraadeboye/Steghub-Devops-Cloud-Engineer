@@ -1,5 +1,6 @@
 
 # Ansible Configuration management for the 3-tier architecture.
+![Architecture diagram for Ansible configuration mgt](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/Configuration%20mgt%20with%20Ansible-3%20tier.png)
 
 We will be automating the management of our web application with infrastructure as code (IAC) using Ansible.
 
@@ -48,7 +49,8 @@ sudo apt install -y ansible
 ansible --version
 
 ```
-[ansible --version]
+![ansible --version](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/ansible%20version.png)
+
 - ## Step 2 Configure jenkins to archive the repository content `ansible-config-mgt`.
 
 We will configure a jenkins job to trigger from a github webhook set to trigger `ansible-job` build. Create a freestyle job in jenkins and click **Configure** Add the following configurations:
@@ -95,10 +97,11 @@ We will test our configuration by making a little change to the Readme file in t
   - Select your EC2 instance and check its details at the bottom of the page.
   - You should see the associated Elastic IP listed under Public IPv4 address.
 
-[allocate elastic ip]
+![allocate elastic ip](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/allocate%20elastic%20ip.png)
 
 &nbsp;
-[elstic ip associated]
+![elastic ip associated](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/elastic%20IP%20allocated.png)
+
 ## Step 3 Prepare your development environment using visual Studio Code.
 We will use visual studio code to prepare our dev environment.
 - Connect your visual studio code to your Github repository.
@@ -109,12 +112,13 @@ git clone https://github.com/laraadeboye/ansible-config-mgt
 ```
 
 ## Step 4 Begin Ansible development
-- We will create a new branch named `feat/ansible` that we will use for developing a new feature. From the command line enter:
+- We will create a new branch named `feat/prj-11-ansible-config` that we will use for developing a new feature. From the command line enter:
 
 ```sh
 git checkout -b feat/ansible
 ```
-[git checkout b]
+![git checkout b](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/git%20flow.png)
+
 - Checkout the feature branch to the machine and build code and directory structure. 
 - Create a directory named `playbooks` in which all our playbook files will be stored.
 - Create another folder named `inventory` which will help keep our hosts organised. We will create **inventory files** within this folder to represent each environment: Development, Staging, Testing and Production (`dev`, `staging`, `uat` and `prod`)
@@ -187,8 +191,8 @@ Follow the steps:
     User ec2-user  # Replace with the appropriate username if different
     ForwardAgent yes
     ```
-
-
+Viewing the bottowm left corner in the image below, we observe SSH connection to the jenkins-server elastic-public-IP.
+![Connect to Jenkins server via vscode](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/connecting%20remotely%20from%20VS%20code%20to%20jenkins-server.png)
     
  ** Update `inventory/dev.yml` file**
  Update the `inventory/dev.yml` file with the connection information of the NFS server, the three webservers, the DB server and the load balancer server:
@@ -224,7 +228,7 @@ Follow the steps:
  172.31.38.76 ansible_ssh_user=ubuntu
 
  [lb]
- 172.31.38.76 ansible_ssh_user=ubuntu
+ 172.31.46.249 ansible_ssh_user=ubuntu
  ```
 
  ## Step 6 Create a Common Playbook
@@ -266,7 +270,7 @@ Play 1 updates web and NFS which are based on RHEL. It uses elevated privileges 
 
 Play 2 update LB server and DB. It uses elevated privileges (become: yes) and updates the apt repository cache. It also installs/updates Wireshark to the latest version using apt.
 
-We will update the `common.yml` to include additional tasks:
+We will later update the `common.yml` to include additional tasks in another file named `common2.yml`
 
  Include tasks to 
  - Create a directory and a file inside it
@@ -287,7 +291,7 @@ We will update the host file as follows:
 172.31.38.76 ansible_ssh_user=ubuntu
 
 [lb]
-172.31.38.76 ansible_ssh_user=ubuntu
+172.31.46.249 ansible_ssh_user=ubuntu
 
 [ubuntu_servers:children]
 lb
@@ -442,14 +446,16 @@ ansible-playbook -i inventory/dev.yml playbooks/common2.yml --check -v
 ansible-playbook -i inventory/dev.yml playbooks/common2.yml
 ```
 
-[checkmode dryrun]
+![checkmode dryrun](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/checkmode%20dryrun.png)
+
+I ran the ansible command in dry-run mode.
 
 ## Step 7 Update Git with the latest code (Practice Git workflow)
 - Push the code changes made locally to Github. This reinforces the skill to collaborate with other team members using git. 
 
 - Commit and push the local changes to github. 
 
-- Navigate to the github console and craete a pull request [research best practices for creating pull request]
+- Navigate to the github console and craete a pull request 
 
 simulate another developer and act as a reviewer. Approve and merge
 
@@ -457,15 +463,16 @@ simulate another developer and act as a reviewer. Approve and merge
 
 - Once the code changes have been merged to the maain branch, jenkins will run the build and do its job- archive the files on the `jenkins-ansible` server
 
-[successful build]
-[Content of the repo]
+![successful build](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/successful%20build.png)
+&nbsp;
+![Content of the repo](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/Content%20of%20the%20repo.png)
 
 When we check the server at the location:
 ```sh
 cd /var/lib/jenkins/jobs/ansible-job/builds/[build-number]/archive/`
 
 ```
-[content of the archive on server]
+![content of the archive on server](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/content%20of%20the%20archive%20on%20server.png)
 
 ## Step 8 Run Ansible test
 We will verify if the playbook works :
@@ -482,7 +489,9 @@ ansible-playbook -i inventory/dev.yml playbooks/common.yml
 ```
 *Hint Troubleshooting*
 If you get errors due to inability to connect to host as shown
-[image errors host]
+![image errors host](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/errors%20ansible%20hostkey.png)
+
+![DB instance unreachable](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/db%20unreachabel%20SG.png)
 
 - Verify you are using the correct hostname in your dev.yml file
 - create the `ansible.cfg` file within your working directory and paste the following:
@@ -494,12 +503,18 @@ host_key_checking = False
 ```
 - Verify security group rules for instance the DB instance should allow inbound access on port 22 from the jenkins-ansible server as shown in the image:
 
+![Security grouip rules from jenkins sg](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/security%20group%20rules%20from%20jenkins%20server.png)
 
 Verifying on each of the servers, we will check if wireshark has been installed by running `wireshark --version`:
 
-[images]
+**Web server 1**
+![Wireshark installed on webserver1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/wireshark%20--version%20on%20webserver%201.png)
 
+**NFS server**
+![Wireshark installed on NFS server](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/wireshark%20version%20on%20NFS.png)
 
+**DB Server**
+![Wireshark installed on DB server](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/wireshark%20version%20on%20DB%20server.png)
 With Ansible we can manage hundreds of servers with one command!
 
 
