@@ -115,7 +115,7 @@ git clone https://github.com/laraadeboye/ansible-config-mgt
 - We will create a new branch named `feat/prj-11-ansible-config` that we will use for developing a new feature. From the command line enter:
 
 ```sh
-git checkout -b feat/ansible
+git checkout -b feat/prj-11-ansible-config
 ```
 ![git checkout b](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/git%20flow.png)
 
