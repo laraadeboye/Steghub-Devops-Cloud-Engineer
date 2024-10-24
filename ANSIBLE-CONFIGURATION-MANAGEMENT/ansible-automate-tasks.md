@@ -167,6 +167,7 @@ Follow the steps:
    ssh-add -l            # Should show your key(s)
   ```
  *Troubleshooting*
+
   - Ensure your security group settings on the instance allow SSH access on port 22 from your host IP
   - ensure you connect to your instance form your local host and accept the host key fingerprint, first.
   - If you have multiple ssh keys in your system, ensure that the key you intend to use is indeed added.
@@ -192,9 +193,11 @@ Follow the steps:
     ForwardAgent yes
     ```
 Viewing the bottowm left corner in the image below, we observe SSH connection to the jenkins-server elastic-public-IP.
+
 ![Connect to Jenkins server via vscode](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/connecting%20remotely%20from%20VS%20code%20to%20jenkins-server.png)
     
  ** Update `inventory/dev.yml` file**
+
  Update the `inventory/dev.yml` file with the connection information of the NFS server, the three webservers, the DB server and the load balancer server:
 
  ```text
