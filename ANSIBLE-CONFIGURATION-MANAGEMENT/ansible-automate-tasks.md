@@ -491,6 +491,7 @@ Run the playbook command:
 ansible-playbook -i inventory/dev.yml playbooks/common.yml
 ```
 *Hint Troubleshooting*
+
 If you get errors due to inability to connect to host as shown
 ![image errors host](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/images/errors%20ansible%20hostkey.png)
 
