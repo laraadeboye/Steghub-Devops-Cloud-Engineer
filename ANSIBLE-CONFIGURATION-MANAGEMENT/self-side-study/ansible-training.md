@@ -44,6 +44,7 @@ sudo apt install ansible
 sudo yum install ansible
 
 # Verify installation
+
 ansible --version
 ```
 
