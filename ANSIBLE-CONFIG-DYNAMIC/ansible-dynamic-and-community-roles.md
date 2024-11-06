@@ -4,12 +4,12 @@ While static assignments use `import` module as seen in the [previous project](h
 
 In this long task 😊, we will introduce dynamic assignment into our structure.
 
-## Step 0 Set up structure
+## Step 0 Set up infrastructure
 - Start your `jenkin-ansible` server , if you stopped it after the previous step. I have all my instances running in case I want to run some tests. Connect to the instance via ssh-forwarding.
-[Instances running]
+![Instances running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/Instances%20running.png)
 
 - Here is the current structure of the project:
-[current project structure]
+![current project structure](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/current%20project%20structure.png)
 
 - Create a new branch in the `ansible-config-mgt` repo named `dynamic-assignments`
 
@@ -20,7 +20,7 @@ git checkout -b feat/dynamic-assignments
 # push the branch to the remote repo
 git push -u origin feat/dynamic-assignments
 ```
-[git new dynamic branch]
+![git new dynamic branch](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/git%20new%20dynamic%20branch.png)
 
 - Create a folder named `dynamic-assignments`and a file named `env-vars.yml` within the folder.
 
@@ -28,7 +28,7 @@ Our use-case can benefit from dynamic assignments because we have four different
 
 - Create a folder of environment variables named `env-vars` in the root directory. Each environment will have separate variables hence, create yaml files within the folder to store environment-specific variables named`dev.yml`, `stage.yml`, `uat.yml` and `prod.yml` respectively.
 
-[structure env-var]
+![structure env-var](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/structure%20env-var.png)
 
 The following yaml configuration consists of
 - `with_first_found`: This is a lookup plugin that searches for the first file it finds from the list. It will:
@@ -59,6 +59,9 @@ Notes on ansible special variables can be found in the [documentation](https://d
     - always
     
 ```
+(The upper one threw up errors at the testing phase. I left it for learning purposes)
+
+[include ran not successfully](ithub.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/include%20ran%20successfully.png)
 
 ```yml
 ## Correct syntax. Check explanations in the troubleshooting section
@@ -80,8 +83,6 @@ Notes on ansible special variables can be found in the [documentation](https://d
 ```
 Paste the above instruction into the `env-vars.yml` file
 
-
-[include ran successfully]
 
 ## Step 1 Update `site.yml` with dynamic assignments
 Next, we will update the `site.yml` with dynamic assignments.
@@ -115,11 +116,11 @@ include: ../dynamic-assignments/env-vars.yml
 ```
 Here is what the `site.yml` looks like now:
 
-[update site.yml]
+![update site.yml](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/update%20site.yml.png)
 
 In the above yaml file, following ansible best practices for clear naming and structure and correct use of import types [here](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse.html), we have a proper name and structure for each play. There is a also a clear separation between dynamic variables loading (using `include_tasks`), common configurations (using `import_playbook`) and host-specific tasks (using `import_tasks`)
 
-To test the configuration, you may need to start the remaining webservers, now, if they are not alreasdy started.
+To test the configuration, you may need to start the remaining webservers, now, if they are not already started.
 
 Change directory to the `ansible-config-mgt` root directory and run:
 
@@ -127,27 +128,27 @@ Change directory to the `ansible-config-mgt` root directory and run:
 ansible-playbook -i inventory/dev.yml playbooks/site.yml
 ```
 
-[image: test include role]
+# [image: test include role]
 
 ## Step 2 Creating community role for the MySQL db
 
-We will create a role for the MySQL db that installs the MySQL package, creates a database and configure users. Rather than, starting from scratch we will use pre-existing production ready roles.
+We will create a role for the MySQL db that installs the MySQL package, creates a database and configure users. Rather than, starting from scratch we will use a pre-existing production ready role from the ansible galaxy.
 
 First we will download the Mysql ansible role. Available community roles can be found in the [ansible galaxy website](https://galaxy.ansible.com/ui/)
 
-For the MySQL role we we use a popular one by [geerlingguy](https://galaxy.ansible.com/ui/standalone/roles/geerlingguy/mysql/)
+For the MySQL role we use a popular one by [geerlingguy](https://galaxy.ansible.com/ui/standalone/roles/geerlingguy/mysql/)
 
-We already have git installed in our machine as well as the git initialised `ansible-config-mgt` directory. we will create a new branch named `roles-features` and switch to it.
+We already have git installed in our machine as well as the git initialised `ansible-config-mgt` directory. We will create a new branch named `roles-features` and switch to it.
 
 Navigate to the roles directory and install the mySQL role with the following command:
 
 ```sh
 ansible-galaxy install geerlingguy.mysql
 ```
-[error no headers]
+![error no headers](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/error%20no-headers.png)
 
 **Community role installed successfully**
-[installing community roles]
+![installing community roles](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/installing%20community%20roles.png)
 
 Rename the created folder to mysql:
 
@@ -156,18 +157,18 @@ mv geerlingguy.mysql/ mysql
 ```
 
 *Troubleshooting*
-The image above shows the creation of a new git branch locally. I attempt to install the community role but i was met with the error above. This indicates an error in the ansible config file in the `etc` folder specifically a missing header `[defaults]`. I include this in the file as shown:
+The image above shows the creation of a new git branch locally. I attempt to install the community role but i was met with the error above ("File contains no sectionheaders"). This indicates an error in the ansible config file in the `etc` folder specifically a missing header `[defaults]`. I include this in the file as shown:
 
-[error corrected default header]
+![error corrected default header](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/error%20corrected%20default%20header.png)
 
 
-Edit the roles configuration to use correct credentials for MySQL required for the `tooling` website.
+Edit the roles configuration to use the correct credentials for MySQL required for the `tooling` website.
 
 We can use the community role to:
 - Manage our existing database
 - Create databases for different environments.
 
-To apply the community role to our use case, first, we will define environment variables.
+To apply the community role to our use case, managing our existing database, first, we will define environment variables.
 
     - Define environment-specific MySQL database credentials in each of your `env-vars` files (like `dev.yml`, `prod.yml`, etc.)
   For instance, the `dev.yml` example:
@@ -253,7 +254,7 @@ Next, update playbook configuration in `playbooks/site.yml` including the variab
       import_tasks: ../static-assignments/uat-webservers.yml
 
 ```
-[custom db geer]
+![custom db geer](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/custom%20db%20geer.png)
 
 For the `uat-webservers.yml`, we will define the following content. This means the tasks configured in the role will be executed when ansible-playbook is run. 
 
@@ -264,16 +265,19 @@ For the `uat-webservers.yml`, we will define the following content. This means t
 
 ```
 Run the ansible-playbook command from the root directory.
+```sh
+ansible-playbook -i inventory/dev.yml playbooks/site.yml
+```
 
 *Troubleshooting*
 Note that you don't need to specify the hosts directive in the `uat-webservers.yml`when you are using `import_tasks` to include `uat-webservers.yml` in your main playbook (site.yml) since the hosts context is already established in the main playbook.
 
 **Error shown if host is defined (conflict)**
-[conflict]
+[conflict](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/conflict%20in%20env-vars.png)
 
 When we run the ansible-playbook command we also get the with_first_found error as show:
 
-[with first found error]
+![with first found error](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/with_first_found%20error.png)
 
 I resolved it by modifying the `dynamic-assignments/env-var.yml` file:
 
@@ -302,10 +306,13 @@ We were getting the "No file was found when using first_found" error - because t
 
 Stage and commit the changes to git.
 Create a pull request and merge to the main branch
-[git add feature-roles]
-[git push feature-roles]
+![git add feature-roles](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/git%20add%20feature-roles.png)
 
-## Step 2 Creating role for the the load balancers
+&nsbp;
+
+![git push feature-roles](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/git%20push%20feature-roles.png)
+
+## Step 3 Creating roles for the the load balancers
 
 We want the flexibility to be able to choose between different load balancers: `nginx` or `apache` (remember we previously created a virtual machine for the apache load balancer, in a past project task).
  
@@ -318,12 +325,13 @@ We cannot use both load balancers at the same time so we will include a conditio
 **Manual setup of role for loadbalancers** 
 
 Ansible documentation on roles can be found [here](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html)
+
 - Create a new branch to work on the manual load balancer setup:
 
 ```sh
 git checkout -b feat/load-balancer-roles
-
 ```
+
 - Navigate to the `roles/` directory and create a `nginx_lb` role for Nginx using `ansible-galaxy` command. I have existing roles called `webserver` (which was created manually) and `mysql` (which was created using community roles) from my previous tasks.
 
 ```sh
@@ -340,8 +348,9 @@ rm -rf files tests vars
 # mkdir -p roles/nginx_lb/{tasks,defaults,handlers,templates}
 ```
 
-[nginx_lb role with ansible-galaxy]
-[tree nginx_lb]
+![nginx_lb role with ansible-galaxy](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/nginx_lb%20role%20with%20ansible-galaxy.png)
+
+![tree nginx_lb](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/tree%20nginx_lb.png)
 
 - Also create a role for the apache load balancer named `apache_lb`.
 
@@ -381,9 +390,9 @@ load_balancer_is required: false
 
 Now we already have  nginx load balancer server installed and configured for load balancing in a previous tasks. (check image for the nginx lb running)
 
-[nginx lb running on AWS]
+![nginx lb running on AWS](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/nginx%20lb%20running.png)
 
-Oops, I just discovered I have terminated the apache load balancer server in the past. We will use ansible to install and configure it for load balancing our app. This affords an opportunity to broaden my knowledge. Here is a link within this repo explaining how I achieved it.
+Oops😯, I just discovered I have terminated the apache load balancer server in the past. We will use ansible to install and configure it for load balancing our app. This affords an opportunity to broaden my knowledge. Here is a [link](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/LOADBALANCING-WITH-APACHE/installing-apache-with-ansible.md) within this repo explaining how I achieved it.
 
 To use your this conditional logic in our setup, where the load balancers are already installed in the virtual machines respectively, In `env-vars/[environment.yml]`, In each load balancer role, create tasks to start or stop the respective services based on these variables we have set.
 
@@ -466,27 +475,34 @@ It includes two roles:
 ```
 ansible-playbook -i inventory/uat.yml playbooks/site.yml
 ```
-The setup should allow you to toggle between Nginx and Apache load balancers simply by setting the appropriate variables in the environment-specific files. Initially, I didnt get the expected result. After a couple of iterations and corrections, the errors were resolved.
+The setup should allow you to toggle between Nginx and Apache load balancers simply by setting the appropriate variables in the environment-specific files. Initially though, I didnt get the expected result. After a couple of iterations and corrections, the errors were resolved.
 
 *Troubleshooting*
 when I ran the above command I got the error:
-[first error config lb]
+![first error config lb](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/first%20error%20config%20lb.png)
 
 This means variables and conditions are not properly configured. I followed a systematic approach to resolve this:
 
 1. Verify that the `env-vars/uat.yml` defines the variables correctly
-[image env-vars uat.yml]
-2. Confirm your `inventory/uat.yml`
-[image inventory uat.yml]
+   
+  ![image env-vars uat.yml](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/image%20env-vars%20uat.yml.png)
 
-`ansible_host`should be correctly set for the webservers and load 
+2. Confirm your `inventory/uat.yml`
+  ![image inventory uat.yml](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/image%20inventory%20uat.yml.png) Notice the variable set for nginx and apache
+
+`ansible_host` should be correctly set for the webservers and load 
 balancers.
 
-[ansible host set]
+![ansible host set](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/ansible%20host%20set.png)
+
 3. Review Role Task for Nginx Load Balance in the `roles/nginx_lb/tasks/main.yml`
-[confirm roles.nginx.task.]
-[updated task.main to correct errors]
-[Update task to include become and remove default .conf]
+![confirm roles.nginx.task.](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/confirm%20roles.nginx.task.png)
+
+I modified tasks/main.yml to correct errors
+![updated task.main to correct errors](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/updated%20nginx%20task.main%20to%20correct%20errors.png)
+
+![Update task to include become and remove default .conf](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/task%20updated%20with%20become.png)
+
 I also modify the configuration to include a handler to reload nginx when changes are made
 [handlers for nginxlb]
 I also create a template file `nginx-lb.conf.j2`
@@ -728,6 +744,124 @@ Checking on the web UI. Remember the apache public-IP is `54.226.233.195`
 
 [accessing wep app after choosing apache]
 
+Here is the final project structure:
+
+
+```sh
+.
+├── README.md
+├── ansible.cfg
+├── dynamic-assignments
+│   └── env-vars.yml
+├── env-vars
+│   ├── dev.yml
+│   ├── prod.yml
+│   ├── staging.yml
+│   └── uat.yml
+├── group_vars
+│   ├── all.yml
+│   └── lb.yml
+├── inventory
+│   ├── dev.yml
+│   ├── prod.yml
+│   ├── staging.yml
+│   └── uat.yml
+├── playbooks
+│   └── site.yml
+├── roles
+│   ├── apache_lb
+│   │   ├── README.md
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   ├── meta
+│   │   │   └── main.yml
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       └── apache-lb.conf.j2
+│   ├── install_apache_lb
+│   │   ├── README.md
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   ├── meta
+│   │   │   └── main.yml
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       └── webserver-lb.conf.j2
+│   ├── mysql
+│   │   ├── LICENSE
+│   │   ├── README.md
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   ├── meta
+│   │   │   └── main.yml
+│   │   ├── molecule
+│   │   │   └── default
+│   │   │       ├── converge.yml
+│   │   │       └── molecule.yml
+│   │   ├── tasks
+│   │   │   ├── configure.yml
+│   │   │   ├── databases.yml
+│   │   │   ├── main.yml
+│   │   │   ├── replication.yml
+│   │   │   ├── secure-installation.yml
+│   │   │   ├── setup-Archlinux.yml
+│   │   │   ├── setup-Debian.yml
+│   │   │   ├── setup-RedHat.yml
+│   │   │   ├── users.yml
+│   │   │   └── variables.yml
+│   │   ├── templates
+│   │   │   ├── my.cnf.j2
+│   │   │   ├── root-my.cnf.j2
+│   │   │   └── user-my.cnf.j2
+│   │   └── vars
+│   │       ├── Archlinux.yml
+│   │       ├── Debian-10.yml
+│   │       ├── Debian-11.yml
+│   │       ├── Debian-12.yml
+│   │       ├── Debian.yml
+│   │       ├── RedHat-7.yml
+│   │       ├── RedHat-8.yml
+│   │       └── RedHat-9.yml
+│   ├── nginx_lb
+│   │   ├── :wq
+│   │   ├── README.md
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   ├── meta
+│   │   │   └── main.yml
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       └── nginx-lb.conf.j2
+│   └── webserver
+│       ├── README.md
+│       ├── defaults
+│       │   └── main.yml
+│       ├── handlers
+│       │   └── main.yml
+│       ├── meta
+│       │   └── main.yml
+│       ├── tasks
+│       │   └── main.yml
+│       └── templates
+└── static-assignments
+    ├── common.yml
+    ├── common2.yml
+    ├── commondel.yml
+    ├── deploy-apache-lb.yml
+    └── uat-webservers.yml
+
+```
 
 ## Conclusion
 
