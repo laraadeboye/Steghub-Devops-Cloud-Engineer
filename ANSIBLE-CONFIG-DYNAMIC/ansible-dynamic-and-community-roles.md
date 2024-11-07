@@ -4,7 +4,7 @@
 
 While static assignments use `import` module as seen in the [previous project](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIGURATION-REFACTORING/refactor-ansible-config.md), the `include` module is used for dynamic assignments. It is recommended to use static assignments for playbooks because it is more reliable. 
 
-In this long task 😊, we will introduce dynamic assignment into our structure. We also make use of ansible community roles to make our configuration modular and reusable. I include the steps I took to troubleshoot errors and get it working. When using ansible, like sevearl other tools, you may need to iterate several times to get your app working. Let's begin...
+In this long task 😊, we will introduce dynamic assignment into our structure. We also make use of ansible community roles to make our configuration modular and reusable. I include the steps I took to troubleshoot errors and get it working. When using ansible, like several other devOps tools, you may need to iterate several times to get your app working. Let's begin...
 
 ## Step 0 Set up infrastructure
 - Start your `jenkin-ansible` server , if you stopped it after the previous step. I have all my instances running in case I want to run some tests. Connect to the instance via ssh-forwarding.
