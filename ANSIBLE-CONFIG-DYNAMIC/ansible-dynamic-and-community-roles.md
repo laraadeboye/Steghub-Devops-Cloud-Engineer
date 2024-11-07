@@ -2,7 +2,7 @@
 
 While static assignments use `import` module as seen in the [previous project](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIGURATION-REFACTORING/refactor-ansible-config.md), the `include` module is used for dynamic assignments. It is recommended to use static assignments for playbooks because it is more reliable. 
 
-In this long task 😊, we will introduce dynamic assignment into our structure.
+In this long task 😊, we will introduce dynamic assignment into our structure. I include the steps I took to troubleshoot errors and get it working. When using ansible, like sevearl other tools, you may need to iterate several times to get your app working. Let's begin...
 
 ## Step 0 Set up infrastructure
 - Start your `jenkin-ansible` server , if you stopped it after the previous step. I have all my instances running in case I want to run some tests. Connect to the instance via ssh-forwarding.
@@ -504,16 +504,17 @@ I modified tasks/main.yml to correct errors
 ![Update task to include become and remove default .conf](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/task%20updated%20with%20become.png)
 
 I also modify the configuration to include a handler to reload nginx when changes are made
-[handlers for nginxlb]
+![handlers for nginxlb](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/handlers%20for%20nginxlb.png)
+
 I also create a template file `nginx-lb.conf.j2`
-[template file for nginx-lb]
+![template file for nginx-lb](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/template%20for%20nginx-lb.png)
 
 The template file dynamically loads IP addresses from each UAT webserver in the `inventory/uat.yml`
 
-[default file for nginxlb]
+![default file for nginxlb](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/default%20variable%20for%20nginx_lb.png)
 
 4. Update site.yml
-[update site.yml]
+![update site.yml](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/update%20site.yml.png)
 
 Run playbook:
 ```sh
@@ -522,8 +523,10 @@ ansible-playbook -i inventory/uat.yml playbooks/site.yml
 
 We are able to access the uat webservers through the nginx load balancer.
 
-[access after choosing nginx]
-[nginx chosen success]
+![access after choosing nginx](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/access%20web%20app%20after%20choosing%20nginx.png)
+
+![nginx chosen success](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/nginx%20chosen%20success.png)
+
 We will also test further by enabling apache while disabling nginx.
 
 Also to do make the site secure using ansible
@@ -554,7 +557,7 @@ apache_listen_port: 80  # Port to listen on
 
 ```
 
-- Configure the task. I modified my yaml file to handle the existing configuration file `webserver-lb.conf` I previously created on the apache_lb server
+- Configure the task. I modified my yaml file to handle the existing configuration file `webserver-lb.conf` I previously created on the apache_lb server.
 
 ```yaml
 # tasks file for apache_lb
@@ -727,9 +730,9 @@ Replace IP as appropriate for your use case
 
 ```
 
-[image current `playbook/site.yml`]
+![image current `playbook/site.yml`](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/current%20playbook%20site.yml.png)
 
-- Now run your ansible-playbook command (Be ready to correct errors and iterate. lol)
+- Now run your ansible-playbook command (Be ready to correct errors and iterate. 😂)
 
 ```sh
 ansible-playbook -i inventory/uat.yml playbooks/site.yml
@@ -737,12 +740,13 @@ ansible-playbook -i inventory/uat.yml playbooks/site.yml
 
 View images of a successful run:
 
-[successfully ansible play apache]
-[successfully ansible play apache 2]
+![successfully ansible play apache](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/successfully%20ansible%20play%20apache.png)
 
-Checking on the web UI. Remember the apache public-IP is `54.226.233.195`
+![successfully ansible play apache 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/successfully%20ansible%20play%20apache%202.png)
 
-[accessing wep app after choosing apache]
+Checking on the web UI. Remember the apache public-IP is `54.226.233.195`. The public-IP of your apache_lb instance will be different.
+
+![accessing wep app after choosing apache](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC/images/access%20web%20app%20after%20choosing%20apache.png)
 
 Here is the final project structure:
 
@@ -865,4 +869,4 @@ Here is the final project structure:
 
 ## Conclusion
 
-We explored ansible dynamic assignments and applied it in configuring two load balancers for our web app.
+We explored ansible dynamic assignments, manual roles and community roles. We also applied it in configuring two load balancers for our web app.
