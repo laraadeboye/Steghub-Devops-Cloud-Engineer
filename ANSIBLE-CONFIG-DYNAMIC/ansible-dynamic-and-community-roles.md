@@ -868,6 +868,10 @@ Here is the final project structure:
     └── uat-webservers.yml
 
 ```
+## More areas to expore
+- Use community roles to achieve the same result
+- Add error handling and include 'successful deployment test' in nginx ansible playbook
+- Add more..
 
 ## Conclusion
 
