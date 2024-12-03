@@ -1,0 +1,25 @@
+Data Visualization Examples from phploc Metrics:
+
+You can generate multiple interesting graphs based on the phploc data:
+Code Complexity Graphs:
+
+Cyclomatic Complexity / Lines of Code
+Cyclomatic Complexity / Number of Classes
+Cyclomatic Complexity / Number of Methods
+
+Code Structure Graphs:
+
+Number of Directories
+Number of Files
+Lines of Code (LOC)
+Logical Lines of Code (LLOC)
+Number of Classes
+Number of Methods
+Number of Functions
+
+Code Quality Graphs:
+
+Comment Lines of Code (CLOC)
+Non-Comment Lines of Code (NCLOC)
+Public vs Non-Public Methods
+Static vs Non-Static Methods
