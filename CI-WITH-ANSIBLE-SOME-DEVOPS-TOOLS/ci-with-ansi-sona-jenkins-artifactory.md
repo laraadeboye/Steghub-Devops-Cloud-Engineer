@@ -431,9 +431,11 @@ Verify php and composer installation on the jenkins-ansible server
 
 We will configure artifactory in the Jenkins UI
 
-When configuring jfrog within the jenkins UI, take note to enter the URL of the artifactory instance (preferably the dns name) and the deployer user name and password.
+When configuring jfrog within the jenkins UI, take note to enter the URL of the artifactory instance and the deployer user name and password.
 
 ![Configure jfrog artifactory in jenkins UI](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Configure%20jfrog%20artifactory%20in%20jenkins%20UI.png)
+
+Here, Note that I later changed the instance ID to `artifactory-server` to match the name I specified in the Jenkinsfile. (This can lead to errors)
 
 To create a deployer user in JFrog Artifactory:
 - Log in to your Artifactory instance as an admin user.
