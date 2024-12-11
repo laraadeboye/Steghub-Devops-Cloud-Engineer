@@ -1,5 +1,5 @@
 
-# CI/CD PIPELINE FOR A PHP BASED APP
+# CI/CD PIPELINE FOR A PHP BASED APP WITH JENKINS, ANSIBLE, ARTIFACTORY, SONARQUBE
 
 PHP is an interpreted language and apps that are based on it can be deployed directly unto a server without compiling. Deploying an app directly, however makes it difdicult to package the app for releases.
 
@@ -26,32 +26,35 @@ We will create infrastructure for seven different environment while nginx serves
     sonar.infradev.laraadeboye.com -> [Nginx-public-IP]
     artifactory.infradev.laraadeboye.com -> [Nginx-public-IP]
     ```
-    [Dns management]
+    ![Dns management](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/DNS%20management.png)
+
 - Install nginx on the server and ensure it is running and accessible on the browser:
 
      ```sh
     sudo apt update -y
     sudo apt install nginx -y
     ```
-     [nginx visible on browser]
+     ![nginx visible on browser](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/nginx%20visible%20on%20browser.png)
 
    - Navigate to the conf.d directory and create three configuration files named `ci.infradev.conf`, `sonar.infradev.conf` and `artifactory.infadev.conf`
 
      ```sh
     cd /etc/nginx/conf.d
     sudo touch ci.infradev.conf sonar.infradev.conf artifactory.infadev.conf
-    ```
-    [create conf.d files]
-   - Open each of the files and add the following configuration for the respective environment.
+     ```
+
+    ![create conf.d files](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/create%20conf.d%20files.png)
+
+  - Open each of the files and add the following configuration for the respective environment.
 
   **ci.infradev.conf**
     [ci.infradev.conf]
   **artifactory.infradev.conf**
-    ```
+    ```sh
     ```
     [artifactory.infradev.conf]
   **sonar.infradev.conf**
-    ```
+    ```sh
     ```
     [sonar.infradev.conf]
 
