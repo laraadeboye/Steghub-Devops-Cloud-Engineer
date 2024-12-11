@@ -36,7 +36,7 @@ We will create infrastructure for seven different environment while nginx serves
     ```
      ![nginx visible on browser](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/nginx%20visible%20on%20browser.png)
 
-   - Navigate to the conf.d directory and create three configuration files named `ci.infradev.conf`, `sonar.infradev.conf` and `artifactory.infadev.conf`
+- Navigate to the conf.d directory and create three configuration files named `ci.infradev.conf`, `sonar.infradev.conf` and `artifactory.infadev.conf`
 
      ```sh
     cd /etc/nginx/conf.d
@@ -45,30 +45,80 @@ We will create infrastructure for seven different environment while nginx serves
 
     ![create conf.d files](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/create%20conf.d%20files.png)
 
-  - Open each of the files and add the following configuration for the respective environment.
+- Open each of the files and add the following basic configuration for the respective environment.
 
   **ci.infradev.conf**
-    [ci.infradev.conf]
+
+```sh
+    server {
+    listen 80;
+    server_name ci.infradev.laraadeboye.com;
+
+    location / {
+        proxy_pass http://172.31.28.125:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarder_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+   ![ci.infradev.conf](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/ci.infradev.conf.png)
+
   **artifactory.infradev.conf**
-    ```sh
-    ```
-    [artifactory.infradev.conf]
+
+ ```sh
+    server {
+    listen 80;
+    server_name artifactory.infradev.laraadeboye.com;
+
+    location / {
+        proxy_pass http://172.31.88.105:8081;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarder_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+```
+   ![artifactory.infradev.conf](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/artifactory%20.infradev.conf.png)
+
   **sonar.infradev.conf**
-    ```sh
-    ```
-    [sonar.infradev.conf]
 
-  - Configure ssl using certbox. We will use one ssl certificate to manage all 3 servers for simplicity.
-   The configuration files becomes:(  note the additional ssl line added by certbox)
+```sh
+    server {
+    listen 80;
+    server_name sonar.infradev.laraadeboye.com;
 
-   [ci dev after ssl]
-   [artifactory dev after ssl]
-   [sonar dev after ssl]
+    location / {
+        proxy_pass http://172.31.90.184:9000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarder_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+ ```
+   ![sonar.infradev.conf](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar.infradev.conf.png)
+ 
+- Configure ssl using certbox. We will use one ssl certificate to manage all 3 servers for simplicity. This is known as a SAN certificate as seen in the images.
+   The configuration files becomes:( note the additional ssl line added by certbox)
 
-   Signing in to the  jenkins server and logging in to the environment on web browser, we see that jenkins is running:
+   ![ci dev after ssl](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/ci%20dev%20after%20ssl.png)
 
-   [signin page jenkins with A record]
-   [login to jenkins https]
+   ![artifactory dev after ssl](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/artifactory%20dev%20after%20ssl.png)
+
+   ![sonar dev after ssl](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20dev%20after%20ssl.png)
+
+It is good practice to add the `access.log` and `error.log` lines as I did for artifactory for ease of debugging. Artifactory gave me some real issues 🥺
+
+Signing in to the  jenkins server and logging in to the environment on web browser, we see that jenkins is running:
+
+   ![signin page jenkins with A record](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/signin%20page%20jenkins%20with%20A%20record.png)
+
+   ![login to jenkins https](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/login%20to%20jenkins%20https.png)
+
 
 2. Add Ansible roles `artifactory` and `sonarqube` to the ci environment.
 
@@ -81,21 +131,25 @@ Create a new branch for configuring the artifactory roles. I initialised the art
   ansible-galaxy init jfrog_artifactory
 
   ```
-  [init jfrog]
+  ![init jfrog](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/init%20jfrog.png)
   
   Edit the defaults, tasks , templates as appropriate to configure ansible to run the jfrog artifactory role.
 
-  I saved the playbook in the `static assignments` folder as `artifactory.yml`. Also, update the CI inventory file with the `[artifactory_servers]` private IP.
+  I saved the playbook in the `static assignments` folder as `artifactory.yml`. Find it in my [ansible-config-mgt repo](https://github.com/laraadeboye/ansible-config-mgt). It can later be imported into the `playbooks/site.yml` which is our entry point to set up the whole infrastructure.
+
+  Also, update the CI inventory file with the `[artifactory_servers]` private IP.
   
-  [artifactory ci.yml 2]
+  ![artifactory ci.yml 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/artifactory%20ci.yml%202.png)
+
 
   Hence, running the playbook against the CI environment within the `ansible-config-mgt` directory:
 
-  
   ```
   ansible-playbook -i inventory/ci.yml static-assignments/artifactory.yml
   ```
-  [jfrog artifactory service running]
+  ![jfrog artifactory service running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/jfrog%20artifactory%20service%20running.png)
+  
+  ![jfrog running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/jfrog%20running.png)
 
   The configuration files are located in the `ansible-config-mgt` [repo](https://github.com/laraadeboye/ansible-config-mgt/tree/main/roles/jfrog-artifactory)
 
@@ -104,22 +158,26 @@ Create a new branch for configuring the artifactory roles. I initialised the art
 # Step 1 Configure Ansible for Jenkins Deployment
 
 Previously, we launched ansible commands directly from the CLI, Now we will run it via Jenkins UI. 
+
 - Install blue oceans plugin (Go to Dashboard > Manage Jenkins > Plugins)
-[blue Ocean plugin]
+
+![blue Ocean plugin](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/blue%20ocean%20plugin.png)
 
 - Click on Open Blue Ocean
-[click on open blue ocean]
+  
+![click on open blue ocean](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/click%20on%20open%20blue%20ocean.png)
 
-- Create a new pipeline named `ansible-config-mgt` same as the name as the repo we used for our ansible deployments previously. Cancel blue oceans attempt to create a Jenkinsfile. We will do it manually. 
-[click on new pipeline]
+- Create a new pipeline named `ansible-config-mgt` same as the name as the repo we used for our ansible deployments previously. Cancel blue oceans attempt to create a Jenkinsfile. We will do it manually.
+  
+![click on new pipeline](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/click%20on%20new%20pipeline.png)
 
 Click on Adminsitration to revert to the original jenkin UI
 
-[ansible-config-mgt pipeline]
+![ansible-config-mgt pipeline](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/ansible-config-mgt%20pipeline.png)
 
 - Create a new folder named deploy within the `ansible-config-mgt` directory on the CLI
 
-[create test jenkins feature]
+![create test jenkins feature](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/create%20test%20jenkins%20feature.png)
 
 Within this folder, create a Jenkinsfile and add a build stage:
 
@@ -139,17 +197,20 @@ pipeline {
 ```
 
 
-[building the app]
-[blue ocean build]
+![building the app](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/building%20the%20app.png)
+
+![blue ocean build](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/blue%20ocean%20build.png)
 
 Navigate to the ansible-config-mgt pipeline and choose **Configure**. Scroll to the `Build Configuration` section and enter the Script Path of the Jenkinsfile as `deploy/Jenkinsfile`
-[deploy jenkinsfile]
+
+![deploy jenkinsfile](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/deploy%20jenkinsfile.png)
 
 In the pipeline console, choose **Build Now**. The build will be triggered and we can view it by going through the console output. 
 
-The github repo has several branches and using jenkins, we can scan the repo to trigger a build for each branch.
+The github repo has several branches and using jenkins, we can **scan the repo** to trigger a build for each branch.
 
 We can create a git branch named `feature/jenkinspipeline-stages`.
+
 Add an new stage named `Test` to the existing build stage as shown:
 
 ```jenkinsfile
@@ -175,8 +236,9 @@ pipeline {
 ```
 For the new branch to be available in Jenkins, we will instruct Jenkins to scan the repository. Click on Administration in the blue ocean UI to revert back to the legacy Jenkins UI. Navigate to the `ansible-config-mgt` project and click `scan repository now`
 
-[scan repository now]
-[build ocean pipeline stages]
+![scan repository now](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/scan%20repo%20now.png)
+
+![build ocean pipeline stages](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/blue%20ocean%20UI%20pipeline%20stages%202.png)
 
 When the page is refreshed, the branches will build simultaneously. Create a pull request and merge the latest code to the main branch.
 
@@ -224,24 +286,30 @@ pipeline {
     }
 }
 ```
-[blue ocean UI main stages]
-[blue ocean UI pipeline stages]
+![blue ocean UI main stages](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/blue%20ocean%20ui%20main%20stages.png)
+
+![blue ocean UI pipeline stages](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/blue%20ocean%20%20UI%20pipeline%20stages.png)
+
 
 *Troubleshooting*
 - Ensure to edit the payload URL in github to reflect the new address of jenkins:
-[payload url settings]
+![payload url settings](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/payload%20url%20settings.png)
 
 # Step 2 Run ansible playbook from Jenkins UI
 As a prerequisite, ansible has been installed on our jenkins-ansible server from previous projects. 
 - Install ansible plugin on Jenkins.
 
-[Install ansible plugin]
+[Install ansible plugin](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/install%20ansible%20plugin.png)
+
 - Wipe out the existing content of the Jenkinsfile to start a new configuration that we can use to run ansible.
+
 - Configure Ansible executable Path. Run `which ansible` on the CLI, then navigate to **Manage jenkins** >> **Tools**
 
-[ansible configuration]
+![ansible configuration](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/configure%20ansible%20pipeline.png)
+
 
 **Parameterizing Jenkinsfile to deploy Ansible**
+
 - Launch four new servers for the SIT-tooling webserver and SIT-Todo webserver, SIT-dbserver and SIT-nginx-proxy respectively
 [SIT servers]
 
