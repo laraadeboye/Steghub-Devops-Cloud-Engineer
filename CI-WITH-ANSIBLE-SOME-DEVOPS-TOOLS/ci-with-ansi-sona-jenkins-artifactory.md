@@ -311,10 +311,11 @@ As a prerequisite, ansible has been installed on our jenkins-ansible server from
 **Parameterizing Jenkinsfile to deploy Ansible**
 
 - Launch four new servers for the SIT-tooling webserver and SIT-Todo webserver, SIT-dbserver and SIT-nginx-proxy respectively
-[SIT servers]
+![SIT servers](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/SIT%20servers.png)
 
 - As a prerequisite register the domain names of the servers in your domain name management system
-[SIT domain name reg]
+![SIT domain name reg](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/SIT%20domain%20name%20reg.png)
+
 - Update the inventory/sit.yml file as shown: (Replace the IPs withe the appropriate private IP of your server)
 
 - Update the Jenkinsfile to introduce parmeterization and introduce tagging as well.The final updated pipeline is as follows:
@@ -349,36 +350,34 @@ pipeline {
     }
 }
 ```
-[parameters jenkinsfile]
+![parameters jenkinsfile](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/parameters%20Jenkinsfile.png)
 
 - Jenkinsfile can also be configured inline as shown:
-[Configure inline pipeline script]
+![Configure inline pipeline script](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Configure%20inline%20pipeline%20script.png)
 
 Now each time we click on **build with parameters** in the jenkins UI or the play button in the blue ocean UI, we will be prompted to fill in the parameters we specified.
 
 If we fill the sit environment, the build will occur in that environment.
-[choosing parameter]
+![choosing parameter](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/choosing%20parameter.png)
 
-[build success 1]
+![build success 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Build%20success%201.png)
 
-[build success 2]
+![build success 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Build%20success%202.png)
 
 If we fill the dev environment, the build will occur in that environment.
 
-[build with parameters on JenkinUI]
+![build with parameters on JenkinUI](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/build%20with%20parameters%20on%20jenkinsUI.png)
 
 # Step 3 CI/CD Pipeline for Todo application
-We will deploy a todo website that has unit tests. We will deploy the application directly from artifactory rather than git. 
+
+We will deploy a todo website that has unit tests. We will deploy the application directly from artifactory rather than git. In the tooling website deployment we deployed from git.
 
 As a prerequisite, we have created an ansible role to configure our artifactory and the artifactory is running and accessible on the url `https://artifactory.infradev.laraadeboye.com`:
 
-[jfrog artifactory running]
+![jfrog artifactory running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/jfrog%20running.png)
 
 Follow the prompts to set the admin password:
-[artifactory set admin password]
-
-
-
+![artifactory set admin password](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/artifactory%20set%20admin%20password.png)
 
 
 1. Fork the repository to your github account
@@ -387,8 +386,8 @@ Follow the prompts to set the admin password:
   https://github.com/laraadeboye/php-todo-app.git
   ```
 
-2. Install PHP, its dependencies and composer tool on your jenkin-ansible server. The composer tool  is a dependency manager for PHP, similar to npm for Node.js or pip for Python. We will create an ansible role named php to install these: (The dependencies for the app are found in the composer.json file in the app repo)
- Still within our feature/artifactory-role branch, we will create a new role for php
+2. Install PHP, its dependencies and composer tool on your jenkin-ansible server. The composer tool  is a dependency manager for PHP, similar to npm for Node.js or pip for Python. We will create an ansible role named `php` to install these: (The dependencies for the app are found in the composer.json file in the app repo)
+ Still within our `feature/artifactory-role` branch, we will create a new role for php.
 
  - Initialise the role with ansible-galaxy:
 
@@ -413,27 +412,25 @@ Run the playbook against the `inventory/ci.yml`
 ```sh
 ansible-playbook -i inventory/ci.yml playbooks/site.yml
 ```
-[php role install]
+![php role install](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/php%20role%20install.png)
 
 Verify php and composer installation on the jenkins-ansible server
 
-[php version and composer]
+![php version and composer](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/php%20version%20and%20composer.png)
 
- The code for the role can be found [here] () in my github repo
+ The yaml for the role can be found [here](https://github.com/laraadeboye/ansible-config-mgt/tree/main/roles/php) in my `ansible-config-mgt` github repo.
 
 3. Install plugins in Jenkins UI:
 - Plot plugin (which is used to display tests reports and code coverage information)
 - Artifactory plugin (which is used to upload artifacts onto the artifactory server)
 
-[Install Plot and artifactory plugin]
+![Install Plot and artifactory plugin](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Install%20plot%20and%20artifactory%20plugins.png)
 
 We will configure artifactory in the Jenkins UI
 
-[jfrog artifactory URL]
-
 When configuring jfrog within the jenkins UI, take note to enter the URL of the artifactory instance (preferably the dns name) and the deployer user name and password.
 
-[Configure jfrog artifactory in jenkins UI]
+![Configure jfrog artifactory in jenkins UI](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Configure%20jfrog%20artifactory%20in%20jenkins%20UI.png)
 
 To create a deployer user in JFrog Artifactory:
 - Log in to your Artifactory instance as an admin user.
@@ -442,8 +439,9 @@ To create a deployer user in JFrog Artifactory:
 - Fill in the required details, such as username, email, and password.
 - Assign the user to the deployer group. This aligns with best security practice rather than directly using the admin user. 
 
-[Create user artofactory url]
-[update user with deploy group]
+![Create user artofactory url](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Create%20user%20artofactory%20url.png)
+
+![update user with deploy group](
 
 
 
