@@ -1,6 +1,8 @@
 
 # CI/CD PIPELINE FOR A PHP BASED APP WITH JENKINS, ANSIBLE, ARTIFACTORY, SONARQUBE
 
+![sonar build sucess](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20build%20success.png)
+
 PHP is an interpreted language and apps that are based on it can be deployed directly unto a server without compiling. Deploying an app directly, however makes it difdicult to package the app for releases.
 
 We will create infrastructure for seven different environment while nginx serves as a reverse proxy for each of the environment. A reverse proxy serves as an intermediary between internal servers. The environments we will be creating are:
@@ -380,6 +382,7 @@ Follow the prompts to set the admin password:
 ![artifactory set admin password](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/artifactory%20set%20admin%20password.png)
 
 
+**Phase 1 Prepare Jenkins**
 1. Fork the repository to your github account
 
   ```
@@ -441,39 +444,41 @@ To create a deployer user in JFrog Artifactory:
 
 ![Create user artofactory url](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Create%20user%20artofactory%20url.png)
 
-![update user with deploy group](
+![update user with deploy group](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/update%20user%20with%20deploy%20group.png)
 
 
-
-Test the connection to the artifactory via the set user
-[Test connection]
+Test the connection to artifactory via the set user
+![Test connection](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Test%20connection.png)
 
 Create a new local repository named `todo-artifact-local`
 
-[Create a new repository]
+![Create a new repository](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Create%20a%20new%20repository.png)
 
 
 **Phase 2 Integrate Artifatory repository with Jenkins**
 1. We will create a dummy Jenkinsfile in the php-todo-app repository.
 I did this on the github UI. Create a new feature branch name `feature/integrate-jenkins-artifactory` to make new changes. You should not make changes directly on the main branch. Create a new file named `Jenkinsfile` at the project root. Include dummy Jenkinsfile content.
 
-[create Jenkinsfile with dummy content]
+![create Jenkinsfile with dummy content](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/create%20Jenkinsfile%20with%20dummy%20content.png)
 
 2. Using blue ocean, we will create a multibranch jenkins pipeline connected to the php-todo-app repository.
 
-[create multibranch pipeline todo app]
-[Php todo app pipeline created]
+![create multibranch pipeline todo app](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/create%20multibranch%20pipeline%20todo%20app.png)
+
+![Php todo app pipeline created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Php%20todo%20app%20pipeline%20created.png)
 
 Ensure to edit the configuration of the pipeline, by adding the github credentials you have previously set up so that jenkins can be successfully authentiacted to perform the build.
 
-[Build success jenkinsfile dummy]
-[build success jenkins dummy]
+![Build success jenkinsfile dummy](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Build%20success%20jenkinsfile%20dummy.png)
+
+![build success jenkins dummy](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Build%20success%20jenkins%20dummy.png)
 
 3. Create a database named `homestead` and user named `homestead` on the database server. We have the role named `mysql`(from geerlinguy community mysql role) in our `ansible-config-mgt` directory. 
 
 This role uses Ansible's built-in `mysql_db` and `mysql_user` modules to manage MySQL databases and users, respectively. Hence, we do not need a local mysql client installation. 😉
 
 But I will install a mysql client on the jenkins-ansible server in order to test access to the db server manually from a remote location:
+
 Install the mysqlclient with the following commands:
 
 ```sh
@@ -520,7 +525,7 @@ mysql_users:
     priv: "tooling.*:ALL"
 
 ```
-[env_vars.dev2.yml]
+![env_vars.dev2.yml](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/env_vars.dev2.yml.png)
 
 Here is the play addressing our database
 ```
@@ -535,7 +540,7 @@ Here is the play addressing our database
 
 ```
 Here is the `inventory/dev.yml` defined here:
-[cat dev.yml]
+![cat dev.yml](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/cat%20dev.yml.png)
 
 
 Run the ansible-playbook to create the database and users:
@@ -544,7 +549,7 @@ Run the ansible-playbook to create the database and users:
 cd ansible-config-mgt
 ansible-playbook -i inventory/dev.yml playbooks/site.yml
 ```
-[ansible play homestead database]
+![ansible play homestead database](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/ansible%20play%20homestead%20database.png)
 
 Navigate to the db server and verify the creation of the databases and users.
 ```sh
@@ -560,13 +565,14 @@ SELECT User, Host FROM mysql.user;
 SHOW GRANTS FOR 'username'@'hostname'; #(Replace 'username' and 'hostname' with the actual username and hostname you want to check.)
 ```
 
-[verify databases mysql]
-[verify privileges mysql]
+![verify databases mysql](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Verify%20databases%20mysql.png)
+
+![verify privileges mysql](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/verify%20privileges%20mysql.png)
 
 4. The .env.sample file should be located in the project root but I can not find it:
-[no .env.sample]
+![no .env.sample](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/no%20.env.sample.png)
 
-I created the file and entered dummy content for the database connectivity details. The environment variables for the database can be found in the config/database.php file.
+I created the file and entered dummy content for the database connectivity details. The environment variables for the database can be found in the `config/database.php` file within the php-todo-app repo.
 
 ```
 DB_HOST=172.31.35.70
@@ -576,21 +582,21 @@ DB_PASSWORD=Sample-password
 DB_CONNECTION=mysql 
 DB_PORT=3306
 ```
-[new .env.sample]
-
-
+![new .env.sample](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/new%20.env.sample.png)
 
 Save the actual details as environment variables under the Global properties in systems configuration in the Jenkins UI
 Navigate to Manage jenkins >> System >> Global properties >> Environment variables
 
+```sh
 DB_HOST=172.31.38.76
 DB_DATABASE=homestead
 DB_USERNAME=homestead
 DB_PASSWORD=Passw0rd123#
 DB_CONNECTION=mysql 
 DB_PORT=3306
+```
 
-[set global environment variables]
+![set global environment variables](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/set%20global%20environment%20variables.png)
 
 5. We will update the dummy jenkinsfile with proper configurations for the pipeline:
 
@@ -702,18 +708,16 @@ I solved this by editting the Security group of the DB server to  allow inbound 
   SQLSTATE[HY000] [1045] Access denied for user 'homestead'@'ip-172-31-28-125.ec2.internal' (using password: YES)  
 ```
 I discovered that I set the wrong password for the database by using mysqlclient to test remote access to the DB server
-[Jenkins laravel build success]
-
+![Jenkins laravel build success](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Jenkins%20laravel%20build%20success.png)
 
 
 We will verify the content of the database to ensure that the database tables are created. Log in to the database and view the tables. (I logged in from the jenkins server using mysqlclient)
 
-[Verify database tables]
+![Verify database tables](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Verify%20database%20tables.png)
 
 After updating the Jenkinsfile, create a pull request and merge the changes in the `feature/integrate-jenkins-artifactory` to the `main ` branch.
 
 The php-todo-app job should begin building. 
-
 
 
 6. Add unit test stage:
@@ -725,7 +729,7 @@ stage ('Execute Unit Tests') {
             }
         } 
 ```
-(check why unit tests are failing)
+
 The .env.sample file contain the environment variable defined in the project:
 
 To ensure the unit test runs:
@@ -797,9 +801,9 @@ echo "xdebug.mode=coverage" >> /etc/php/7.4/cli/php.ini
 
 After reviewing the pipeline for errors, correcting them by updating the jenkinsfile, the unit test also ran successfully:
 
-[unit test successful]
+![unit test successful](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Unit%20test%20successful.png)
 
-[unit test successful 2]
+![unit test successful 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/unit%20test%20successful%202.png)
 
 The jenkinsfile can be found in the [repo](https://github.com/laraadeboye/php-todo-app/blob/feature/integrate-jenkins-articatory/Jenkinsfile)
 
@@ -811,23 +815,9 @@ Create a pull request and merge it to the main branch.
 *Hint*
 It is important to clone the repository and run the app locally in order to discover any dependencies that may be needed for the app to run. The dependencies of the project are located in the `composer.json` file
 
-```
-
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
-REDIS_PORT=6379
-
-MAIL_DRIVER=smtp
-MAIL_HOST=mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-```
-
 
 **Phase 3** : Code Quality Analysis:
-After the successful run of the unit test we can move on to the next phase - code quality analysis. The most commonly used code quality analysis tool for php apps is phploc. PHPLOC (PHP Lines Of Code) is a tool for measuring the size and complexity of PHP projects. The output of the data will be saved in the `/build/logs/phploc.csv` file.
+After the successful run of the unit test we can move on to the next phase - code quality analysis. The most commonly used code quality analysis tool for php apps is `phploc`. PHPLOC (PHP Lines Of Code) is a tool for measuring the size and complexity of PHP projects. The output of the data will be saved in the `/build/logs/phploc.csv` file.
 
 1. We will add the code analysis stage :
 
@@ -840,9 +830,9 @@ stage ('Code Analysis') {
 ```
 
 
-[Console out put of code analysis using phploc]
+![Console out put of code analysis using phploc](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Console%20out%20put%20of%20code%20analysis%20using%20phploc.png)
 
-[content of the phploc.csv]
+![content of the phploc.csv](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/content%20of%20the%20phploc.csv.png)
 
 
 2. We will plot the data obtained by using the `plot` jenkins plugin . The plot plugin provides graphing capabilities in jenkins. Plot can be used to track different types of metrics such as build logs, software performance, code quality metrics. You can use several types of graphs including line graphs, bar charts, area charts.
@@ -893,10 +883,13 @@ This Jenkins pipeline stage plots two types of reports:
 
 
 - Next locate the plot icon on the jenkins UI to view the trends
-[locate the plot icon]
-[plot group]
-[code metrics.lines of code]
-[plot with more builds]
+![locate the plot icon](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/locate%20the%20plot%20icon.png)
+
+![plot group](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/plot%20groups.png)
+
+![code metrics.lines of code](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/code%20metrics.lines%20of%20code.png)
+
+![plot with more builds](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/plot%20with%20more%20builds.png)
 
 *Troubleshooting*
 - Ensure the plot plugin is installed
@@ -908,10 +901,10 @@ Updating the code coverage report, we can further modify it to display a more gr
 For a summarized code report check my self-side study [here](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/self-side-study/phploc%20with%20plot%20plugin)
 
 
-[Plot with more builds (2)]
+![Plot with more builds (2)](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Plot%20with%20more%20builds%20(2).png)
 
 On main branch
-[Plot on main branch]
+![Plot on main branch](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/plot%20on%20main%20baranch.png)
 
 
 - Next we will include stages to Package the code into and Artifact and upload to artifactory.
@@ -945,9 +938,9 @@ stage('Upload Artifact to Artifactory') {
 ```
 Replace the <name-of-artifact-repo> with the name of the artifactory repo you created on j-frog artifactory for the app.
 
-[upload to artifactory server success]
+![upload to artifactory server success](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/upload%20to%20artifactory%20server%20success.png)
 
-[php-todo in artifactory repo]
+![php-todo in artifactory repo](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/php-todo%20in%20artifactory%20repo.png)
 
 *Troubleshooting*
 Error (as seen in my console output jenkins):
@@ -963,6 +956,7 @@ Caused by: java.io.IOException: JFrog service failed. Received 413: <html>
 ```
 - This indicates that the zipped artifact is too large for the server to upload. I solved this by including a  `client_max_body_size 100M;` directive in my nginx configuration file.
 
+![Client max body](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/client%20max%20directive.png)
 
 - Next, we need to deploy the application to the `dev` environment by launching ansible pipeline. We will include another stage to accomplish this.
 
@@ -987,25 +981,30 @@ Ensure that the following are done to configure the Dev todo-app webserver for d
 
 - Create an rhel ec2 instance for the development todo webserver named `DEV-todo-webapp`. 
 - Included it's private IP in the dev environment inventory file.
-  [update dev.yml with todo ip2]
-- Configure nginx-reverse proxy to route traffic to the server with SSL using certbox and create an A record in your domain management system named `todo.dev.laraadeboye.com`. Ensure to create it with your specific domain name. 
-- Prepare the webserver to serve our todo app. Use ansible tasks to automate it. I create a playbook named `php-todo-app.yml` in the static-assignments folder and imported it into our `playbook/site.yml`
-- Edit your ansible-config-mgt pipeline to point to the correct playbook for your dev deployment
-[edit the ansible-config pipeline to point to]
-- Also ensure the correct parameters are specified. I specified my inventory parameter as `dev.yml` and the tags as `todo`
-[specify correct parameters]
 
-[deploy to dev succesful]
+  ![update dev.yml with todo ip2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/update%20dev.yml%20with%20todo%20ip2.png)
+
+- Configure nginx-reverse proxy to route traffic to the server with SSL using certbox and create an A record in your domain management system named `todo.dev.laraadeboye.com`. Ensure to create it with your specific domain name. 
+
+- Prepare the webserver to serve our todo app. Use ansible tasks to automate it. I created a playbook named `php-todo-app.yml` in the static-assignments folder and imported it into our `playbook/site.yml`
+  
+- Edit your ansible-config-mgt pipeline to point to the correct playbook for your dev deployment
+![edit the ansible-config pipeline to point to](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/edit%20the%20ansible-config%20pipeline%20to%20point%20to.png)
+
+- Also ensure the correct parameters are specified. I specified my inventory parameter as `dev.yml` and the tags as `todo`
+![specify correct parameters](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/specify%20correct%20parameters.png)
+
+![deploy to dev succesful](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/deploy%20to%20dev%20succesful.png)
 
 *Troubleshooting*
 - Ensure your ansible tasks correctly deploys the artifact to the correct environment without errors.
 - Ensure your jenkins nodes has the correct number of executors to support the build. Navigate to manage jenkins > nodes > configure (Increase number of executors to 2)
 
-Increasing the number of executors allow multiple jobs to be run simultaneously, thereby reducing execution time and also helps to adequately leverage the server resources. Your number of executors should not exceed the number of cpus you have
+Increasing the number of executors allow multiple jobs to be run simultaneously, thereby reducing execution time and also helps to adequately leverage the server resources. Your number of executors should not exceed the number of cpus you have.
 
-Merge the changes to the main barnch and ensure the pipeline still runs successfully.
+Merge the changes to the main branch and ensure the pipeline still runs successfully.
 
-[deploy to dev main successful]
+![deploy to dev main successful](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/deploy%20to%20dev%20main%20successful.png)
 
 ## Step 4 Implement Quality Gate with sonarqube
 
@@ -1015,13 +1014,13 @@ To ensure that the deployed code has the quality that meets corporate and custom
 
 We will automate the installation of sonarqube on our previously configured sonarqube instance in the ci environment: `sonar.infradev.laraadeboye.com` with ansible.
 
-Later, using ansible we will create a role that installs sonarqube with postgresql as the backend database.
+** Later, using ansible we will create a role that installs sonarqube with postgresql as the backend database.
 
 Now, it will be done manually,
 
-First create the sonarqube EC2 instance preferably with `t2.medium`. Allow inboud traffic on sonarqube default port `9000`
+First create the sonarqube EC2 instance preferably with `t2.medium`. Allow inbound traffic on sonarqube default port `9000`
 
-We will install sonarqube 9.9 version which is currently the latest version (Dec 2024). It has a prerequisite for java
+We will install sonarqube 9.9 version which is currently the latest version (Dec 2024). It has a prerequisite for java.
 
 Make some linux kernel configuration changes to ensure optimal performance of the tool by increasing `vm.max_map_count`, `file descriptor` and `ulimit`
 
@@ -1040,7 +1039,7 @@ Make it permanent by editting the `/etc/security/limits.conf
 sonarqube   -   nofile   65536
 sonarqube   -   nproc    4096
 ```
-[set security limits]
+![set security limits](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/set%20security%20limits.png)
 
 - Install prerequisites:
 
@@ -1054,7 +1053,7 @@ sudo apt-get upgrade
 # Install wget and unzip packages
 sudo apt-get install wget unzip -y
 
-# Install OpenJDK and Java Runtime Environment (JRE) 11
+# Install OpenJDK and Java Runtime Environment (JRE) 17
 sudo apt-get install openjdk-17-jdk -y
 sudo apt-get install openjdk-17-jre -y
 
@@ -1064,10 +1063,11 @@ sudo update-alternatives --config java
 # Verify java version
 java -version
 ```
-[java installed and set]
+
+![java installed and set](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/java%20installed%20and%20set.png)
 
 
-**Install and Setup postgresql 10 for Sonarqube**
+**Install and Setup postgresql for Sonarqube**
 
 ```sh
 # Add Postgresql repo to the repo list
@@ -1088,7 +1088,7 @@ sudo systemctl enable postgresql
 # Check Postgresql status
 sudo systemctl status postgresql
 ```
-[check postgresql status]
+![check postgresql status](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/check%20postgresql%20status.png)
 
 
 ** Configure Postgresql**
@@ -1102,7 +1102,7 @@ su - postgres
 # Create new user
 createuser sonar
 
-# switch to posgreql shell
+# switch to posgresql shell
 psql
 
 # set a password for the newly created postgresql user 
@@ -1121,7 +1121,8 @@ grant all privileges on DATABASE sonarqube to sonar;
 # Switch to root user:
 exit
 ```
-[Configure postgresql]
+
+![Configure postgresql](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Configure%20postgresql.png)
 
 **Install Sonarqube on Ubuntu 24.04.LTS**
 
@@ -1186,9 +1187,9 @@ cd /opt/sonarqube/bin/linux-x86-64/
 # To check SonarQube logs, navigate to /opt/sonarqube/logs/sonar.log directory
 tail /opt/sonarqube/logs/sonar.log
 ```
-[sonar running]
+![sonar running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20running.png)
 
-[sonarqube is running on browser]
+![sonarqube is running on browser](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonarqube%20is%20running%20on%20browser.png)
 
 ** Configure sonarqube as a systemd service**
 ```sh
@@ -1232,7 +1233,7 @@ sudo systemctl enable sonar
 sudo systemctl status sonar
 
 ```
-[sonarqube systemd running]
+![sonarqube systemd running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonarqube%20systemd%20running.png)
 
 
 ** Additional configurations**
@@ -1253,14 +1254,14 @@ Having configured our sonar server previously with nginx reverse proxy and SSL, 
 ```
 https://sonar.infradev.laraadeboye.com
 ```
-[sonarqube on proxied url]
+![sonarqube on proxied url](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonarqube%20on%20proxied%20url.png)
 
 **Access Sonarqube**
 Login to Sonarqube with the default username and password (admin, admin)
 
 You will be propmted to create a new password. I am still using `Passw0rd123#` for our development environment
 
-[sonar ui after login]
+![sonar ui after login](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20ui%20after%20login.png)
 
 ## Step 5 Configure Sonarqube and Jenkins for Quality Gate
 
@@ -1269,24 +1270,25 @@ You will be propmted to create a new password. I am still using `Passw0rd123#` f
 ```
 User > My Account > Security > Generate Tokens
 ```
-[sonar token]
+![sonar token](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20token.png)
+
+#[choose the sonar token]
 
 - Install `SonarQube  Scanner `plugin in Jenkins UI
 
 ```
 Dashboard > manage jenkins > Available Plugins (Search for SonarQube  Scanner )
 ```
-[sonarqube scanner]
+![sonarqube scanner](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonaqube%20scanner.png)
 
-[Add the generated token]
-
-[choose the sonar token]
 - Configure sonarqube in jenkins UI
 
 ```
 Manage jenkins > Configure System > Sonarqube servers
 ```
-[sonarqube server configuration]
+![sonarqube server configuration](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonarqube%20server%20configuration.png)
+
+![Add the generated token](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/add%20the%20generated%20token.png)
 
 - In Sonarqube UI, Configure Quality Gate Jenkins Webhook. The URL should point to the jenkins server `http://{JENKINSIP:8080}/sonarqube-webhook/`.
 I pointed it to my jenkins url `https://ci.infradev.laraadeboye.com/sonarqube-webhook/`
@@ -1296,7 +1298,7 @@ Administration > Configuration > Webhooks > Create
 
 ```
 
-[Quality gate jenkins webhook]
+![Quality gate jenkins webhook](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Quality-gate-jenkinswebhook.png)
 
 - Update the Jenkins Pipeline to include Sonarqube scanning and Quality Gate:
 
@@ -1327,17 +1329,19 @@ The steps `steps { ... }` block defines the steps to be executed within the stag
 
 After running this build this step fails, because we have not configured the tool sonarQube scanner and `sonar-scanner.properties` in the jenkins server
 
-[sonarqube scanner not found]
+![sonarqube scanner not found](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonarqube%20scanner%20not%20found.png)
 
 - Configure `SonarQubeScanner` tool:
 ```
 Manage jenkins > Tools > Add SonarQube scanner 
 ```
-[sonar tool config]
-Choose install automatically, maintaining the most resent version
+![sonar tool config](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20tool%20config.png)
 
+![sonar tool config 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20tool%20config%202.png)
 
-[sonar scanner properties error]
+Choose install automatically, maintaining the most recent version
+
+![sonar scanner properties error](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20scanner%20properties%20error.png)
 
 - Configure `sonar-scanner.properties` :
 The tool directory in the jenkins home, will not be visible unless a tool has been installed and a pipeline has been run to use it.
@@ -1347,21 +1351,23 @@ Jenkins installs scanner tool on the Linux server. Navigate to the tools directo
 ```
 cd /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/conf
 ```
-[tool location on jenkins server]
+![tool location on jenkins server](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/tool%20location%20on%20jenkins%20server.png)
 
-[sonar-scanner location]
+![sonar-scanner location](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar-scanner%20location.png)
 
-[in the conf dir]
+![in the conf dir](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/in%20the%20conf%20dir.png)
+
 Open the `sonar.properties` file:
 
 ```sh
 sudo vi sonar-scanner.properties
 ```
 To add details to the sonar.properties file specific to the project, the appropriate settings can be found in the sonarqube console. Navigate to Administration > Configuration > Language (Choose the specific language)
-[Php settings for sonarproperties1]
-[Php settings for sonarproperties2]
+![Php settings for sonarproperties1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Php%20settings%20for%20sonarproperties1.png)
 
-Add the following configuration which is related to the `php-todo` project
+![Php settings for sonarproperties2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Php%20settings%20for%20sonarproperties2.png)
+
+Add the following configuration which is related to the `php-todo` project to the `sonar.properties` file
 
 ```
 sonar.host.url=http://<SonarQube-Server-IP-address>:9000
@@ -1372,23 +1378,24 @@ sonar.php.exclusions=**/vendor/**
 sonar.php.coverage.reportPaths=build/logs/clover.xml
 sonar.php.tests.reportPath=build/logs/junit.xml
 ```
-[sonar properties config]
+![sonar properties config](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20properties%20config.png)
 
-[sonar build sucess]
+![sonar build sucess](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20build%20success.png)
 
 Scroll down the build report, you will find the link to the scan analysis.
-[scroll and find analysis report]
+![scroll and find analysis report](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/scroll%20and%20find%20analysis%20report.png)
 
-[sonar report]
+![sonar report](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20report.png)
 
-[sonarqube ui project report]
+![sonarqube ui project report](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonarqube%20ui%20project%20report.png)
 
 Note that code snippets for the jenkinsfile can be obtained using the pipeline syntax generator on the jenkins UI. More details about using sonarqube can be found [here](https://docs.sonarsource.com/sonarqube-server/latest/analyzing-source-code/scanners/jenkins-extension-sonarqube/).
 
 
 Since the build was successful on the feature branch, we will create a pull request and merge the code to main. After running the build on the main branch, we see that it passed.
-[build passed on main 1]
-[build passed on main 2]
+![build passed on main 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Build%20passed%20on%20main.png)
+
+![build passed on main 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/build%20passed%20on%20main%202.png)
 
 
 ## Step 6 Conditional Deployment to higher environments
