@@ -1,5 +1,5 @@
 
-# CI/CD PIPELINE FOR A PHP BASED APP WITH JENKINS, ANSIBLE, ARTIFACTORY, SONARQUBE
+# CI/CD PIPELINE FOR A PHP-BASED APP WITH JENKINS, ANSIBLE, ARTIFACTORY, SONARQUBE
 
 ![sonar build sucess](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/sonar%20build%20success.png)
 
