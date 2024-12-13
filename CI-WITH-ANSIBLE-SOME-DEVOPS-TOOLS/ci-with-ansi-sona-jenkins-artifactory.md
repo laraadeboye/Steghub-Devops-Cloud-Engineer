@@ -1441,112 +1441,104 @@ To test this, we will create  the branches, `develop`, `hotfix`, `release `
 We will notice that the code cannot be deployed to the SIT environment based on the quality. In the real world scenerio, DevOPs team will send the code back to the developers to further work on it.
 
 
-
 ## Step 7 Introduction of Jenkins Agents/ Slaves
 The existing Jenkins server is a `t3.medium` server. it will serve as the Jenkins master. The agent servers need to be of the same specifications
 
 - Create two `t3.medium` ubuntu servers on AWS to serve as jenkins agents. Security group settings on each server should allow inbound traffic from the Jenkins master on port `22`. I created a security group named `jenkins_agent_sg` which allows inbound traffic on port `22` from the jenkins master private IP. To connect with instance connect, I also configured it to allow inbound traffic from the instance connect IP range.
 
-[jenkins agents running]
+![jenkins agents running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/jenkins%20agents%20running.png)
 
-[security group settings jenkins slave]
+![security group settings jenkins slave](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/security%20group%20settings%20jenkins%20slave.png)
 
-- Configure SSH access.
-On Jenkins master, you can either generate ssh key by following the steps:
+**Masters node configuration**
+- Verify that the ssh-build agent and ssh-agent plugin are installed (If not, install them)
+![ssh-agent and ssh build](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/ssh-agent%20and%20ssh%20build.png)
 
-```sh
-ssh-keygen -t rsa -b 4096
-```
-
-Copy the public key to each agents
-
-```
-ssh-copy-id jenkins@<agent-server-ip>
-```
-
-I used the same ssh key I have been using `stapleskey.pem` to simplify key management. To ensure authentication to the new agent servers, I will securely copy my private key to my jenkins master server.
-
+- Jenkins runs on the master node as the user `jenkins`. Switch to the jenkins user. 
 
 ```sh
-# Securely copy the private key to Jenkins master
-scp /path/to/your/downloaded/key.pem ubuntu@jenkins-master-ip:/tmp
-
+su - jenkins
 ```
-SSH into the agent servers and move the key to the jenkins .ssh/ directory:
+- Configure SSH access. On Jenkins master, generate ssh key by following the steps:
 
 ```sh
-# Move the key to the Jenkins directory
-sudo mv /tmp/stapleskey.pem /var/lib/jenkins/.ssh/stapleskey
+ssh-keygen -t rsa -b 4096 -C "jenkins-agent-key"
 ```
+The private key and public key will be generated as `id_rsa` and `id_rsa.pub` respectively.
 
-- Ensure the permissions are appropriate
+- Verify that the key was created:
 
 ```sh
-# Set appropriate permissions for the .ssh directory
-sudo chmod 700 /var/lib/jenkins/.ssh
-sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh
-
-# Set appropriate permissions for the private key
-sudo chmod 400 /var/lib/jenkins/.ssh/stapleskey
-sudo chown jenkins:jenkins /var/lib/jenkins/.ssh/stapleskey
-```
-
-
-- Verify that the private key is on the Jenkins master
-
-```
-siudo ls -l /var/lib/jenkins/.ssh/stapleskey
-
-```
-- Verify that the public key is in the `~/.ssh/authorized_keys` file on each agent
-
-```
-cat ~/.ssh/authorized_keys
+ls -l /var/lib/jenkins/.ssh/
 
 ```
 
-- Test SSH from the Jenkins master to each agent (Replace `stapleskey` with the specific name of your private key):
+![keys generated jenkins](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/keys%20generated%20jenkins.png)
+
+2. Agent nodes Preparation
+- Create a jenkins user and group on the agent nodes and configure ssh access
 
 ```sh
-ssh -i /var/lib/jenkins/.ssh/stapleskey ubuntu@<agent-private-ip>
-
-```
-
-- You should also add the agents keys to to the `known_hosts` file of the jenkins master:
-
-```sh
-sudo -u jenkins ssh-keyscan -H <agent-private-ip> >> /var/lib/jenkins/.ssh/known_hosts
-
-```
-
-Test the connectivity of the jenkins-master to the agent server using the jenkins user:
-
-```
-sudo -u jenkins ssh -i /var/lib/jenkins/.ssh/stapleskey ubuntu@<agent-ip>
-
-```
-**Create jenkins user  and group on agents**
-On each agent, create a jenkins user with consistent configuration:
-```sh
-# Create jenkins user
-# -m: Create home directory
-# -s /bin/bash: Set bash as the login shell
+# Create jenkins user with home directory and bash shell
 sudo useradd -m -s /bin/bash jenkins
 
-# Create jenkins group
-sudo groupadd jenkins
 
-# Add jenkins user to jenkins group
+# Add jenkins user to the jenkins group (optional, if already assigned)
 sudo usermod -aG jenkins jenkins
-```
-
-*Troubleshooting*
-if you get the error below on your local system when transferring the key, simply add your private key to the ssh-agent using `ssh-add <path-to-private-key>`
 
 ```
-Permission denied (publickey).
-scp: Connection closed
+
+- Create the .ssh folder with the appropriate permissions in each agent nodes
+
+```sh
+sudo mkdir /home/jenkins/.ssh
+sudo chmod 700 /home/jenkins/.ssh
+sudo chown jenkins:jenkins /home/jenkins/.ssh
+
 ```
+
+
+
+2. Copy the public key generated on the master node to each the authorized_keys file on each agent nodes
+
+```sh
+# Ensure you have switched to the jenkins user
+sudo su - jenkins
+
+# Copy the public key
+ssh-copy-id -i /var/lib/jenkins/.ssh/id_rsa.pub jenkins@<agent-node-ip>
+
+```
+Replace <agent-node-ip> with the private IP of the agent nodes.
+
+This command will copy the public key to the ~/.ssh/authorized_keys file of the jenkins user on the agent.
+ 
+Or manually copy the public keys to the authorized keys folder of each of the agent nodes.
+
+```sh
+cd /var/lib/jenkins/.ssh
+cat id_rsa.pub #Then copy the content
+
+# On each agent nodes, switch to the jenkins user
+
+sudo vi /home/jenkins/.ssh/authorized_keys
+
+# Paste the content of the /var/lib/jenkins/.ssh/id_rsa.pub and set the appropriate permissions for the file
+sudo chmod 600 /home/jenkins/.ssh/authorized_keys
+sudo chown jenkins:jenkins /home/jenkins/.ssh/authorized_keys
+
+```
+
+3. Test the connection
+
+```sh
+# Run this command from the jenkins user
+ssh jenkins@<private-ip of agent nodes>
+```
+
+We can log in to the servers without a password
+
+
 
 
 Now that SSH is set up.
@@ -1586,9 +1578,9 @@ ansible --version
 
 ```
 
-[java and ansible version]
+![java and ansible version](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/java%20and%20ansible%20version.png)
 
-**Agent nodes configuration**
+**Connect the Master to the Agent nodes **
 
 In Jenkins Web Interface:
 - Navigate to "Manage Jenkins" > "Nodes"
@@ -1598,44 +1590,84 @@ In Jenkins Web Interface:
 
 Configure:
 
-- Remote root directory (e.g., /home/jenkins/jenkins-agent). Create this directory in each jenkins agent server. 
-(`mkdir -p /home/jenkins/jenkins-agent`)
+- Remote root directory: `/home/jenkins`
 
-  ```sh
-    # Create the jenkins-agent directory
-    sudo mkdir -p /home/jenkins/jenkins-agent
-
-    # Set appropriate permissions
-    sudo chmod 755 /home/jenkins/jenkins-agent
-
-    #Set ownership
-    sudo chown -R jenkins:jenkins /home/jenkins/jenkins-agent
-
-    # Verify the existence of the directory
-    ls -ld /home/jenkins/jenkins-agent
-
-  ```
-
-  [create remote agent home]
 - Launch method: "Launch agents via SSH"
 - Host: IP of the agent server (Private IP of the agent server)
--Credentials: Add SSH credentials from the key generated. Ensure the username of the credential is set to the username of the server (`ubuntu`). Also the private key is the `stapleskey`.Copy and paste it to the provided space
+-Credentials: Add SSH credentials from the key generated. Ensure the username of the credential is set to the username of the jenkins user (`jenkins`). Also the private key is the generated `id_rsa`.Copy and paste it to the provided space. 
+
+*Hint*:Copy the private key completely. (incude the "Begin Open SSH private key" and the last line)
 
 
-[configure nodes 0]
-[configure nodes]
-[Click on the node configure]
+![Configure nodes 0](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Configure%20nodes%200.png)
 
-Click on "Launch agent"
+![Configure nodes 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Configure%20nodes%201.png)
+
+![Configure nodes 3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Configure%20nodes%203.png)
+
+Click on "**Launch agent**"
+
 
 **jenkins master node configuration**
 Navigate to manage jenkins > Nodes > Builtin node
 
 Set the number of executors on controller node to `0` to ensure that the jenkins uses the nodes for execution of jobs
 
-[Master node configuration]
+![Master node configuration](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Master%20node%20configuration.png)
 
-[Agent_1 Connected]
-[Nodes available]
+![agent 1 login with jenkins](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/agent%201%20login%20with%20jenkin.png)
 
-We will run the job to enable us verify that any of the nodes will be used for the build
+
+
+Configure agent node 2 with the same setting and launch the agent:
+
+![agent 2 also connected and online](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/agent%202%20also%20connected%20and%20online.png)
+
+Note that both nodes are available.
+
+![Nodes available](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Nodes%20available.png)
+
+**Configure agent nodes to run the php application**
+When you set up Jenkins agents to handle your builds, any tools, dependencies, or environment configurations required to build and test your application must also be installed and configured on the agent nodes.
+
+I have updated my php role to include other dependencies needed for my php app as observed from the errors i got when testing my jenkins build.
+
+First install php and its dependencies using the php role located in my repository. It defines the tasks to be run on `jenkins-agents` host in the ci.yml inventory file.
+
+Run the following command in the `ansible-config-mgt` folder to perform the installation on the jenkins agent servers
+
+```sh
+ansible-playbook -i inventory/ci.yml playbooks/jenkins-agents.yml
+```
+
+Also, update the security group of the database server to allow inbound access on port `3306` from the jenkins agent servers security group.
+
+Next,
+We will run the job to enable us verify that any of the nodes will be used for the build.
+
+You may need to correct environment related errors. For instance , I had to edit the sonar.properties file in the agent nodes to include the following details as we prepreviously did for the masters node.
+
+```
+sonar.host.url=sonar.infradev.laraadeboye.com
+sonar.projectKey=php-todo
+#----- Default source code encoding
+sonar.sourceEncoding=UTF-8
+sonar.php.exclusions=**/vendor/**
+sonar.php.coverage.reportPaths=build/logs/clover.xml
+sonar.php.tests.reportPath=build/logs/junit.xml
+```
+
+
+
+When I run the jobs, the agent nodes are used. The feature branch was scheduled for agent_1 while the main branch was scheduled for agent_2
+![agent_1 run](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/agent_1%20run.png)
+
+![agent_2 run](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/agent_2%20run.png)
+
+Also when second concurrent build on `ansible-config-mgt` main was run on a different agent
+
+![second build agent 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/second%20build%20agent%202.png)
+
+Jenkins schedules tasks between multiple agents using a concept called node allocation to distribute tasks across multiple agents. The scheduling of builds between agents depends on  your agents  are configured and labelled and the availability of resources. 
+
+
