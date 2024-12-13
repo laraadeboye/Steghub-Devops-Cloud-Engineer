@@ -1670,4 +1670,44 @@ Also when second concurrent build on `ansible-config-mgt` main was run on a diff
 
 Jenkins schedules tasks between multiple agents using a concept called node allocation to distribute tasks across multiple agents. The scheduling of builds between agents depends on  your agents  are configured and labelled and the availability of resources. 
 
+## Step 8 Configure Webhook
+We will configure webhook between jenkins and github to automatically run the pipeline when there is a code push
+
+1. Configure Your Jenkins Job
+Ensure your Jenkins job is set up to respond to webhook events:
+
+** Pipeline Configuration:**
+In the Jenkins job, go to Configure >> Scroll to the Build Triggers section >> Select GitHub hook trigger for GITScm polling.
+
+This step is not available currently in a multibranch set up
+
+2. Enable Webhooks in GitHub
+Go to Your Repository Settings:
+
+In your GitHub repository, click Settings (usually located on the top menu).
+Set Up the Webhook:
+
+Navigate to Webhooks in the left-hand menu.
+Click Add Webhook.
+Enter Payload URL:
+
+In the Payload URL field, enter the Jenkins URL followed by /github-webhook/. For example:
+
+```sh
+https://ci.infradev.laraadeboye/github-webhook/
+```
+
+Set the Content type to application/json.
+
+Set Trigger Events:
+
+Choose the event you want to trigger the pipeline:
+Select Just the push event (to trigger builds only on pushes).
+
+Click Add webhook.
+
+
+*Hint:* if you previously configured a webhook that is giving errors e.g `302` error code. Delete it and configure a new one with the correct settings
+
+![success github webhook](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/success%20github%20webhook.png)
 
