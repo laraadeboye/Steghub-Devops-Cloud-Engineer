@@ -16,3 +16,4 @@ The order of projects in this repository is found below:
 - [ANSIBLE CONFIGURATION MANAGEMENT](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/ANSIBLE-CONFIGURATION-MANAGEMENT/ansible-automate-tasks.md)
 - [ANSIBLE CONFIGURATION REFACTORING](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/tree/docs/update-readme/ANSIBLE-CONFIGURATION-REFACTORING)
 - [ANSIBLE CONFIGURATION DYNAMIC ASSIGNMENTS](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/tree/docs/update-readme/ANSIBLE-CONFIG-DYNAMIC)
+- [CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/tree/main/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS)
