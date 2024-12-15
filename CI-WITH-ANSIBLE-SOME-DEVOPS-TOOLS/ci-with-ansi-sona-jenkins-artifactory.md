@@ -1635,6 +1635,7 @@ Note that both nodes are available.
 When you set up Jenkins agents to handle your builds, any tools, dependencies, or environment configurations required to build and test your application must also be installed and configured on the agent nodes.
 
 I have updated my php role to include other dependencies needed for my php app as observed from the errors i got when testing my jenkins build.
+Ensure you update the `ci.yml` file with the private IPs of the agent nodes.
 
 First install php and its dependencies using the php role located in my repository. It defines the tasks to be run on `jenkins-agents` host in the ci.yml inventory file.
 
