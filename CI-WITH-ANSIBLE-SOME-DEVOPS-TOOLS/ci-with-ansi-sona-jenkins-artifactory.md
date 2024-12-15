@@ -1596,7 +1596,8 @@ Configure:
 - Host: IP of the agent server (Private IP of the agent server)
 -Credentials: Add SSH credentials from the key generated. Ensure the username of the credential is set to the username of the jenkins user (`jenkins`). Also the private key is the generated `id_rsa`.Copy and paste it to the provided space. 
 
-*Hint*:Copy the private key completely. (incude the "Begin Open SSH private key" and the last line)
+*Hint*:
+Copy the private key completely. (incude the "Begin Open SSH private key" and the last line)
 
 
 ![Configure nodes 0](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Configure%20nodes%200.png)
@@ -1609,6 +1610,7 @@ Click on "**Launch agent**"
 
 
 **jenkins master node configuration**
+
 Navigate to manage jenkins > Nodes > Builtin node
 
 Set the number of executors on controller node to `0` to ensure that the jenkins uses the nodes for execution of jobs
@@ -1627,7 +1629,9 @@ Note that both nodes are available.
 
 ![Nodes available](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/Nodes%20available.png)
 
+
 **Configure agent nodes to run the php application**
+
 When you set up Jenkins agents to handle your builds, any tools, dependencies, or environment configurations required to build and test your application must also be installed and configured on the agent nodes.
 
 I have updated my php role to include other dependencies needed for my php app as observed from the errors i got when testing my jenkins build.
