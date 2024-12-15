@@ -1650,7 +1650,7 @@ Also, update the security group of the database server to allow inbound access o
 Next,
 We will run the job to enable us verify that any of the nodes will be used for the build.
 
-You may need to correct environment related errors. For instance , I had to edit the sonar.properties file in the agent nodes to include the following details as we prepreviously did for the masters node.
+You may need to correct environment related errors. For instance , I had to edit the sonar.properties file in the agent nodes to include the following details as we previously did for the masters node.
 
 ```
 sonar.host.url=sonar.infradev.laraadeboye.com
@@ -1681,7 +1681,9 @@ We will configure webhook between jenkins and github to automatically run the pi
 1. Configure Your Jenkins Job
 Ensure your Jenkins job is set up to respond to webhook events:
 
-** Pipeline Configuration:**
+
+**Pipeline Configuration:**
+
 In the Jenkins job, go to Configure >> Scroll to the Build Triggers section >> Select GitHub hook trigger for GITScm polling.
 
 This step is not available currently in a multibranch set up
