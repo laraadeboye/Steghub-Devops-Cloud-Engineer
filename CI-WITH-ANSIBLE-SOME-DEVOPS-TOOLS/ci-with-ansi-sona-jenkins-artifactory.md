@@ -301,7 +301,7 @@ pipeline {
 As a prerequisite, ansible has been installed on our jenkins-ansible server from previous projects. 
 - Install ansible plugin on Jenkins.
 
-[Install ansible plugin](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/install%20ansible%20plugin.png)
+![Install ansible plugin](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS/images/install%20ansible%20plugin.png)
 
 - Wipe out the existing content of the Jenkinsfile to start a new configuration that we can use to run ansible.
 
