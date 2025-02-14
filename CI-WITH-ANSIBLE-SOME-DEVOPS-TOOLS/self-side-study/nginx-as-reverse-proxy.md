@@ -195,6 +195,59 @@ http {
 ```
 
 
+**Sample configuration file**
+
+```sh
+
+# HTTP Block for Redirection
+server {
+    listen 80;
+    server_name ci.infradev.laraadeboye.com;
+
+    # Redirect HTTP to HTTPS
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS Block
+server {
+    listen 443 ssl;
+    server_name ci.infradev.laraadeboye.com;
+
+    # SSL Certificate
+    ssl_certificate /etc/letsencrypt/live/artifactory.infradev.laraadeboye.com/fullchain.pem; # SAN certificate
+    ssl_certificate_key /etc/letsencrypt/live/artifactory.infradev.laraadeboye.com/privkey.pem; # SAN certificate
+    include /etc/letsencrypt/options-ssl-nginx.conf; # Recommended by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # Proxy settings
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Logging
+    access_log  /var/log/nginx/ci.access.log;
+    error_log   /var/log/nginx/ci.error.log;
+
+    # Security Headers
+    add_header X-Frame-Options SAMEORIGIN;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+
+    # Optional WebSocket Headers
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Upgrade $http_upgrade;
+
+    # Timeout Settings
+    proxy_connect_timeout       150;
+    proxy_send_timeout          100;
+    proxy_read_timeout          100;
+}
+
+```
 
 
 
