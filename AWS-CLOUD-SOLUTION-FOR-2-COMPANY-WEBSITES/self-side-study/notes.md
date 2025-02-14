@@ -1,0 +1,2 @@
+## The Bastion host
+The Bastion host, also called a jumphost is an intermediary server that is used to access private resources in a VPC. It is a hardened, publicly accessible server designed to provide secure access to private network resources. It acts as a jump server that allows administrators to connect to private instances in a VPC (Virtual Private Cloud) while minimizing exposure to potential attacks.
