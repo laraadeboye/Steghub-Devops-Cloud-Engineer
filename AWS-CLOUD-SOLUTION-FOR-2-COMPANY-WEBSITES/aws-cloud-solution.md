@@ -10,7 +10,7 @@ Specific requirements:
 - Resilience: Infrastructure for both the wordpress and tooling website must be resilient to webserver failures, can accomodate increased traffic.
 
 Here is the architecture we want to achieve:
-[Architecture diagram]
+![Architecture diagram](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/aws_cloud_solution.png)
 
 
 **Prerequisites**
@@ -30,7 +30,7 @@ Project: [project name]
 Environment: [dev]
 Automated: [No] (If the resource is created using and automation tool, it would be yes)
 
-[tagging]
+![tagging](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/tagging.png)
 
 Note that this just sets the tagging policy. For each AWS service created we will tag them appropriately.
 
@@ -48,33 +48,34 @@ We will use this existing account as the **management account**.
 You can create a sub-account (referred to as a **member account**) directly from the Management Account within the AWS Organizations console. This eliminates the need to create a separate account outside of AWS and then link it later. 
 
 Login to the management account: Use the root user or an IAM user/role with appropriate permissions to manage AWS Organizations.
-[aws organisation]
+
+![aws organisation](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/aws%20organization.png)
 
 - Click on **Add an AWS account** to create a sub-account named `DevOps` (another email address will be needed to complete  `larboyedevops@gmail.com`)
-[add an aws account]
+![add an aws account](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/add%20an%20aws%20account.png)
 
 Note that sub account is created in the Root on the same level as the manaagement account
 
-[on the same level]
+![on the same level](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/on%20the%20same%20level.png)
 
 When we create a sub-account this way, there is no need to manually register a new account as AWS handles the creation and linking of the new account. The sub-account inherits policies, permissions, and billing rules from the organization. The billing is centralized under the management account.
 
 Next we will create an Organization Unit (OU).
 - The OU will be created in the Root. Navigate to the Root of the Organization, 
 
-[click on Root and Actions]
+![click on Root and Actions](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/click%20on%20Root%20Actions.png)
 
 Click on **Actions** >> **Create New**.
 
-[click on create new]
+![click on create new](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/click%20on%20create%20new.png)
 
 Create an OU for this project. Mine is named `Dev-OU` (This is where dev resources will be launched).
 
 
 - Move the `DevOps` account into the `Dev-OU`
-[move devops account to DevOU]
+![move devops account to DevOU](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/move%20devops%20account%20to%20Dev%20OU.png)
 
-[success move devops]
+![success move devops](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/success%20move%20devops.png)
 
 - You can attach service control policies (SCPs) to restrict actions at the organization level if necessary.
 
@@ -85,7 +86,7 @@ Create an OU for this project. Mine is named `Dev-OU` (This is where dev resourc
 ** Creation of Hosted zone in AWS**
 This is not a free service. As at the time of this project, it is $0.5 per hosted zone per month for the first 25 hosted zone, then $0.1 per hosted zone per month for additional hosted zones.
 
-3. We will create a hosted zone in AWS Route 53 since we will be using a lot of AWS services like EC2, ALB.DNS management becomes easier and more powerful with a hosted zone, especially if you want to leverage AWS-specific features (like ALB alias records or health checks)
+3. We will create a hosted zone in AWS Route 53 since we will be using a lot of AWS services like EC2, ALB. DNS management becomes easier and more powerful with a hosted zone, especially if you want to leverage AWS-specific features (like ALB alias records or health checks)
 
 - Navigate to Route 53 Console from the AWS management Console.
 - click on **Hosted zones** in the left navigation panel > **Create hosted zone**
@@ -95,13 +96,14 @@ Fill out the details:
   - Type: Select **Public hosted zone**
   - Click **Create hosted zone**
 
-[create hosted zone 1]
-[create hosted zone 2]
+![create hosted zone 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20hosted%20zone%201.png)
+
+![create hosted zone 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20hosted%20zone%202.png)
 
 After creating the hosted zone, you will automatically be presented with a set of default DNS records. You’ll see an **NS record** (Name Server) and a **SOA record** (Start of Authority).
 NS record will list the nameservers that you need to configure at your domain registrar.
 
-Next, update the DNS Records in your domain. 
+Next, update the DNS Records in your domain registrar. 
 
 You can verify that the domain name has been propagated by entering the following command on the terminal, replacing the domain name with your domain name. (It should output that the Route 53 name servers):
 
@@ -126,13 +128,13 @@ We will be using the CIDR range `10.0.0.0/16` for the VPC as seen in our archite
 ### Create VPC
 1. Navigate to VPC in the list of AWS services and choose **Create VPC** >> Choose **VPC only**. Name the vpc `Dev-vpc` and Click **Create VPC**
 
-[create dev vpc]
+![create dev vpc](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20dev%20vpc.png)
 
 ### Create Public and Private Subnets
 2. Next, we will create the subnets. From our architecture, we have two public subnets and 4 private subnets. The public-facing reources are launched in the public subnets while the private subnet is used for resources that should not be accessed from the internet.
 
 We will create the Public Subnets
-Choose **Subnets** in the left navigation pane, them **Create Subnet**
+Choose **Subnets** in the left navigation pane, then **Create Subnet**
 Enter the following the the dialogue box:
 
 - VPC ID: Dev-vpc
@@ -141,11 +143,11 @@ Enter the following the the dialogue box:
 - IPV4 subnet CIDR block: 10.0.1.0/24
 Select **Create Subnet**
 
-[PublicSubnet1]
+![PublicSubnet1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/PublicSubnet1.png)
 
 Create another public subnet named  `PublicSubnet2` in a second availability zone `us-east-1b` with a CIDR block range of `10.0.2.0/24`
 
-[PublicSubnet2]
+![PublicSubnet2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/PublicSubnet2.png)
 
 In choosing the appropriate Subnet CIDR ranges, there must be no overlap or intersection. Each subnet must also be within the overall VPC CIDR block.
 
@@ -157,7 +159,7 @@ Creating the private subnets follow the same steps. We will use the following de
 - Availability zone: us-east-1a
 - IPV4 subnet CIDR block: 10.0.3.0/24
 
-[privatesubnet1]
+![privatesubnet1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/privatesubnet1.png)
 
 **PrivateSubnet2**
 - VPC ID: Dev-vpc
@@ -165,7 +167,7 @@ Creating the private subnets follow the same steps. We will use the following de
 - Availability zone: us-east-1b
 - IPV4 subnet CIDR block: 10.0.4.0/24
 
-[privatesubnet2]
+![privatesubnet2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/privatesubnet2.png)
 
 **PrivateSubnet3**
 - VPC ID: Dev-vpc
@@ -173,7 +175,7 @@ Creating the private subnets follow the same steps. We will use the following de
 - Availability zone: us-east-1a
 - IPV4 subnet CIDR block: 10.0.5.0/24
 
-[privatesubnet3]
+![privatesubnet3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/privatesubnet3.png)
 
 **PrivateSubnet4**
 - VPC ID: Dev-vpc
@@ -181,7 +183,7 @@ Creating the private subnets follow the same steps. We will use the following de
 - Availability zone: us-east-1b
 - IPV4 subnet CIDR block: 10.0.6.0/24
 
-[privatesubnet4]
+![privatesubnet4](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/privatesubnet4.png)
 
 The resources that must be isolated from the internet i.e the webservers and the databases will be launched into the private subnets.
 
@@ -193,20 +195,23 @@ To create a NAT gateway, navigate to the left navigation pane and choose **NAT g
 - Connectivity type: Public
 - Elastic IP allocation ID: (Select **Allocate elastic IP**)
 
-[create NAT]
-[create-NAT 2]
+![create NAT](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20NAT.png)
+
+[create-NAT 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create-NAT%202.png)
 
 ### Create Internet gateway (IGw)
 Next we will create the internet gateway (IGw).  Navigate to the left navigation pane and choose **Internet gateway**. Name it `Dev-vpcIGw`, then click **Create Internet Gateway**
 
-[create IGw]
+![create IGw](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20IGw.png)
 
 For our Vpc to be able to make use of the newly created internet gateway, we must attach it to the VPC we created.
 
 Select Dev-vpcIGw > Choose **Actions** > **Attach to VPC** (select **Dev-vpc**)
-[select dev vpc]
-[attach to dev vpc 1]
-[attached to VPC]
+![select dev vpc](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/select%20dev%20vpc.png)
+
+![attach to dev vpc 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/attach%20to%20dev%20vpc%201.png)
+
+![attached to VPC](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/attached%20to%20vpc.png)
 
 ### Configure Route tables
 It is not sufficient to just create the IGw for Internet access. we will need to associate it with a route table (RT). A RT consists of rules that determine where the network traffic is directed. The public and private subnets of the Dev-vpc must be associated with a RT.
@@ -214,7 +219,8 @@ It is not sufficient to just create the IGw for Internet access. we will need to
 
 **Creating the public route table**
 In the left navigation pane, choose **Route tables** > **Create route table**
-[create RT]
+
+![create RT](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20RT.png)
 
 Configure it with the following details:
 Name: Public-RT
@@ -222,34 +228,36 @@ VPC: Dev-vpc
 
 Select **Create Route table**
 
-[public-rt]
+![public-rt](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/public-rt.png)
 
 Select the public route table you created and navigate to the **Routes tab**, select **add route**. Set the destination as `0.0.0.0/0` (which is an IP range that applies to anywhere on the internet), the target as `internet Gateway`, then choose the internet gatway you created earlier. Click **Save Changes**
 
-[edit route 1]
+![edit route 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/edit%20route%201.png)
 
-[edit route 2]
+![edit route 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/edit%20route%202.png)
+
 You will notice that all the subnets are associated with the main route table.
 
-[associated with main RT]
+![associated with main RT](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/associated%20with%20main%20RT.png)
 
 For the route table to work, it must be associated with the public subnet.
 
-[public rt subnet asso]
+![public rt subnet asso](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/public%20rt%20subnet%20asso.png)
 
 Navigate to the **Subnet associations tab**, choose **Edit subnet asssociations**
 [public rt subnet asso]
 
 In the dialogue box, choose the two public subnets we created and click **Save associations**
-[choose public subnet]
+
+![choose public subnet](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/public%20rt%20subnet%20asso.png)
 
 To verify the public RT subnet associations, navigate to public-RT >> actions >> edit subnet associations
 
-[verify public RT]
+![verify public RT](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/verify%20public%20RT.png)
 
 We should observe the associations as seen below:
 
-[public subnet associated]
+![public subnet associated](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/public%20subnet%20associated.png)
 
 **Creating the private route table**
 Similarly, the private route table must be created. 
@@ -260,18 +268,18 @@ VPC: Dev-vpc
 
 Select **Create Route table**
 
-[private-rt]
+[private-rt](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/private-rt.png)
 
 Select the private route table you created and navigate to the **Routes tab**, select **add route**. Set the destination as `0.0.0.0/0` (which is an IP range that applies to anywhere on the internet), the target as `NAT gateway`, then choose the nat gateeway you created earlier. Click **Save Changes**
 
-[edit NAT gateway 1]
-[edit NAT gateway 2]
+![edit NAT gateway 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/edit%20nat%20gateway%201.png)
+![edit NAT gateway 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/edit%20nat%20gateway%202.png)
 
 For the private route table to work, it must be associated with the private subnet.
 
-Navigate to the **Subnet associations tab**, choose **Edit subnet asssociations**. Select all the four private subnets and click **Save associations**
+Navigate to the **Subnet associations tab**, choose **Edit subnet associations**. Select all the four private subnets and click **Save associations**
 
-[private rt subnet asso]
+![private rt subnet asso](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/private%20rt%20subnet%20asso.png)
 
 Note: Ensure that the auto-assign of the public IPv4 is enabled for the public subnets.
 
@@ -285,7 +293,7 @@ Security groups are virtual firewalls that control inbound and outbound traffic 
 
 To create the security groups, navigate to the navigation pane and choose **Security groups**. Select **Create security group**  and configure it with the details below:
 
-** application load balancer security group**
+**application load balancer security group**
 - Security group name: ALB-sg
 - Description: Allows access from the internet.
 - VPC: Dev-vpc
@@ -302,8 +310,8 @@ Value: ALB-sg
 
 Click **Create security group**
 
-[alb-sg 1]
-[alb-sg 2]
+![alb-sg 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/alb-sg%201.png)
+![alb-sg 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/alb-sg%202.png)
 
 ** nginx security group**
 - Security group name: nginx-sg
@@ -323,8 +331,8 @@ Key: Name
 Value: nginx-sg
 
 Click **Create security group**
-[nginx-sg 1]
-[nginx-sg 2]
+![nginx-sg 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/nginx-sg%201.png)
+![nginx-sg 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/nginx-sg%202.png)
 
 
 **webservers security group**
