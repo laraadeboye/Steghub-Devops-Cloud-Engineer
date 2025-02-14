@@ -361,8 +361,8 @@ Key: Name
 Value: webserver-sg
 
 Click **Create security group**
-[webserver-sg 1]
-[webserver-sg 2]
+![webserver-sg 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/webserver-sg%201.png)
+![webserver-sg 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/webserver-sg%202.png)
 
 
 **bastion servers security group**
@@ -384,8 +384,8 @@ Key: Dev
 Value: bastion-sg
 
 Click **Create security group**
-[bastion-sg 1]
-[bastion-sg 2]
+![bastion-sg 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/bastion-sg%201.png)
+![bastion-sg 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/bastion-sg%202.png)
 
 
 ** datalayer security group**
@@ -409,8 +409,8 @@ Key: Name
 Value: RDS-sg
 
 Click **Create security group**
-[RDS-sg 1]
-[RDS-sg 2]
+![RDS-sg 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/RDS-sg%201.png)
+![RDS-sg 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/RDS-sg%202.png)
 
 **(EFS-sg)**
 - Security group name: EFS-sg
@@ -437,13 +437,13 @@ Key: Name
 Value: EFS-sg
 
 Click **Create security group**
-[RDS-sg 1]
-[RDS-sg 2]
+![EFS-sg 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/EFS-sg%201.png)
+![EFS-sg 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/EFS-sg%202.png)
 
 ### Create Elastic IPs
 We will be using 3 elastic IPS in this set up. Note that one has been allocated to our NAT gateway in the process of its configuration as seen in this image step:
 
-[show allocated eip]
+![show allocated eip](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/show%20allocated%20eip.png)
 
 We will also create 2 Elastic IPs for the Bastion hosts
 
@@ -477,31 +477,31 @@ Create a key-pair named `devkey`. You can also make use of existing keypair
 Number of Instance: 1
 
 After launching the instance, we will observe that the instance is running but the public Ipv4 address has not been assigned.
-[dev custom ami launched]
+![dev custom ami launched](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/dev%20custom%20ami%20launched.png)
 
 This is because the auto-assign of the public IPv4 was not enabled during the creation of of the EC2 instance as shown:
-[auto assign not done] 
+![auto assign not done](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/auto%20assign%20not%20done.png) 
 
 We will manually do this by navigationg to VPC Dashboad >> Subnets. Select the subnet your instance is launched in. (I launched it in the PublicSubnet1). Check **Auto-assign public IPv4 addresss**:
    - If it is set to No, instances launched in this subnet won't have public IPs by default.
-   [Auto assign No]
+   ![Auto assign No](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/Auto%20assign%20No.png)
 
    - Click **Edit subnet settings** and enable **Auto-assign public IPv4 addresses** and click **Save**
 
-[enable auto assign]
+![enable auto assign](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/enable%20auto%20assign.png)
 
 Go ahead and enable auto-assign public subnet for the PublicSubnet2
-[auto assign Public Subnet2]
+![auto assign Public Subnet2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/auto%20assign%20Public%20Subnet2.png)
 
 I terminated the previously created instance and relaunched it. Once, an instance has been created without a public IP, AWS does not allow you to assign a public IP to it unless you use an Elastic IP. I do not want to use an Elastic IP for this particular instance because it is just for generating a custom AMI.
 
 The new instance is automatically assigned a public IP as shown:
 
-[instance running with IP add]
+![instance running with IP add](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/instance%20running%20with%20IP%20add.png)
 
 Next, add an SSH inbound rule allowing access from on the internet. Note that, this IP range is too broad and shouldn't be used in production. I am using this for testing purposes, so that the necessary software packages can be installed. Ideally, the IP ranges should be only from the IP of the local system used to access the virtual server.
 
-[ssh adjust for testing]
+![ssh adjust for testing](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/ssh%20adjust%20for%20testing.png)
 
 I connected to the server via my local system through SSH on port 22 and updated the server.
 
@@ -565,19 +565,19 @@ sudo alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.12 2
 python3 --version
 
 ```
-[php8.3 installed]
+![php8.3 installed](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/php8.3%20%20installed.png)
 
 Note:
 - On RHEL 9, `chrony` is used instead of ``ntp for time synchronization
 - If you need a specific PHP version, you can append it to the package name (e.g., php81)
 - Most of these packages are available in the base repositories except for `htop` which comes from `EPEL`
 
-Having installed all the necessary packages on our RHEL instance, we will create an AMI out of the EC2 instancemusing the AWS Management Console:
+Having installed all the necessary packages on our RHEL instance, we will create an AMI out of the EC2 instance using the AWS Management Console:
 
 - Navigate to the EC2 Dashboard
 - Select your instance
 - Click "Actions" > "Image and templates" > "Create image"
-[ami images and template]
+![ami images and template](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/ami%20images%20and%20template.png)
 
 Fill in the required fields:
 
@@ -587,12 +587,12 @@ Fill in the required fields:
 
 
 Click "Create image"
-[create AMI image]
-[create AMI image with tagging]
+![create AMI image](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20AMI%20image.png)
+![create AMI image with tagging](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20ami%20image%20with%20tag.png)
 
 Go to the left navigation pane and choose **AMIs**. The AMI is still in the pending state as shown:
 
-[ami image pending]
+![ami image pending](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/ami%20image%20pending.png)
 
 Once the status displays as **available**, the instance can be deleted.
 
@@ -623,14 +623,15 @@ systemctl start nginx
 
 Click **Create Launch Template**
 
-[create Launch template 1]
-[create Launch template 2]
-[create Launch template 3]
-[create Launch template 4]
-[create Launch template 5]
-[launch template details]
+![create Launch template 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20Launch%20template%201.png)
+![create Launch template 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20Launch%20template%202.png)
+![create Launch template 3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20Launch%20template%203.png)
+![create Launch template 4](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20Launch%20template%204.png)
+![create Launch template 5](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20Launch%20template%205.png)
 
-## Confifure ALB To Route Traffic to Nginx
+![launch template details](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/launch%20template%20details.png)
+
+## Configure ALB To Route Traffic to Nginx
 **Target groups for Nginx servers**
 We will be distributing traffic accross multiple instances using an application load balancer (ALB) as seen in our architecture diagram, hence, we need to create a target group. Creating a target group also supports health checks at the application level.
 
@@ -643,8 +644,8 @@ Ip address type: IPv4
 VPC: Dev-vpc
 health check path: `/healthstatus`
 
-[create target group]
-[create target group]
+![create target group](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20target%20group.png)
+![create target group](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20target%20group%202.png)
 
 Click Next > **Create Target group** (Without registering any instances)
 
@@ -659,14 +660,15 @@ Navigate to Amazon Certificate manager and configure the following:
 - Choose **Request**
 
 You will notice that the certificate is pending validation.
-[ACM creation 1]
-[ACM creation 2]
-[ACM creation 3]
+![ACM creation 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/ACM%20creation%201.png)
+![ACM creation 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/ACM%20creation%202.png)
+![ACM creation 3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/ACM%20creation%203.png)
+
 IF you are using Route53 to host and manage your domain name, on the Certificate console, Click on **Create records in Route 53** and follow the prompts.
 
 After some time 5minutes to an hour, it should be issued.
 
-**Application Loadd Balancer for Nginx**
+**Application Load Balancer for Nginx**
 - Go to the left navigation panel, choose **Load Balancer** > **Create Application Load Balancer**
 
 Configure:
@@ -679,7 +681,7 @@ Configure:
 - Certificate: Choose your created certificate
 - Add load balancer tags
 - Choose **Create Load balancer**
-[Nginx LB created]
+![Nginx LB created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/Nginx%20LB%20created.png)
 
 **Autoscaling groups for Nginx servers**
 An Autoscaling group automatically manages the number of EC2 instances to ensure you  have the right amount of compute capacity for your workload. It scales out (adds instances) when demand increases and scales in (removes instances) when demand decreases based on various metrics like CPU utilization, network traffic.
@@ -702,7 +704,7 @@ An Autoscaling group automatically manages the number of EC2 instances to ensure
   - Select **Target tracking scaling policy** > Average CPU utilization
   - Target value: 90
   - Instance warmup: 300 seconds Click **Next**
-  - Add notification. Here , first navigate to Simple Notification Service on the management console to create an SNS topic:
+  - Add notification. Here , first navigate to Simple Notification Service on the management console in another tab to create an SNS topic:
   
 ** SNS Topic creation**
 Cost:  Amazon Simple Notification Service (SNS) topics are not free, but there is a free tier. First 1 million Amazon SNS requests per month are free, $0.50 per 1 million requests thereafter.
@@ -711,7 +713,7 @@ Cost:  Amazon Simple Notification Service (SNS) topics are not free, but there i
 - In the **Create Topic** box, enter the name of the topic:`ASG-Notifications` .
 - Select Standard as the topic type.
 - Click **Create topic**.
-[SNS Topic Created]
+![SNS Topic Created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/SNS%20Topic%20created.png)
 
 Next, you need to subscribe to the Topic:
 - In the SNS topic, click **Create Subscription**.
@@ -720,26 +722,25 @@ Next, you need to subscribe to the Topic:
 - Click Create Subscription.
 - Check your email and confirm the subscription.
 
-[Suscription created]
+![Suscription created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/Suscription%20created.png)
 
 You will get a message similar to the following image after confirming it in your mail box
-[suscription confirmed]
+![suscription confirmed](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/Suscription%20confirmed.png)
 
 
-Return  o your ASG creation tab to finish up. Choose the notifiction topic you created. You may need to go back one step and Add notifications again for the topic you created to be visible.
+Return to your ASG creation tab to finish up. Choose the notification topic you created. You may need to go back one step and Add notifications again for the topic you created to be visible.
 
 Click **Create Auto Scaling group**
-[NGinx ASG created]
-[Nginx ASG instances]
+![NGinx ASG created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/Nginx%20ASG%20created.png)
+![Nginx ASG instances](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/Nginx%20ASG%20instances.png)
 
 
 ## Compute Resources for Bastion host
-We will create compute resources for Bastion host. The Bastion host, also called a jumphost is an intermediary server that is used to access private resources in a VPC. It is a hardened, publicly accessible server designed to provide secure access to private network resources. It acts as a jump server that allows administrators to connect to private instances in a VPC (Virtual Private Cloud) while minimizing exposure to potential attacks.
-
+We will create compute resources for Bastion host. 
 The bastion host in this infrastructure will NOT be created in an Auto scaling group for the following reasons:
 - Elastic IPS cannot be automatically assigned to new instances in an ASG
 - Bastion host do not need ASG becuase they handle SSH traffic
-- They typically require minimal resourcess and do not need scaling based on load.
+- They typically require minimal resources and do not need scaling based on load.
 
 For high availability, I will create the bastion hosts in two availability zones with Route 53 failover
 
@@ -753,7 +754,7 @@ For high availability, I will create the bastion hosts in two availability zones
   - You can also make use of existing keypair `devkey`
   - Number of Instance: 1
 
-[Bastion servers running]
+![Bastion servers running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/Bastion%20servers%20running.png)
 
 SSH into the servers and install these software packages in each of the servers: (The installation steps are above as for nginx)
  `Python`, `ntp`, `net-tools`, `vim`, `wget`, `telnet`, `epel-release`, `htop`.
@@ -782,8 +783,8 @@ git --version
 
 Hint: Remember to edit Bastion-sg security group to allow internet access from your IP address. (or use 0.0.0.0/0 for testing purposes only)
 - Create and Assign Elastic IPs to both Instances.
-[Elastic IP associated]
-[Elastic IP assigned to bastion servers]
+![Elastic IP associated](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/Elastic%20IP%20associated.png)
+![Elastic IP assigned to bastion servers](
 
 
 - Set up Route 53 Failover for high availability
@@ -799,7 +800,7 @@ First create a Route 53 health check for the Instances. Each failover record req
   - Create Alarm: Optional
 
   Repeat the same steps for `Dev-bastion-server-2`
-[health checks for bastion]
+![health checks for bastion](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/health%20checks%20for%20bastion.png)
   - Navigate to **AWS Route 53 Console > Hosted Zones > Select your domain
   - Create two A records for each bastion hosts
     - Record name: `bastion.laraadeboye.com`
@@ -812,8 +813,8 @@ First create a Route 53 health check for the Instances. Each failover record req
 
     - Repeat the above steps for Dev-bastion-server-2 setting it as Secondary failover
 
-    [failover record for bastion]
-    [bastion records A created]
+    ![failover record for bastion](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/failover%20record%20for%20bastion.png)
+    ![bastion records A created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/bastion%20records%20A%20created.png)
 
 The bastion servers have been created with high availability using Route 53 failover routing.
 
@@ -842,7 +843,7 @@ Security group: webserver-sg.
 Create a key-pair named `devkey`. You can also make use of existing keypair
 Number of Instance: 1
 
-[webservers custom AMI]
+![webservers custom AMI](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/webservers%20custom%20AMI.png)
 
 Note:
 I editted the security group of the `webserver-sg` to allow internet access from `0.0.0.0/0`. because of this AMI. I intend to delete this rule in my security group settings as it is too open. The webservers should only be accessed by the ALB of the Nginx and from the bastion hosts.
@@ -862,14 +863,14 @@ sudo dnf install -y php php-cli php-mysqlnd php-fpm
 ```
 After the installation of the software packages and php, create the custom AMI from the instances
 
-[tooling and wordpress AMI]
+![tooling and wordpress AMI](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/tooling%20and%20wordpress%20AMIS.png)
 
 **Creating Launch Templates for the webservers**
 Use `Webserver-sg` for the security group
 **tooling webservers**
-[tooling-LT 1]
-[tooling-LT 2]
-[tooling-LT 3]
+![tooling-LT 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/tooling-LT%201.png)
+![tooling-LT 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/tooling-LT%202.png)
+![tooling-LT 3](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/tooling-LT%203.png)
 
 **Wordpress webservers**
 In the userdata section under the advanced details, we will include the following script to  install:
@@ -911,12 +912,12 @@ systemctl restart httpd
 ```
 
 
-[wordpress LT]
+![wordpress LT](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/wordpress%20LT.png)
 
 
-[three LT]
+![three LT](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/three%20LT.png)
 
-## Confifure ALB To Route Traffic to Webservers
+## Configure ALB To Route Traffic to Webservers
 **Target groups for webservers**
 First, create Target groups  with the following configuration details:
 Target group name: `tooling-TG`
@@ -934,9 +935,9 @@ Ip address type: IPv4
 VPC: Dev-vpc
 health check path: `/healthstatus`
 
-[tooling TG]
+![tooling TG](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/tooling%20TG.png)
 
-[wordpress TG]
+![wordpress TG](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/wordpress%20TG.png)
 
 **Application Laod Balancer for webservers**
 
@@ -952,7 +953,7 @@ Set up the Applictaion Load balancer for the webservers with the following confi
 - Add load balancer tags
 - Choose **Create Load balancer**
 
-[tooling LB]
+![tooling LB](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/tooling%20LB.png)
 
 - Load balancer name: `wordpress-LB`
 - Scheme: Internal
@@ -964,8 +965,10 @@ Set up the Applictaion Load balancer for the webservers with the following confi
 - Add load balancer tags
 - Choose **Create Load balancer**
 
-[wordpress LB]
-[loadbalancers created]
+![wordpress LB](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/wordpress%20LB.png)
+
+![loadbalancers created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/loadbalancers%20created.png)
+
 **Create Auto Scaling Group for the webservers**
 - Configure the following:
   - Auto Scaling Group Name: `tooling-ASG`
@@ -990,41 +993,44 @@ Set up the Applictaion Load balancer for the webservers with the following confi
 
 All the three autoscaling groups have been created as seen in the following image
 
-  [All 3 ASG]
+  ![All 3 ASG](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/All%203%20ASG.png)
+
 The auto scaling group has launched all the instances and some others are being initialised. Note that, The wordpress and tooling webservers have no public IPs as expected. 
 
 I will go ahead and terminate the instances used to create the AMis.
 
-[ASG instances running]
+![ASG instances running](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/ASG%20instances%20running.png)
 
-For our infrastructure , the next step is to create the Database layer. We will create the Amazon Elastic File System (EFS), first. The EFS will helps to ensure persistent file storage.
+For our infrastructure , the next step is to create the Data layer. We will create the Amazon Elastic File System (EFS), first. The EFS will helps to ensure persistent file storage.
 
 
-## Create Database layer
+## Create Data layer
 **Elastic File System**
 - Navigate to the Elastic File system console by searching the search bar, then click **Create file system**
-- PRovide the name of the file system `Dev-EFS` and choose `Dev-vpc` as the VPC. Click **Create**
-[create-EFS]
+- Provide the name of the file system `Dev-EFS` and choose `Dev-vpc` as the VPC. Click **Create**
+![create-EFS](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create-EFS.png)
 - Select the created file system, click edit. Choose **Network**. The EFS has been created with mount targets and default security groups. Remove them and create new mount targets in the `PrivateSubnet1`and `PrivateSubnet2` which is where the ASG instances are deployed. Modify it to use the appropriate security groups you created previously `EFS-sg` (The security group allows traffic from NFS port range `2049`)
 Mount targets should be created in the same subnets (AZs) where your ASG instances are running.
-[create mount target 2]
+
+![create mount target 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20mount%20target%202.png)
 
 - Next, Create access points named `web-accesspoint` for fine-grained control (e.g., different applications sharing the same EFS).
-[accesspoint created]
+
+![accesspoint created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/accesspoint%20created.png)
 
 **Relational Database Service (RDS)**
 Another component of the datalayer is the RDS, For high availability, we will configure a multi-AZ set up of RDS MySQL Database instance.
 
 First create a KMS key from Key Management Service fro use to encrypt the database
-[database key]
+[database key](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/database-key.png)
 
 Then create a DB subnet group named `dev-dbsubnet`. Select the datalayer subnets and click **Create**
-[select datalayer subnet]
+![select datalayer subnet](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/select%20datalayer%20subnet.png)
 
 Next create  the database using Mysql 8.. 
-I will create the database with the free tier to save cost. The multi-AZ option is available for Dev/test  and Production. 
+The multi-AZ option is available for Dev/test  and Production. 
 
-The configurations used:
+The configurations I used:
 Database creation method: Standard create
 Engine type: MySQL, 8.0.40
 Template: Dev/Test
@@ -1037,13 +1043,13 @@ Choose the `dev-vpc` and `RDS-SG`
 Add appropriate tags and create the database.
 
 It takes time to create the database. Wait for the creation
-[dev dbsubnet]
-[create database]
+![dev dbsubnet](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/dev%20dbsubnet.png)
+![create database](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/create%20database.png)
 
 **Routing**
 From the Route 53 console, we will Create alias record for the root domain `laraadeboye.com` and `tooling.laraadeboye.com`
-[alias a record]
-[alias a record tooling]
+
+![alias a record tooling](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/alias%20a%20record%20tooling.png)
 
 
 ## Conclusion:
