@@ -10,6 +10,8 @@ Specific requirements:
 - Resilience: Infrastructure for both the wordpress and tooling website must be resilient to webserver failures, can accomodate increased traffic.
 
 Here is the architecture we want to achieve:
+
+
 ![Architecture diagram](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/aws_cloud_solution.png)
 
 
