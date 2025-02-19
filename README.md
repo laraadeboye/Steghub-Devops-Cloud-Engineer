@@ -19,5 +19,11 @@ The order of projects in this repository is found below:
 - [CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLs](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/tree/main/CI-WITH-ANSIBLE-SOME-DEVOPS-TOOLS)
 - [AWS-CLOUD-SOLUTION-WITH-2-COMPANY-WEBSITES](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/tree/main/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES)
 
+## Projects 16-20
+- [AUTOMATE INFRA WITH IAC USING TERRAFORM 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/tree/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1)
+- [AUTOMATE INFRA WITH IAC USING TERRAFORM 2]()
+- [AUTOMATE INFRA WITH IAC USING TERRAFORM 3]()
+- [AUTOMATE INFRA WITH IAC USING TERRAFORM 4]()
+
 
 
