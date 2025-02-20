@@ -1,6 +1,6 @@
 # AUTOMATE INFRASTRUCTURE PROVISIONING ON AWS PLATFORM WITH TERRAFORM 1
 
-[Architecture diagram]
+![Architecture diagram](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/aws_cloud_solution.png)
 
 I previously created the above three-tier architecture manually via the AWS management console [here](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/aws-cloud-solution.md).
 
@@ -20,10 +20,13 @@ Now, I will automate the provisioning of this infrastructure using terraform in 
 ### Create iam user named `terraform`
 - I created an admin group named `admin`. Then, I created the `terraform` user with no console access, then I proceeded to create the access key for programmatic access. The access key will be used to configure the AWS CLI
 
-[create admin group]
-[attach admin permissions to group]
-[create terraform user]
-[add terraform user to group]
+![create admin group](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/create%20admin%20group.png)
+
+![attach admin permissions to group](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/attach%20admin%20permissions%20to%20group.png)
+
+![create terraform user](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/create%20terraform%20user.png)
+
+![add terraform user to group](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/add%20terraform%20user%20to%20group.png)
 
 - On the terminal of your workstation, where AWS CLI has been installed, run:
 
@@ -48,7 +51,7 @@ I run the following command to list the existing profiles:
 ```
 aws configure list-profiles
 ```
-[existing profile]
+![existing profile](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/existing%20profile.png)
 
 Use the `aws configure --profile <profile-name>` command to add the new credentials:
 
@@ -62,15 +65,15 @@ To view the AWS credentials file, run the following command, terrafom should be 
 vi ~/.aws/credentials
 
 ```
-To use this profile `terraform` when running terraform commands, run `export AWS_PROFILE=terraform` on the commandline to set the default profile. I also changed the default profile to terraform on my VScode. Also, ensure to specify it in the `provider.tf` file. 
+To use this profile `terraform` when running terraform commands, run `export AWS_PROFILE=terraform` on the commandline to set the default profile. I also changed the default profile to terraform on my VScode.  
  
-[terraform profile added]
+![terraform profile added](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/terraform%20profile%20added.png)
 
 
 
 ### Create Project folder to write terraform code
 Create a project folder named `PBL` in git and clone it locally, so that all the terraform codes are version-controlled.
-Also, create a feature branch `git checkout -b feature/terraform-setup`
+Also, create a feature branch using the command: `git checkout -b feature/terraform-setup`
 
 ### Install boto3
 To install boto3, ensure python3 virtual environment has been installed with the following command:
@@ -109,9 +112,9 @@ aws s3api create-bucket --bucket terraform-bucket-349-$(date +%s)
 Note that you need to specify the region if you are creating the bucket in another region different from `us-east-1`.
 Find the reference [here](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/create-bucket.html)
 
-[create-terraform-bucket]
+![create-terraform-bucket](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/create-terraform-bucket.png)
 
-[create-terraform-bucket2]
+![create-terraform-bucket2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/create-terraform-bucket2.png)
 
 
 Next, we will write reusable terraform codes to provision our infrastructure. I will include the variables in the variable file to avoid hardcoding values.
@@ -119,7 +122,7 @@ Next, we will write reusable terraform codes to provision our infrastructure. I 
 ## Create terraform files and write code
 Create four files `provider.tf`, `main.tf`, `variable.tf` and `terraform.tf.vars`
 
-In the provider.tf file, write following to work with AWS provider:
+In the provider.tf file, write the following to work with AWS provider:
 
 ```sh
 terraform {
@@ -141,13 +144,12 @@ Reference [here](https://registry.terraform.io/providers/hashicorp/aws/latest/do
 
 First initialise the terraform using the `terraform init` command. You need to run this once to download the terraform plugins.
 
-[terraform init]
+![terraform init](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/terraform%20init.png)
+![terraform init successful](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/terraform%20init%20successful.png)
 
-[terraform init successful]
+At this point, I will create a `.gitignore `file that includes terraform files that shouldnt be commited to my repo.
 
-At this point, I will create a .gitignore file that includes terraform files that shouldnt be commited to my repo
-
-`.gitignore` file:
+**Content of the `.gitignore` file**:
 ```sh
 # Local .terraform directories
 **/.terraform/*
@@ -229,6 +231,10 @@ In the `terraform.tfvars`:
 ```
 vpc_cidr_block      = "10.0.0.0/16"
 region              = "us-east-1"
+preferred_number_of_public_subnets = 2
+enable_dns_hostnames = "true"
+enable_dns_support = "true"
+
 ```
 Run the following to create the vpc resource
 ```sh
@@ -239,13 +245,13 @@ terraform apply # to create resources
 
 - terraform plan:
 
-[create vpc with terraform]
+[create vpc with terraform](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/create%20vpc%20with%20terraform.png)
 
 
 - terraform apply:
-[terraform vpc created]
+![terraform vpc created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/terraform%20vpc%20created.png)
 
-Next, we will add additional code to create the subnets using count,loops, data sources, cidrsubnet() function
+Next, we will add additional code to create the subnets using `count`,`data sources` and `cidrsubnet()` function.
 
 ```sh
 # Create public subnets
@@ -270,13 +276,21 @@ The subnets are automatically assigned public IPz(map_public_ip_on_launch = true
 - The `count.index` in availability_zone = data.aws_availability_zones.available.names[count.index] determines which AZ each subnet goes into, starting from index 0. Each subnet gets placed in a different availability zone, distributed sequentially through the available AZs.
 
 When terraform plan is run, the subnets will be created in availability zone `us-east-1a` and `us-east-1b`
-[public subnet 1]
+![public subnet 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/public%20subnet%201.png)
 
-[public subnet 2]
+![public subnet 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/public%20subnet%202.png)
 
 
-[vpc created]
-[subnet created]
+![vpc created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/vpc%20created.png)
 
-The code for the infrastructure is found in my repository [here](https://github.com/laraadeboye/PBL)
+![subnet created](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1/images/subnets%20created.png)
+
+I destroyed the infrastructure created with:
+
+```sh
+terraform destroy
+```
+We will edit the terraform code to include tags.
+
+Note that the code for the infrastructure is found in my repository [here](https://github.com/laraadeboye/PBL)
 
