@@ -275,6 +275,7 @@ Select **Create Route table**
 Select the private route table you created and navigate to the **Routes tab**, select **add route**. Set the destination as `0.0.0.0/0` (which is an IP range that applies to anywhere on the internet), the target as `NAT gateway`, then choose the nat gateeway you created earlier. Click **Save Changes**
 
 ![edit NAT gateway 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/edit%20nat%20gateway%201.png)
+
 ![edit NAT gateway 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES/images/edit%20nat%20gateway%202.png)
 
 For the private route table to work, it must be associated with the private subnet.
