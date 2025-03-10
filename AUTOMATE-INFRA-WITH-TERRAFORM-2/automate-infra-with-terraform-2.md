@@ -14,15 +14,15 @@ The Internet gateway and NAT gateway are created in separate files named `intern
 
 - The element() function to assign the subnet id
 After running `terraform plan`, we see the resources to be created:
-[terraform plan_networking]
-[terraform plan_networking_1]
-[terraform plan_networking_2]
+![terraform plan_networking](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-2/images/terraform%20plan_networking.png)
+![terraform plan_networking_1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-2/images/terraform%20plan_networking_1.png)
+![terraform plan_networking_2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-2/images/terraform%20plan_networking_2.png)
 
 When we run `terraform apply`, 20 resources are created.
 
-[terraform apply_20resources]
+![terraform apply_20resources](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-2/images/terraform%20apply_20resources.png)
 
-The code is found in this [repo]()
+The code is found in this [repo](https://github.com/laraadeboye/PBL/blob/main/internet_gateway.tf)
 
 Next, I create the access control configuration and compute resources with terraform:
 
@@ -30,7 +30,7 @@ Next, I create the access control configuration and compute resources with terra
 - Create a separate file named `roles.tf`
 - Create an IAM role for EC2 instances to have access to specific resources. We will do this by creating an `AssumeRole`, creating a policy for the role, attach the policy to the role and create an instance profile
 
-The code is found in this [repo]()
+The code is found in this [repo](https://github.com/laraadeboye/PBL/blob/main/roles.tf)
 
 
 **Compute Resources with terraform**
@@ -163,7 +163,7 @@ resource "aws_route53_record" "wordpress" {
 
 If your `terraform validate` at this point, we will face an error of undeclared load balancer resource:
 
-[undeclared resource]
+![undeclared resource](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-2/images/undeclared%20alb.png)
 
 3. External Load Balancer and Internal Load Balancer
 Next, we will create the external and internal load balancers. 
@@ -194,9 +194,9 @@ For bastion hosts, we typically don't need load balancer attachments because:
 - There's no need to distribute traffic across multiple bastion hosts
 - You don't typically need health checks for bastion instances from a load balancer.
 
-Find code [here]()
+Find code [here](https://github.com/laraadeboye/PBL/blob/main/asg-bastion-nginx.tf)
 
-Within the `asg-wordpress-tooling.tf`, enter the code found in this [repo](here)
+Within the `asg-wordpress-tooling.tf`, enter the code found [here](https://github.com/laraadeboye/PBL/blob/main/asg-wordpress-tooling.tf)
 
 
 This setup complements the code for the bastion and Nginx servers. 
@@ -211,7 +211,7 @@ The full architecture consists of:
 6. Datalayer: Elastic Filesystem and Relational Database (RDS)
 Next, we will write the terraform code for the datalayer. We must first create the KMS key from AWS Key Managament Service. Create a file name `efs.tf` and `rds.tf` respectively.
 
-Find code [here]()
+Find code [here](https://github.com/laraadeboye/PBL/blob/main/efs.tf)
 
 Run the terraform commands, correcting errors where necessary:
 - `terraform fmt`
