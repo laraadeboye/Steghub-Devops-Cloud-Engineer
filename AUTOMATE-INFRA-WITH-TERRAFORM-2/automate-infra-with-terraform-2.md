@@ -1,6 +1,8 @@
 
 # AUTOMATE INFRASTRUCTURE PROVISIONING ON AWS PLATFORM WITH TERRAFORM 2
 
+![automate infra with terraform](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-2/images/automate%20infra%20with%20terraform.drawio.png)
+
 Here, I go further by creating the remaining networking resources:
 - Internet gateway
 - Elastic IP and Nat gateway
