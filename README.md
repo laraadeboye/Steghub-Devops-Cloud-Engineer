@@ -20,8 +20,8 @@ The order of projects in this repository is found below:
 - [AWS-CLOUD-SOLUTION-WITH-2-COMPANY-WEBSITES](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/tree/main/AWS-CLOUD-SOLUTION-FOR-2-COMPANY-WEBSITES)
 
 ## Projects 16-20
-- [AUTOMATE INFRA WITH IAC USING TERRAFORM 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/main/AUTOMATE-INFRA-WITH-TERRAFORM-1/automate-infra-with-terraform.md)
-- [AUTOMATE INFRA WITH IAC USING TERRAFORM 2]()
+- [AUTOMATE INFRA WITH IAC USING TERRAFORM 1](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/tree/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-1)
+- [AUTOMATE INFRA WITH IAC USING TERRAFORM 2](https://github.com/laraadeboye/Steghub-Devops-Cloud-Engineer/blob/docs/update-readme/AUTOMATE-INFRA-WITH-TERRAFORM-2/automate-infra-with-terraform-2.md)
 - [AUTOMATE INFRA WITH IAC USING TERRAFORM 3]()
 - [AUTOMATE INFRA WITH IAC USING TERRAFORM 4]()
 
